@@ -13,11 +13,12 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 import sys
 from . import config
+from django.utils.translation import ugettext_lazy as _
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, BASE_DIR)
 sys.path.insert(0, os.path.join(BASE_DIR, 'app'))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -29,7 +30,6 @@ SECRET_KEY = 'tp6z0bzhjl9^161msoe!%#6xm&%p1y@bcy=3hew=&i+pb1h#c5'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'staff',
     'statistic',
     'user',
+    'crispy_forms',
+    'xadmin',
 ]
 
 MIDDLEWARE = [
@@ -79,7 +81,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'df2.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
@@ -93,7 +94,6 @@ DATABASES = {
         'PORT': 3306,
     }
 }
-
 
 # Password validation
 
@@ -114,20 +114,22 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
+LANGUAGE_CODE = 'zh-hans'
+LANGUAGES = [
+    ('en', _('English')),
+    ('zh-hans', _('Simplified Chinese')),
+    ('zh-hant', _('Traditional Chinese')),
+]
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/

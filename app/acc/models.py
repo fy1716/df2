@@ -17,6 +17,8 @@ class AccManage(models.Model):
 
     class Meta:
         db_table = 'acc'
+        verbose_name = '配件管理'
+        verbose_name_plural = verbose_name
 
 
 # 配件扫描
