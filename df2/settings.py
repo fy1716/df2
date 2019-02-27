@@ -19,6 +19,7 @@ from django.utils.translation import ugettext_lazy as _
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, BASE_DIR)
 sys.path.insert(0, os.path.join(BASE_DIR, 'app'))
+sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -40,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'acc',
+    'app.acc',
     'car',
     'other',
     'staff',
@@ -48,6 +49,8 @@ INSTALLED_APPS = [
     'user',
     'crispy_forms',
     'xadmin',
+    'rest_framework',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -135,3 +138,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+}

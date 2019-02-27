@@ -4,7 +4,7 @@ from django.db import models
 # 车辆信息
 class CarInfoManage(models.Model):
     station_id = models.IntegerField()
-    id_number = models.CharField(max_length=50)
+    sn = models.CharField(max_length=50)
     number = models.CharField(max_length=50, null=True)
     type = models.CharField(max_length=10, null=True)
     but_date = models.DateField(null=True)
@@ -20,7 +20,7 @@ class CarInfoManage(models.Model):
 # 维修信息
 class CarFixManage(models.Model):
     station_id = models.IntegerField()
-    car_id = models.ForeignKey('CarInfoManage', on_delete=models.CASCADE, related_name='car_fix')
+    car = models.ForeignKey('CarInfoManage', on_delete=models.CASCADE, related_name='car_fix')
     odo = models.IntegerField(null=True)
     date = models.DateField()
     reg_time = models.CharField(max_length=24, null=True)
@@ -39,7 +39,7 @@ class CarFixManage(models.Model):
 class CarFixAccManage(models.Model):
     date = models.DateField(verbose_name='更换日期')
     station_id = models.IntegerField()
-    fix_id = models.ForeignKey('CarFixManage', on_delete=models.CASCADE, related_name='fix_acc')
+    fix = models.ForeignKey('CarFixManage', on_delete=models.CASCADE, related_name='fix_acc')
     # 记录下配件信息，而不是外键，这样保证存留历史快照
     name = models.CharField(max_length=50)
     id_number = models.CharField(max_length=50)

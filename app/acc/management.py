@@ -16,9 +16,19 @@ name = AccConfig.name.split('.')[-1]
 
 def init_db(sender, **kwargs):
     print(sender.name)
-    if sender.name == name:
+    if sender.name == AccConfig.name:
         if not AccManage.objects.exists():
-            AccManage.objects.create(name='机油格', id_number='CA100801-FA01', price=25)
+            AccManage.objects.create(name='机油格', sn='CA100801-FA01', price=25)
+            AccManage.objects.create(name='机油格', sn='CA100801-FA01', price=25)
+            AccManage.objects.create(name='机油格', sn='CA100801-FA01', price=25)
+            AccManage.objects.create(name='机油格', sn='CA100801-FA01', price=25)
+            AccManage.objects.create(name='机油格', sn='CA100801-FA01', price=25)
+            AccManage.objects.create(name='机油格', sn='CA100801-FA01', price=25)
+            AccManage.objects.create(name='机油格', sn='CA100801-FA01', price=25)
+            AccManage.objects.create(name='机油格', sn='CA100801-FA01', price=25)
+            AccManage.objects.create(name='机油格', sn='CA100801-FA01', price=25)
+            AccManage.objects.create(name='机油格', sn='CA100801-FA01', price=25)
+            AccManage.objects.create(name='机油格', sn='CA100801-FA01', price=25)
 
 
 post_migrate.connect(init_db)
