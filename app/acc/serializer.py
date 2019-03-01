@@ -12,7 +12,5 @@ from .models import AccManage
 class AccSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccManage
-        fields = ('name', 'price')
+        fields = "__all__"
 
-    def create(self, validated_data):
-        AccManage.objects.create(**validated_data)

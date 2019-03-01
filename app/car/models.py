@@ -1,11 +1,12 @@
 from django.db import models
+from app.staff.models import EmployeeManage
 
 
 # 车辆信息
 class CarInfoManage(models.Model):
-    station_id = models.IntegerField()
-    sn = models.CharField(max_length=50)
-    number = models.CharField(max_length=50, null=True)
+    station_id = models.SmallIntegerField(null=True)
+    sn = models.CharField(max_length=50, unique=True)
+    number = models.CharField(max_length=50, null=True, unique=True)
     type = models.CharField(max_length=10, null=True)
     but_date = models.DateField(null=True)
     pro_date = models.DateField(null=True)
@@ -17,19 +18,23 @@ class CarInfoManage(models.Model):
         db_table = 'carInfo'
 
 
+def _get_employee():
+    return EmployeeManage.objects.get_or_create(username='deleted')[0]
+
+
 # 维修信息
 class CarFixManage(models.Model):
-    station_id = models.IntegerField()
+    station_id = models.SmallIntegerField()
     car = models.ForeignKey('CarInfoManage', on_delete=models.CASCADE, related_name='car_fix')
-    odo = models.IntegerField(null=True)
-    date = models.DateField()
+    odo = models.SmallIntegerField(null=True)
+    date = models.DateField('维修日期')
     reg_time = models.CharField(max_length=24, null=True)
     income = models.SmallIntegerField(default=0, null=True)
-    fix_man = models.CharField(max_length=16, null=True)
+    fix_man = models.ForeignKey('staff.EmployeeManage', null=True, on_delete=models.SET(_get_employee))
     remark = models.CharField(max_length=1024, null=True)
     logging = models.BooleanField(default=False)
     maintain = models.BooleanField(default=False)
-    temp_id = models.IntegerField(default=0, null=True)
+    temp_id = models.SmallIntegerField(default=0, null=True)
 
     class Meta:
         db_table = 'car_fix'

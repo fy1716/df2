@@ -42,11 +42,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app.acc',
-    'car',
-    'other',
-    'staff',
-    'statistic',
-    'user',
+    'app.car',
+    'app.other',
+    'app.staff',
+    'app.statistic',
+    'app.user',
     'crispy_forms',
     'xadmin',
     'rest_framework',
@@ -139,7 +139,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# 配置全局分页设置
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,
+    'PAGE_SIZE': 8
 }
