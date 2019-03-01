@@ -4,3 +4,4 @@ migrations/
 config.py
 test.py
 test/
+venv/
