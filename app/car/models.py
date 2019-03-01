@@ -17,6 +17,9 @@ class CarInfoManage(models.Model):
     class Meta:
         db_table = 'carInfo'
 
+    def __str__(self):
+        return self.number
+
 
 def _get_employee():
     return EmployeeManage.objects.get_or_create(username='deleted')[0]
@@ -24,7 +27,7 @@ def _get_employee():
 
 # 维修信息
 class CarFixManage(models.Model):
-    station_id = models.SmallIntegerField()
+    station_id = models.SmallIntegerField(null=True)
     car = models.ForeignKey('CarInfoManage', on_delete=models.CASCADE, related_name='car_fix')
     odo = models.SmallIntegerField(null=True)
     date = models.DateField('维修日期')
@@ -38,6 +41,9 @@ class CarFixManage(models.Model):
 
     class Meta:
         db_table = 'car_fix'
+
+    def __str__(self):
+        return self.car.number
 
 
 # 维修配件

@@ -5,7 +5,7 @@
 # Time: 2019/2/28 15:21
 __author__ = 'Peter.Fang'
 import django_filters
-from .models import CarInfoManage
+from .models import CarInfoManage, CarFixManage, CarFixAccManage
 
 
 class CarInfoFilter(django_filters.rest_framework.FilterSet):
@@ -30,5 +30,19 @@ class CarFixFilter(django_filters.rest_framework.FilterSet):
     end_date = django_filters.DateFilter(field_name="date", lookup_expr="lte")
 
     class Meta:
-        model = CarInfoManage
+        model = CarFixManage
         fields = ['station_id', 'start_date', 'end_date']
+
+
+class FixAccFilter(django_filters.rest_framework.FilterSet):
+    """
+    按维修ID过滤
+    """
+    # fix_id = django_filters.NumberFilter(name="fix__id", method='fix_id_filter')
+
+    # def fix_id_filter(self, queryset, name, value):
+    #     return queryset.filter(fix__id=value)
+
+    class Meta:
+        model = CarFixAccManage
+        fields = ['fix_id']

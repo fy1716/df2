@@ -17,12 +17,17 @@ from django.urls import path, include
 import xadmin
 from rest_framework.documentation import include_docs_urls
 from rest_framework.routers import DefaultRouter
-from car.views import CarInfoViewSet
+from car.views import CarInfoViewSet, CarFixViewSet, FixAccViewSet
 from acc.views import AccListViewSet
+from staff.views import EmployeeViewSet, EmployeeBonusListView
 
 router = DefaultRouter()
 router.register(r'acc', AccListViewSet)
-router.register(r'carinfo', CarInfoViewSet, base_name='CarInfo')
+router.register(r'car_info', CarInfoViewSet, base_name='car_info')
+router.register(r'car_fix', CarFixViewSet, base_name='car_fix')
+router.register(r'fix_acc', FixAccViewSet)
+router.register(r'employee', EmployeeViewSet)
+router.register(r'employee_bonus', EmployeeBonusListView)
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
