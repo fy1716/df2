@@ -14,10 +14,10 @@ from .apps import CarConfig as config
 name = config.name.split('.')[-1]
 
 
-def init_db(sender, **kwargs):
-    if sender.name == config.name:
-        if not model.objects.exists():
-            model.objects.create(number='xh101', sn='FA01')
-
-
-post_migrate.connect(init_db)
+# def init_db(sender, **kwargs):
+#     if sender.name == config.name:
+#         if not model.objects.exists():
+#             model.objects.create(number='xh101', sn='FA01')
+#
+#
+# post_migrate.connect(init_db)

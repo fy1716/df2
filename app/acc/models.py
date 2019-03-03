@@ -9,11 +9,12 @@ class AccManage(models.Model):
     name = models.CharField(max_length=48, verbose_name="名称")
     sn = models.CharField(max_length=30, unique=True, verbose_name="件号")
     type = models.CharField(max_length=30, null=True, verbose_name="类型")
-    location = models.CharField(max_length=10, null=True, verbose_name="存放位置")
+    location = models.CharField(max_length=30, null=True, verbose_name="存放位置")
     cost = models.FloatField(default=0, verbose_name="材料费")
     price = models.SmallIntegerField(verbose_name="售价")
     count = models.SmallIntegerField(null=True, verbose_name="数量")
     remark = models.CharField(max_length=50, null=True, verbose_name="备注")
+    old_id = models.IntegerField(verbose_name="ord_id", null=True)
 
     class Meta:
         db_table = 'acc'
@@ -40,6 +41,7 @@ class AccBuyRecordManage(models.Model):
     type = models.CharField(max_length=30, null=True, verbose_name="类型")
     cost = models.FloatField(null=True, default=0, verbose_name="材料费")
     count = models.SmallIntegerField(null=True, verbose_name="数量")
+    old_id = models.IntegerField(verbose_name="ord_id")
 
     class Meta:
         db_table = 'accBuyRecord'

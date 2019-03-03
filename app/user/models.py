@@ -1,10 +1,11 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import AbstractUser
 
 
-class UserManage(models.Model):
-    station_id = models.IntegerField()
-    username = models.CharField(max_length=128)
+class UserManage(AbstractUser):
+    station_id = models.IntegerField(null=True)
+    username = models.CharField(max_length=128, unique=True)
     password = models.CharField(max_length=256)
     role = models.SmallIntegerField()
     disable = models.BooleanField(default=False)
@@ -12,7 +13,7 @@ class UserManage(models.Model):
     position = models.CharField(max_length=24, null=True)
     telphone = models.CharField(max_length=24, null=True)
     created = models.DateTimeField(editable=False)
-    lastLogin = models.DateTimeField()
+    lastLogin = models.DateTimeField(null=True)
     description = models.CharField(max_length=48, null=True)
 
     def save(self, *args, **kwargs):

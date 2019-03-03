@@ -14,10 +14,10 @@ from .apps import AccConfig
 name = AccConfig.name.split('.')[-1]
 
 
-def init_db(sender, **kwargs):
-    if sender.name == AccConfig.name:
-        if not AccManage.objects.exists():
-            AccManage.objects.create(name='机油格', sn='CA100801-FA01', price=25)
-
-
-post_migrate.connect(init_db)
+# def init_db(sender, **kwargs):
+#     if sender.name == AccConfig.name:
+#         if not AccManage.objects.exists():
+#             AccManage.objects.create(name='机油格', sn='CA100801-FA01', price=25)
+#
+#
+# post_migrate.connect(init_db)

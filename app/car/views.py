@@ -16,8 +16,7 @@ class CarPagination(PageNumberPagination):
 
 
 # '101': cardata.getData '102': cardata.getData '103': cardata.getData '104': cardata.getData
-class CarInfoViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin,
-                     mixins.UpdateModelMixin, mixins.DestroyModelMixin):
+class CarInfoViewSet(viewsets.ModelViewSet):
     queryset = CarInfoManage.objects.all()
     serializer_class = CarInfoSerializer
     pagination_class = CarPagination
@@ -31,6 +30,7 @@ class CarInfoViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Retr
     #     print(self.request.query_params.get('station_id'))
     #     query_set = CarInfoManage.objects.filter(station_id=self.request.query_params.get('station_id'))
     #     return query_set
+
 
 
 class CarFixViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin,

@@ -93,7 +93,7 @@ DATABASES = {
         'NAME': 'df2',
         'USER': config.DB['user'],
         'PASSWORD': config.DB['password'],
-        'HOST': 'localhost',
+        'HOST': config.DB['host'],
         'PORT': 3306,
     }
 }
@@ -139,8 +139,17 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+AUTH_USER_MODEL = 'user.UserManage'
 # 配置全局分页设置
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 8
+    'PAGE_SIZE': 8,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    )
 }

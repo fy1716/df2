@@ -20,6 +20,7 @@ from rest_framework.routers import DefaultRouter
 from car.views import CarInfoViewSet, CarFixViewSet, FixAccViewSet
 from acc.views import AccListViewSet
 from staff.views import EmployeeViewSet, EmployeeBonusListView
+from rest_framework_jwt.views import obtain_jwt_token
 
 router = DefaultRouter()
 router.register(r'acc', AccListViewSet)
@@ -34,4 +35,5 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('docs/', include_docs_urls(title='df')),
     path('api/', include(router.urls)),
+    path('login/', obtain_jwt_token)
 ]

@@ -11,7 +11,7 @@ EMPLOYEE_TYPE = (
 # 员工
 class EmployeeManage(models.Model):
     name = models.CharField(max_length=24)
-    type = models.SmallIntegerField(choices=EMPLOYEE_TYPE, help_text="类型")
+    em_type = models.SmallIntegerField(choices=EMPLOYEE_TYPE, help_text="类型")
     remark = models.CharField(max_length=48, null=True)
 
     class Meta:
@@ -32,4 +32,4 @@ class EmployeeBonusManage(models.Model):
 
     class Meta:
         db_table = 'bonus'
-        unique_together = ('date', 'fix_id', 'acc_id')
+        # unique_together = ('date', 'fix_id', 'acc_id')
