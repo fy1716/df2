@@ -1,0 +1,2 @@
+# 安装xadmin 适配django2
+pip install git+git://github.com/sshwsfc/xadmin.git@django2
