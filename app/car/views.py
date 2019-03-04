@@ -11,7 +11,7 @@ from app.car.filters import CarInfoFilter, CarFixFilter, FixAccFilter
 
 # 根据page_size不同来获取数据的多少
 class CarPagination(PageNumberPagination):
-    page_size_query_param = 'page_size'
+    page_size_query_param = 'rows'
     max_page_size = 20
 
 

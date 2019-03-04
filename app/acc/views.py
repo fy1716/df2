@@ -10,7 +10,7 @@ from rest_framework.pagination import PageNumberPagination
 
 # 根据page_size不同来获取数据的多少
 class AccPagination(PageNumberPagination):
-    page_size_query_param = 'page_size'
+    page_size_query_param = 'rows'
 
 
 # '101': accdata.getData

@@ -41,7 +41,6 @@ class AccBuyRecordManage(models.Model):
     type = models.CharField(max_length=30, null=True, verbose_name="类型")
     cost = models.FloatField(null=True, default=0, verbose_name="材料费")
     count = models.SmallIntegerField(null=True, verbose_name="数量")
-    old_id = models.IntegerField(verbose_name="ord_id")
 
     class Meta:
         db_table = 'accBuyRecord'

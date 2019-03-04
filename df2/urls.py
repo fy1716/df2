@@ -33,7 +33,7 @@ router.register(r'employee_bonus', EmployeeBonusListView)
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    path('docs/', include_docs_urls(title='df')),
+    path('docs/', include_docs_urls(title='df2')),
     path('api/', include(router.urls)),
     path('login/', obtain_jwt_token),
 ]
