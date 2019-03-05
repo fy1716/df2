@@ -48,7 +48,7 @@ class CarFixViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Retri
 
 class FixAccViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin,
                     mixins.UpdateModelMixin, mixins.DestroyModelMixin):
-    queryset = CarFixAccManage.objects.all()
+    # queryset = CarFixAccManage.objects.all()
     serializer_class = FixAccSerializer
     pagination_class = CarPagination
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter)
