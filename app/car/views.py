@@ -57,7 +57,8 @@ class FixAccViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Retri
     filter_class = FixAccFilter
 
     def get_queryset(self):
-        query_set = CarFixAccManage.objects.filter(fix_id=self.request.query_params.get('car_fix_id'))
+        fix_id = self.request.data.get('car_fix_id') or self.request.query_params.get('car_fix_id')
+        query_set = CarFixAccManage.objects.filter(fix_id=fix_id)
         return query_set
 
     def perform_create(self, serializer):
