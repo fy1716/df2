@@ -1,9 +1,11 @@
+from django.forms.models import model_to_dict
 from rest_framework import mixins
 from rest_framework import viewsets
 import django_filters.rest_framework
 from rest_framework.pagination import PageNumberPagination
 
 from rest_framework import filters
+from app.acc.models import AccManage
 from app.car.models import CarInfoManage, CarFixManage, CarFixAccManage
 from app.car.serializer import CarInfoSerializer, CarFixSerializer, FixAccSerializer
 from app.car.filters import CarInfoFilter, CarFixFilter, FixAccFilter
@@ -32,7 +34,6 @@ class CarInfoViewSet(viewsets.ModelViewSet):
     #     return query_set
 
 
-
 class CarFixViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin,
                     mixins.UpdateModelMixin, mixins.DestroyModelMixin):
     queryset = CarFixManage.objects.all()
@@ -54,3 +55,31 @@ class FixAccViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Retri
     ordering_fields = ('id',)
     ordering = ('-id',)
     filter_class = FixAccFilter
+
+    def get_queryset(self):
+        query_set = CarFixAccManage.objects.filter(fix_id=self.request.query_params.get('car_fix_id'))
+        return query_set
+
+    def perform_create(self, serializer):
+        fix_id = self.request.data['fix_id']
+        id_number = self.request.data['id_number']
+        acc = {
+            "sn": id_number,
+            "name": '',
+            "type": '',
+            "price": 0,
+            "cost": 0,
+        }
+        try:
+            data = model_to_dict(AccManage.objects.get(sn=id_number))
+            acc = {k: data[k] for k in acc}
+        except Exception as e:
+            pass
+        fix_acc = CarFixAccManage(**acc, fix_id=fix_id)
+        fix_acc.save()
+
+    def perform_destroy(self, instance):
+        instance.delete()
+
+    def perform_update(self, serializer):
+        serializer.save()

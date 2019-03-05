@@ -50,19 +50,17 @@ class CarFixManage(models.Model):
 
 # 维修配件
 class CarFixAccManage(models.Model):
-    date = models.DateField(verbose_name='更换日期')
-    station_id = models.IntegerField()
+    station_id = models.IntegerField(blank=True, null=True)
     fix = models.ForeignKey('CarFixManage', on_delete=models.CASCADE, related_name='fix_acc', null=True)
     # 记录下配件信息，而不是外键，这样保证存留历史快照
-    name = models.CharField(max_length=50)
-    id_number = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, blank=True)
+    sn = models.CharField(max_length=50, blank=True)
     type = models.CharField(max_length=30, null=True)
-    price = models.SmallIntegerField()
-    usage = models.SmallIntegerField()
+    price = models.SmallIntegerField(blank=True, null=True)
+    usage = models.SmallIntegerField(default=1)
     cost = models.FloatField(default=0)
     guarantee = models.BooleanField(default=False)
-    pid = models.CharField(max_length=128)
-    old_id = models.IntegerField(verbose_name="ord_id")
+    old_id = models.IntegerField(verbose_name="old_id", null=True, blank=True)
 
     class Meta:
         db_table = 'fix_acc'

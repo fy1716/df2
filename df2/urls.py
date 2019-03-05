@@ -26,7 +26,7 @@ router = DefaultRouter()
 router.register(r'acc', AccListViewSet)
 router.register(r'car_info', CarInfoViewSet, base_name='car_info')
 router.register(r'car_fix', CarFixViewSet, base_name='car_fix')
-router.register(r'fix_acc', FixAccViewSet)
+router.register(r'fix_acc', FixAccViewSet, base_name='fix_acc')
 router.register(r'employee', EmployeeViewSet)
 router.register(r'employee_bonus', EmployeeBonusListView)
 

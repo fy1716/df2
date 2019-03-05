@@ -30,9 +30,15 @@ class FixAccSerializer(serializers.ModelSerializer):
 
 class CarFixSerializer(serializers.ModelSerializer):
     car = CarInfoSerializer(read_only=True)
-    fix_acc = FixAccSerializer(many=True, read_only=True)  # 被外键的字段，添加在这就可以直接显示
+    # fix_acc = FixAccSerializer(many=True, read_only=True)  # 被外键的字段，添加在这就可以直接显示
     fix_man = EmployeeSerializer(read_only=True)
 
     class Meta:
         model = CarFixManage
         fields = "__all__"
+
+    def create(self, validated_data):
+        # 由于read_only将car_id自动过滤，只能通过获取参数值，来创建car_fix
+        car_info = CarFixManage(**validated_data, car_id=self.context['request'].data['car_id'])
+        car_info.save()
+        return car_info
