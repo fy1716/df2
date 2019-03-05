@@ -6,14 +6,14 @@ from app.staff.models import EmployeeManage
 class CarInfoManage(models.Model):
     station_id = models.SmallIntegerField(null=True)
     sn = models.CharField(max_length=50)
-    number = models.CharField(max_length=50, null=True)
-    type = models.CharField(max_length=90, null=True)
-    but_date = models.DateField(null=True)
-    pro_date = models.DateField(null=True)
-    owner = models.CharField(max_length=50, null=True)
-    tel = models.CharField(max_length=30, null=True)
-    remark = models.CharField(max_length=100, null=True)
-    old_id = models.IntegerField(verbose_name="ord_id", null=True)
+    number = models.CharField(max_length=50, null=True, blank=True)
+    type = models.CharField(max_length=90, null=True, blank=True)
+    buy_date = models.DateField(null=True, blank=True)
+    pro_date = models.DateField(null=True, blank=True)
+    owner = models.CharField(max_length=50, null=True, blank=True)
+    tel = models.CharField(max_length=30, null=True, blank=True)
+    remark = models.CharField(max_length=100, null=True, blank=True)
+    old_id = models.IntegerField(verbose_name="ord_id", null=True, blank=True)
 
     class Meta:
         db_table = 'car_info'
