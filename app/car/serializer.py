@@ -7,6 +7,7 @@ __author__ = 'Peter.Fang'
 
 from rest_framework import serializers
 from .models import CarInfoManage, CarFixManage, CarFixAccManage
+from app.staff.models import EmployeeManage
 from app.staff.serializer import EmployeeSerializer
 
 
@@ -37,8 +38,26 @@ class CarFixSerializer(serializers.ModelSerializer):
         model = CarFixManage
         fields = "__all__"
 
+    @staticmethod
+    def _get_fix_man(name):
+        try:
+            print(name)
+            return EmployeeManage.objects.get(name=name).id
+        except Exception as e:
+            print(e)
+            raise
+
     def create(self, validated_data):
         # 由于read_only将car_id自动过滤，只能通过获取参数值，来创建car_fix
-        car_info = CarFixManage(**validated_data, car_id=self.context['request'].data['car_id'])
+        car_info = CarFixManage(**validated_data, car_id=self.context['request'].data['car_id'],
+                                fix_man_id=self._get_fix_man(self.context['request'].data['fix_man_id']))
         car_info.save()
         return car_info
+
+    def update(self, instance, validated_data):
+        print(validated_data)
+
+        instance.car_id = self.context['request'].data['car_id']
+        instance.fix_man_id = self._get_fix_man(self.context['request'].data['fix_man_id'])
+        instance.save()
+        return instance
