@@ -6,6 +6,7 @@
 __author__ = 'Peter.Fang'
 
 import requests, time, json
+from datetime import datetime
 
 s = requests.session()
 data = [
@@ -29,9 +30,10 @@ data_VIN_DETAIL = [
     ('VIN', 'LVZA53P90FC641821'),
     ('_JSON_PARAMS_', ''),
 ]
+today = datetime.now().strftime('%Y-%m-%d')
 
 
-def parse_html(res):
+def parse_info_html(res):
     from bs4 import BeautifulSoup
     soup = BeautifulSoup(res.text, 'html.parser')
     format = ["number", "car_type", "buy_date", "pro_date", "owner", "tel"]
@@ -45,9 +47,15 @@ def parse_html(res):
     return {k: v for k, v in zip(format, data)}
 
 
-def get_info(VIN):
+def login(acc_flag=False):
     res = s.post("http://dcms.dfsk.com.cn/DCMS/common/login/LoginManager/doLogin.json", data)
-    ret = s.post("http://dcms.dfsk.com.cn/DCMS/common/menu/MenuShow/menuDisplay.do?poseId=1100013086", data_Location)
+    if not acc_flag:
+        ret = s.post("http://dcms.dfsk.com.cn/DCMS/common/menu/MenuShow/menuDisplay.do?poseId=1100013086",
+                     data_Location)
+
+
+def get_info(VIN):
+    login()
     data_VIN = [
         ('VIN', VIN),
         ('lastLoginUserName', 'F13-0009_HGH'),
@@ -65,7 +73,17 @@ def get_info(VIN):
             "http://dcms.dfsk.com.cn/DCMS/servicemng/businessreception/CustomerReception/repairOrderAddInit.do?lastLoginUserName=F13-0009_HGH",
             data_VIN_DETAIL)
         if VIN in r.text:
-            return parse_html(r)
+            return parse_info_html(r)
+
+
+def get_gurantee(day_start=today, day_end=today):
+    login()
+    data = [
+        ('VIN', 1),
+        ('lastLoginUserName', 'F13-0009_HGH'),
+    ]
+    r = s.post("http://dcms.dfsk.com.cn/DCMS/servicemng/businessreception/CustomerReception/vinSelect.json", data)
+    print(r.text)
 
 
 if __name__ == "__main__":

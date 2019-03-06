@@ -60,6 +60,9 @@ class CarFixAccManage(models.Model):
     usage = models.SmallIntegerField(default=1)
     cost = models.FloatField(default=0)
     guarantee = models.BooleanField(default=False)
+    guarantee_price = models.FloatField('三包价', default=0)
+    guarantee_time = models.FloatField('工时', default=0)
+    guarantee_time_fee = models.FloatField('工时费', default=0)
     old_id = models.IntegerField(verbose_name="old_id", null=True, blank=True)
 
     class Meta:
@@ -67,3 +70,9 @@ class CarFixAccManage(models.Model):
 
     def __str__(self):
         return self.name
+
+
+# gurantee table unit is acc
+class Gurantee(models.Model):
+    date = models.DateTimeField()
+    sn = models.CharField(max_length=50)

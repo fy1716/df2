@@ -35,12 +35,12 @@ class AccScanManage(models.Model):
 # 进货记录
 class AccBuyRecordManage(models.Model):
     station_id = models.SmallIntegerField()
-    accBuyDate = models.DateField()
+    date = models.DateField(null=True)
     name = models.CharField(max_length=48, verbose_name="名称")
-    id_number = models.CharField(max_length=30, verbose_name="件号")
-    type = models.CharField(max_length=30, null=True, verbose_name="类型")
+    sn = models.CharField(max_length=30, verbose_name="件号")
     cost = models.FloatField(null=True, default=0, verbose_name="材料费")
     count = models.SmallIntegerField(null=True, verbose_name="数量")
+    total_cost = models.FloatField(null=True, default=0, verbose_name="总价")
 
     class Meta:
-        db_table = 'accBuyRecord'
+        db_table = 'acc_buy_record'
