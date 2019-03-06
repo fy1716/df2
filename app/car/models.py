@@ -35,7 +35,7 @@ class CarFixManage(models.Model):
     reg_time = models.CharField(max_length=24, null=True)
     income = models.SmallIntegerField(default=0, null=True)
     fix_man = models.ForeignKey('staff.EmployeeManage', null=True, on_delete=models.CASCADE)
-    remark = models.CharField(max_length=1024, null=True)
+    remark = models.CharField(max_length=1024, null=True, default='')
     logging = models.BooleanField(default=False)
     maintain = models.BooleanField(default=False)
     temp_id = models.SmallIntegerField(default=0, null=True)
