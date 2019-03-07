@@ -74,5 +74,29 @@ class CarFixAccManage(models.Model):
 
 # gurantee table unit is acc
 class Gurantee(models.Model):
-    date = models.DateTimeField()
-    sn = models.CharField(max_length=50)
+    order_no = models.CharField('单号', max_length=50)
+    apply_date = models.DateTimeField(null=True)
+    check_date = models.DateTimeField(null=True)
+    repair_type = models.CharField('维修类型', max_length=10)
+    gurantee_type = models.CharField('索赔类型', max_length=10)
+    check_state = models.CharField('审核状态', max_length=50)
+    car_sn = models.CharField('VIN', max_length=50)
+    car_type = models.CharField('车型', max_length=50)
+    acc_sn = models.CharField('配件代码', max_length=50)
+    acc_name = models.CharField('配件名称', max_length=50)
+    acc_unit = models.FloatField('配件单价', default=0)
+    acc_count = models.FloatField('配件数', default=0)
+    acc_fee = models.FloatField('配件费', default=0)
+    guarantee_unit = models.FloatField('工时单价', default=0)
+    guarantee_time = models.FloatField('工时数', default=0)
+    guarantee_time_fee = models.FloatField('工时费', default=0)
+    event_fee = models.FloatField('活动费', default=0)
+    material_fee = models.FloatField('辅料费', default=0)
+    special_fee = models.FloatField('特殊费', default=0)
+    total_fee = models.FloatField('总金额', default=0)
+
+    class Meta:
+        db_table = 'gurantee'
+
+    def __str__(self):
+        return self.order_no

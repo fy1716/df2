@@ -69,3 +69,7 @@ def json_response(flag, data=None, message=''):
         "message": message
     }
     return JsonResponse(result_format)
+
+
+def excel_float(data):
+    return float(str(data).replace(',', ''))

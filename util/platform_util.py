@@ -7,6 +7,7 @@ __author__ = 'Peter.Fang'
 
 import requests, time, json
 from datetime import datetime
+import subprocess
 
 s = requests.session()
 data = [
@@ -30,6 +31,7 @@ data_VIN_DETAIL = [
     ('VIN', 'LVZA53P90FC641821'),
     ('_JSON_PARAMS_', ''),
 ]
+
 today = datetime.now().strftime('%Y-%m-%d')
 
 
@@ -48,10 +50,10 @@ def parse_info_html(res):
 
 
 def login(acc_flag=False):
-    res = s.post("http://dcms.dfsk.com.cn/DCMS/common/login/LoginManager/doLogin.json", data)
+    s.post("http://dcms.dfsk.com.cn/DCMS/common/login/LoginManager/doLogin.json", data)
     if not acc_flag:
-        ret = s.post("http://dcms.dfsk.com.cn/DCMS/common/menu/MenuShow/menuDisplay.do?poseId=1100013086",
-                     data_Location)
+        s.post("http://dcms.dfsk.com.cn/DCMS/common/menu/MenuShow/menuDisplay.do?poseId=1100013086",
+               data_Location)
 
 
 def get_info(VIN):
@@ -78,24 +80,35 @@ def get_info(VIN):
 
 def get_gurantee(day_start=today, day_end=today):
     login()
-    data = [
-        ('VIN', 1),
-        ('lastLoginUserName', 'F13-0009_HGH'),
+    s.get(
+        'http://dcms.dfsk.com.cn/DCMS/sysmng/usemng/DcsFuncMapping/pageIntegration.do?funcId=88888888')
+    s.get(
+        'http://idcs.dfsk.com.cn/sysusermng/sysuserinfo/DcsFuncMapping/pageIntegration1.do?funcId=1e4ad363503a24b210130103&password=*********************************&vin=null&inMileage=null&codes=null&codes_type=null&labcodes=null&labcodes_type=null')
+    data_download = [
+        ('RO_STARTDATE', day_start),
+        ('RO_ENDDATE', day_end),
     ]
-    r = s.post("http://dcms.dfsk.com.cn/DCMS/servicemng/businessreception/CustomerReception/vinSelect.json", data)
-    print(r.text)
+    r = s.post(
+        'http://idcs.dfsk.com.cn/claim/dealerClaimMng/ClaimBillTrack/export.do', data_download)
+    with open('../db_tools/data/download_gurantee.xls', 'wb') as f:
+        f.write(r.content)
+
+    # 导入db
+    subprocess.run(['python', '../db_tools/gurantee_sync.py'])
 
 
 if __name__ == "__main__":
     # 登录
-    # res=s.post("http://dcms.dfsk.com.cn/DCMS/common/login/LoginManager/doLogin.json",data)
-    # # c = print(res.text)
-    # # 进入职位选择
-    # # res=s.get("http://dcms.dfsk.com.cn/DCMS/common/login/LoginManager/login.do?userId=1100013384")
-    # # print(res.text)
-    # # 选择职位
+    # res = s.post("http://dcms.dfsk.com.cn/DCMS/common/login/LoginManager/doLogin.json", data)
+    # c = print(res.text)
+    # 进入职位选择
+    # res = s.get("http://dcms.dfsk.com.cn/DCMS/common/login/LoginManager/login.do?userId=1100013384")
+    # print(res.text)
+    # 选择职位
     # ret = s.post("http://dcms.dfsk.com.cn/DCMS/common/menu/MenuShow/menuDisplay.do?poseId=1100013086", data_Location)
-    # # print(ret.text)
+    # print(ret.text)
+    # print(s.cookies, ret.cookies)
+
     # # 获取完整VIN
     # # res_add = s.get("http://dcms.dfsk.com.cn/DCMS/servicemng/businessreception/CustomerReception/queryCustomerReceptionInit.do?lastLoginUserName=F13-0009_HGH")
     # # print(res_add.text)
@@ -107,4 +120,5 @@ if __name__ == "__main__":
     # # print(r.text)
     # print('湘H0FY90' in r.text)
     # parse_html(r)
-    print(get_info("JA042894"))
+    # print(get_info("JA042894"))
+    get_gurantee(day_start="2019-03-05")
