@@ -36,8 +36,8 @@ def read_excel():
                       "acc_unit", "acc_count", "acc_fee", "guarantee_unit", "guarantee_time",
                       "guarantee_time_fee", "event_fee", "material_fee", "special_fee", "total_fee"]
         # 打开excel
-        path = os.path.abspath()
-        excel = xlrd.open_workbook('./data/download_gurantee.xls')
+        path = os.path.dirname(__file__)
+        excel = xlrd.open_workbook(os.path.join(path, 'data/download_gurantee.xls'))
         # 打开表
         table = excel.sheet_by_index(0)
         # 读取每一行
