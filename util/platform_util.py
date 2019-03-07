@@ -5,8 +5,8 @@
 # Time: 2019/3/6 8:44
 __author__ = 'Peter.Fang'
 
-import requests, time, json
-from datetime import datetime
+import requests
+import datetime
 import subprocess
 
 s = requests.session()
@@ -32,7 +32,7 @@ data_VIN_DETAIL = [
     ('_JSON_PARAMS_', ''),
 ]
 
-today = datetime.now().strftime('%Y-%m-%d')
+today = datetime.datetime.now().strftime('%Y-%m-%d')
 
 
 def parse_info_html(res):
@@ -94,7 +94,13 @@ def get_gurantee(day_start=today, day_end=today):
         f.write(r.content)
 
     # 导入db
-    subprocess.run(['python', '../db_tools/gurantee_sync.py'])
+    subprocess.run(['python', '../db_tools/gurantee_sync.py', day_start, day_end])
+
+
+def do_sync_gurantee():
+    today = datetime.date.today()
+    day_start = today - datetime.timedelta(days=3)
+    get_gurantee(day_start=day_start.strftime('%Y-%m-%d'))
 
 
 if __name__ == "__main__":
@@ -121,4 +127,4 @@ if __name__ == "__main__":
     # print('湘H0FY90' in r.text)
     # parse_html(r)
     # print(get_info("JA042894"))
-    get_gurantee(day_start="2019-03-05")
+    do_sync_gurantee()

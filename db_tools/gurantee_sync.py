@@ -9,10 +9,9 @@ import sys
 import traceback
 import xlrd
 
-from util import common_util
-
 pwd = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(pwd + "../")
+main_dir = os.path.dirname(pwd)
+sys.path.append(main_dir)
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "df2.settings")
 
 import django
@@ -31,6 +30,9 @@ def read_excel():
     gurantee_list = []
     param_dict = {}
     try:
+        data = Gurantee.objects.filter(apply_date__gte=day_start, apply_date__lte=day_end)
+        order_no_list = [item.order_no for item in data]
+        # 获取一条最新的有效数据
         param_list = ["order_no", "apply_date", "check_date", "repair_type", "gurantee_type",
                       "check_state", "car_sn", "car_type", "acc_sn", "acc_name",
                       "acc_unit", "acc_count", "acc_fee", "guarantee_unit", "guarantee_time",
@@ -50,13 +52,15 @@ def read_excel():
             i += 1
             for item in param_list:
                 param_dict[item] = locals()[item]
+            if param_dict['check_date'] == '' or param_dict['order_no'] in order_no_list:  # 将未审核的过滤，这样可以简化数据处理
+                continue
             gurantee_list.append(Gurantee(**param_dict))
             param_dict = {}
             if i >= limit:
                 i = 0  # 计数重置
                 gurantee_list = []  # 存入列表重置
                 Gurantee.objects.bulk_create(gurantee_list)  # 批量存入数据库
-            elif n == table.nrows - 1:
+            elif n == table.nrows:
                 Gurantee.objects.bulk_create(gurantee_list)  # 批量存入数据库
 
     except Exception as e:
@@ -65,4 +69,6 @@ def read_excel():
 
 
 if __name__ == '__main__':
+    print(sys.argv)
+    _, day_start, day_end = sys.argv
     read_excel()
