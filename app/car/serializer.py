@@ -24,9 +24,19 @@ class CarInfoSerializer(serializers.ModelSerializer):
 
 
 class FixAccSerializer(serializers.ModelSerializer):
+    fix_man_name = serializers.SerializerMethodField()  # 增加展示的外来字段
+
     class Meta:
         model = CarFixAccManage
         fields = "__all__"
+        # fields = ('fix', 'fix_man', 'name', 'sn', 'type', 'price', 'usage', 'cost', 'guarantee', 'guarantee_price',
+        #           'guarantee_time', 'guarantee_time_fee', 'fix_man_name')
+
+    def get_fix_man_name(self, obj):
+        try:
+            return obj.fix_man.name
+        except Exception as e:
+            return None
 
 
 class CarFixSerializer(serializers.ModelSerializer):

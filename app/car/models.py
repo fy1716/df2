@@ -52,6 +52,7 @@ class CarFixManage(models.Model):
 class CarFixAccManage(models.Model):
     station_id = models.IntegerField(blank=True, null=True)
     fix = models.ForeignKey('CarFixManage', on_delete=models.CASCADE, related_name='fix_acc', null=True)
+    fix_man = models.ForeignKey('staff.EmployeeManage', null=True, on_delete=models.CASCADE)
     # 记录下配件信息，而不是外键，这样保证存留历史快照
     name = models.CharField(max_length=50, blank=True)
     sn = models.CharField(max_length=50, blank=True)

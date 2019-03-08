@@ -9,6 +9,7 @@ from app.acc.models import AccManage
 from app.car.models import CarInfoManage, CarFixManage, CarFixAccManage
 from app.car.serializer import CarInfoSerializer, CarFixSerializer, FixAccSerializer
 from app.car.filters import CarInfoFilter, CarFixFilter, FixAccFilter
+from util import common_util
 
 
 # 根据page_size不同来获取数据的多少
@@ -83,4 +84,5 @@ class FixAccViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Retri
         instance.delete()
 
     def perform_update(self, serializer):
+        common_util.debug(serializer)
         serializer.save()
