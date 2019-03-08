@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Accordion Tools - jQuery EasyUI Demo</title>
+	<link rel="stylesheet" type="text/css" href="/media/css/easyui.css">
+	<link rel="stylesheet" type="text/css" href="/media/css/icon.css">
+	<link rel="stylesheet" type="text/css" href="/media/css/demo.css" >
+	<link rel="stylesheet" type="text/css" href="/media/css/carfix.css" >
+	<script type="text/javascript" src="/media/js/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="/media/js/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="/media/js/carfix.js"></script>
+	<script type="text/javascript" src="/media/js/validate.js"></script>
+</head>
+<body style="padding:0px;font-size:15px;">
+	<div id="car_accordion" class="easyui-accordion" style="width:100%;height:650px;">
+		<div title="车辆维修管理" data-options="iconCls:'icon-home'" style="overflow:auto;padding:0px;">
+			<!-- 表格-->
+			<table id="dg_car" title="维修记录" class="easyui-datagrid" style="width:100%;height:100%"
+			url="/dfapi?api=211"
+			method='get'
+			toolbar="#toolbar_car" pagination="true" striped="true"
+			rownumbers="true" fitColumns="true" singleSelect="true" loadMsg="正在查询...">
+				<thead>
+					<tr>
+						<th field="id" width="30" hidden="true">ID</th>
+						<th field="carFixMan" width="50" hidden="true">维修人员</th>
+						<th field="carFixIncome" width="50" hidden="true">实收</th>
+						<th field="carFixDate" width="45">维修日期</th>
+						<th field="carIDNumber" width="45">底盘号</th>
+						<th field="carNumber" width="45">车牌</th>
+						<th field="carType" width="30">车型</th>
+						<th field="carCard" width="30">信息卡</th>
+						<th field="carBuyDate" width="45" sortable="true">购车日期</th>
+						<th field="carOwner" width="35">车主</th>
+						<th field="carFixODO" width="30">公里数</th>
+						<th field="carFixMaintain" width="20" data-options="formatter:showImgLogging">保养</th>
+						<th field="carFixFavorable" width="35">下次优惠</th>
+						<th field="carAccName" width="270">更换配件及备注</th>
+						<th field="carFixLogging" width="15" data-options="formatter:showImgLogging">录入</th>
+					</tr>
+				</thead>
+			</table>
+
+			<div id="toolbar_car">
+				<span>起始日期:</span>
+				<input id="daystart" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser,width:'100px'" validType="date">
+				<span>结束日期:</span>
+				<input id="dayend" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser,width:'100px'" validType="date">
+				<span>底盘号:</span><input type="text" id="carIDNumber" value="" size=10 />
+				<span>车牌:</span><input type="text" id="carNumber" value="" size=10 />
+				<span>车主:</span><input type="text" id="carOwner" value="" size=10 />
+
+				<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="findCarFixInfo()">查询</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newCarFixInfo()">新增</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editCarFixInfo()">编辑</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyCarFixInfo()">删除</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-redo" plain="true" onclick="outCarFix()">维修导出</a>
+			</div>
+
+		</div>
+
+		<div title="维修明细" data-options="iconCls:'icon-edit'" style="padding:0px;">
+		<table id="dg_acc" title="配件管理" class="easyui-datagrid" style="width:100%;height:290px"
+		url="/dfapi?api=301"
+		method='get'
+		toolbar="#toolbar_acc" pagination="true" striped="true" 
+		rownumbers="true" fitColumns="true" singleSelect="true" loadMsg="正在查询...">
+			<thead>
+				<tr>
+					<th field="carFixID" width="50" hidden="true">维修ID</th>
+					<th field="carAccName" width="50">名称</th>
+					<th field="carAccIDNumber" width="50">件号</th>
+					<th field="carAccType" width="50">类型</th>
+					<th field="carAccPrice" width="50">单价</th>
+					<th field="carAccUsage" width="50">数量</th>
+					<th id="carAccGuarantee" field="carAccGuarantee" width="50" data-options="formatter:showImgGuaranty">三包</th>
+				</tr>
+			</thead>
+		</table>
+
+		<div id="toolbar_acc">
+
+			<input id="accName" name="acc" class="easyui-combobox" style="width:250px;" data-options=
+			                "loader: btsloader, mode: 'remote', valueField: 'id', textField: 'name'"/>
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="fixAddAcc()">添加</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="fixEditAcc()">编辑</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="fixDestroyAcc()">删除</a>
+		</div>
+
+		<div id="dlg" class="easyui-dialog" style="width:400px;height:360px;padding:10px 20px"
+		closed="true" buttons="#dlg-buttons">
+			<div class="ftitle">配件信息</div>
+			<form id="fm" method="post" novalidate>
+				<div class="fitem">
+					<p id="hideaccID">
+						<label>ID(不填):</label>
+						<input id="fmid" name="carFixID" class="easyui-textbox" readonly="true">
+					</p>
+				</div>
+				<div class="fitem">
+					<label>名称:</label>
+					<input name="carAccName" class="easyui-textbox">
+				</div>
+				<div class="fitem">
+					<label>件号:</label>
+					<input id="fmidnumber" name="carAccIDNumber" class="easyui-textbox" required="true" validType="notnull" missingMessage="必填">
+				</div>
+				<div class="fitem">
+					<label>类型:</label>
+					<input name="carAccType" class="easyui-textbox">
+				</div>
+				<div class="fitem">
+					<label>单价:</label>
+					<input name="carAccPrice" class="easyui-textbox" required="true" validType="numeric" missingMessage="必填">
+				</div>
+				<div class="fitem">
+					<label>数量:</label>
+					<input name="carAccUsage" class="easyui-textbox" required="true" validType="positive_int" missingMessage="必填">
+				</div>
+				<div class="fitem">
+					<label>三包:</label>
+					<input name="carAccGuarantee" type="checkbox" id="guarantee" value=1>
+				</div>
+			</form>
+		</div>
+
+		<div id="dlg-buttons">
+
+			<a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="fixSaveAcc()" style="width:90px">保存</a>
+
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">取消</a>
+
+		</div>
+		<div id="car_fix_basic" class="easyui-panel" title="维修信息" style="height:165px;width:100%;padding:10px 20px">
+			<form id="fm_fix_detail" method="post" novalidate>
+				<div class="fitem_fix">
+					<label>里程:</label>
+					<input id="detailFixODO" name="carFixODO" class="easyui-textbox" validType="numeric">
+				<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<label>维修人员:</label>
+					<select id="detailFixMan" class="easyui-combobox" name="carFixMan" style="width:113px;"> 
+						<option value="方建平">方建平</option> 
+						<option value="焦俊峰">焦俊峰</option> 
+						<option value="李宇文">李宇文</option> 
+						<option value="李进">李进</option> 
+						<option value="李登科">李登科</option>
+					</select> 
+				<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<label>实收:</label>
+					<input id="detailFixIncome" name="carFixIncome" class="easyui-textbox" validType="numeric">
+				<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<label>下次优惠:</label>
+					<input id="detailFixFavorable" name="carFixFavorable" class="easyui-textbox" validType="numeric">
+				<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<label>维修备注:</label>
+					<input id="detailFixRemark" name="carFixRemark" class="easyui-textbox">
+				</div>
+				<div class="fitem_fix">
+					<label>底盘号:</label>
+					<input id="detailIDNumber" name="carIDNumber" class="easyui-textbox" required="true" validType="notnull" missingMessage="必填">
+				<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<label>车牌:</label>
+					<input id="detailNumber" name="carNumber" class="easyui-textbox">
+				<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<label>车型:</label>
+					<input id="detailType" name="carType" class="easyui-textbox">
+				<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<label>购车日期:</label>
+					<input id="detailBuyDate" name="carBuyDate" class="easyui-textbox" validType="extenddate">
+				<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<label>生产日期:</label>
+					<input id="detailProDate" name="carProDate" class="easyui-textbox" validType="extenddate">
+				</div>
+				<div class="fitem_fix">
+					<label>信息卡:</label>
+					<select id="detailCard" class="easyui-combobox" name="carCard" style="width:113px;"> 
+						<option value ="未知">未知</option>
+						<option value="自带">自带</option> 
+						<option value="服务站">服务站</option> 
+						<option value="丢失">丢失</option> 
+					</select> 
+				<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<label>车主:</label>
+					<input id="detailOwner" name="carOwner" class="easyui-textbox">
+				<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<label>电话:</label>
+					<input id="detailTel" name="carTel" class="easyui-textbox" validType="positive_int">
+				<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<label>维修日期:</label>
+					<input id="detailFixDate" name="carFixDate" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" validType="date" required="true" missingMessage="必填">
+				<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<label>是否录入:</label>
+					<input name="carFixLogging" type="checkbox" id="detailLogging" value=1>				
+					<p id="hideID">
+						<label>ID(不填):</label>
+						<input id="carFixID" name="id" class="easyui-textbox" value="-1" readonly="true"/>
+					</p>
+
+				</div>
+			</form>
+			<div align="right">
+				<a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-save" onclick="saveCarFixInfo()" style="width:88px;margin-right:100px;">保存</a>
+				<a href="javascript:void(0)" id="sum" class="easyui-linkbutton c6" target="_blank" iconCls="icon-print" onclick="printCarFix()" style="width:88px;margin-right:170px;">打印</a>
+			</div>
+		</div>
+
+		</div>
+	</div>
+</body>
+</html>
+

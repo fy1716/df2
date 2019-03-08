@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<META HTTP-EQUIV="pragma" CONTENT="no-cache"> 
+		<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"> 
+		<META HTTP-EQUIV="expires" CONTENT="Wed, 26 Feb 1997 08:21:57 GMT">
+
+		<link rel="stylesheet" type="text/css" href="/media/css/easyui.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/icon.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/color.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/demo.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/jquery-ui.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/accmanage.css">
+
+		<script type="text/javascript" src="/media/js/jquery-1.11.2.min.js"></script>
+		<script type="text/javascript" src="/media/js/jquery.easyui.min.js"></script>
+		<script type="text/javascript" src="/media/js/accstatistics.js"></script>
+		<script type="text/javascript" src="/media/js/validate.js"></script>
+
+	</head>
+
+	<body style="padding:0px;">
+		<table id="dg" title="配件统计" class="easyui-datagrid" style="width:100%;height:653px"
+		url="/dfapi?api=501"
+		method='get'
+		toolbar="#toolbar" pagination="true" striped="true"
+		rownumbers="true" fitColumns="true" singleSelect="true" loadMsg="正在查询...">
+			<thead>
+				<tr>
+					<th field="accName" width="50">名称</th>
+					<th field="accIDNumber" width="50">件号</th>
+					<th field="accType" width="50">类型</th>
+					<th field="accTotalUsage" width="50">使用量</th>
+				</tr>
+			</thead>
+		</table>
+		<div id="toolbar">
+			<span>起始日期:</span>
+			<input id="daystart" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" validType="date" required="true">
+			<span>结束日期:</span>
+			<input id="dayend" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" validType="date" required="true">
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="findAcc()">查询</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-redo" plain="true" onclick="exportAcc()">配件出库导出</a>
+		</div>
+	</body>
+</html>

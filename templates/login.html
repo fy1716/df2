@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en-us" id="extr-page" data-ng-app="loginApp" style="background-color: #96b4d1">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title> 益阳德丰 </title>
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<!-- split -->
+		<!-- build:css /media/css/login.min.css -->
+		<link rel="stylesheet" type="text/css" media="screen" href="/media/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="/media/css/font-awesome.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="/media/css/smartadmin-production.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="/media/css/smartadmin-skins.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="/media/css/ng.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="/media/css/login.css">
+		<!-- endbuild -->
+		<!-- split -->
+		<link rel="shortcut icon" href="/media/favicon.ico" type="image/x-icon">
+		<link rel="icon" href="/media/favicon.ico" type="image/x-icon">
+	</head>
+	<body class="animated fadeInDown" data-ng-controller="loginCtrl">
+		<!-- possible classes: minified, no-right-panel, fixed-ribbon, fixed-header, fixed-width-->
+		<header id="header" style="background-color: rgb(248, 248, 248)!important;box-shadow: 0px 1px 2px #0170ea;">
+			<!--<span id="logo"></span>-->
+			<div id="logo-group">
+				<span id="logo" style="margin-top:13px;"> <img src="/media/img/logo.png" alt="SmartAdmin"> </span>
+			</div>
+			<span id="extr-page-header-space"><a href="/register" class="btn btn-info">用户注册</a></span>
+		</header>
+		<div id="main" role="main" class="defeng-login-bk">
+			<!-- MAIN CONTENT -->
+			<div id="content" class="container">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-7 col-lg-8 hidden-xs hidden-sm">
+							<div id="myCarousel-2" class="carousel fade">
+								<ol class="carousel-indicators">
+									<li data-target="#myCarousel-2" data-slide-to="0" class="active"></li>
+									<li data-target="#myCarousel-2" data-slide-to="1" class=""></li>
+									<li data-target="#myCarousel-2" data-slide-to="1" class=""></li>
+									<li data-target="#myCarousel-2" data-slide-to="2" class=""></li>
+									<li data-target="#myCarousel-2" data-slide-to="3" class=""></li>
+								</ol>
+								<div class="carousel-inner">
+									<div class="item active">
+										<img src="/media/img/demo/F580.jpg" alt="">
+									</div>
+									<div class="item">
+										<img src="/media/img/demo/F580-1.jpg" alt="">
+									</div>
+									<div class="item">
+										<img src="/media/img/demo/F580-2.jpg" alt="">
+									</div>
+									<div class="item">
+										<img src="/media/img/demo/F370.jpg" alt="">
+									</div>
+									<div class="item">
+										<img src="/media/img/demo/C37.jpg" alt="">
+									</div>
+								</div>
+								<a class="left carousel-control" href="#myCarousel-2" data-slide="prev"> <span class="glyphicon glyphicon-chevron-left"></span> </a>
+								<a class="right carousel-control" href="#myCarousel-2" data-slide="next"> <span class="glyphicon glyphicon-chevron-right"></span> </a>
+							</div>
+					</div>
+					<div class="col-xs-12 col-sm-12 col-md-5 col-lg-4">
+						<div class="well no-padding" style="height: 455px;">
+							<form id="login-form" name="LoginForm" ng-submit="login(LoginForm.$valid)" class="smart-form client-form" autocomplete="off" novalidate="novalidate">
+								<header style="text-align: center;font-size: large;">
+									东风小康售后服务站
+								</header>
+								<fieldset style="padding: 30px 14px 15px;">
+									<section>
+										<label class="label" style="font-weight:600">用户名</label>
+										<label class="input"> <i class="icon-append fa fa-user"></i>
+											<input type="userName" name="userName" ng-model="userName" required>
+											<b class="tooltip tooltip-top-right"><i class="fa fa-user txt-color-teal"></i> 请输入用户名</b></label>
+									</section>
+									<section>
+										<label class="label" style="font-weight:600">密码</label>
+										<label class="input"> <i class="icon-append fa fa-lock"></i>
+											<input type="password" name="password" ng-model="password" required>
+											<b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i> 请输入密码</b> </label>
+										<div class="note">
+										</div>
+									</section>
+
+									<section>
+										<label class="checkbox">
+											<input type="checkbox" name="remember" id="remember" checked="" ng-model="remember">
+											<i></i>记住密码</label>
+									</section>
+								</fieldset>
+								<footer style="background-color:#fff">
+									<button type="submit" class="btn btn-primary">
+										<span style="font-weight:700">登 录</span>
+									</button>
+								</footer>
+							</form>
+							<h5 class="text-center" style="margin-top:25px;"> - Or sign in using -</h5>
+							<ul class="list-inline text-center">
+								<li>
+									<a href="javascript:void(0);" class="btn btn-primary btn-circle"><i class="fa fa-facebook"></i></a>
+								</li>
+								<li>
+									<a href="javascript:void(0);" class="btn btn-info btn-circle"><i class="fa fa-twitter"></i></a>
+								</li>
+								<li>
+									<a href="javascript:void(0);" class="btn btn-warning btn-circle"><i class="fa fa-linkedin"></i></a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--================================================== -->	
+		<!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)
+		<script data-pace-options='{ "restartOnRequestAfter": true }' src="js/plugin/pace/pace.min.js"></script>-->
+		<!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+		<!-- 
+		<script src="//cdn.bootcss.com/jquery/2.0.2/jquery.min.js"></script>
+		-->
+		<!-- 
+		<script src="//cdn.bootcss.com/jqueryui/1.10.3/jquery-ui.min.js"></script>
+		-->
+		<!-- BOOTSTRAP JS -->
+		<!-- JQUERY VALIDATE -->
+		<!-- <script src="//cdn.bootcss.com/jquery-validate/1.9.0/jquery.validate.min.js"></script> -->
+		<!-- JQUERY MASKED INPUT -->
+		<!--[if IE 8]>
+			<h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
+		<![endif]-->
+		<!-- AngularJS -->
+		<!--
+		<script src="//cdn.bootcss.com/angular.js/1.2.16/angular.min.js"></script>
+		<script src="//cdn.bootcss.com/angular.js/1.2.16/angular-animate.min.js"></script>
+		<script src="//cdn.bootcss.com/angular.js/1.2.16/angular-cookies.min.js"></script>
+		<script src="//cdn.bootcss.com/angular.js/1.2.16/angular-route.min.js"></script>
+		<script src="//cdn.bootcss.com/angular-ui-bootstrap/0.11.0/ui-bootstrap-tpls.min.js"></script>
+		-->
+		<!-- split -->
+      		<!-- build:js media/scripts/login.min.js -->	
+		<script src="/media/js/jquery.min.js"></script>
+		<script src="/media/js/jquery-ui.min.js"></script>
+		<script src="/media/js/bootstrap/bootstrap.min.js"></script>
+		<script src="/media/js/plugin/jquery-validate/jquery.validate.min.js"></script> 
+		<script src="/media/js/plugin/masked-input/jquery.maskedinput.min.js"></script>
+ 		<script src="/media/js/libs/angular/angular.js"></script>
+	  	<script src="/media/js/libs/angular/angular-route.js"></script>
+	  	<script src="/media/js/libs/angular/angular-animate.js"></script>
+       		<script src="/media/js/libs/angular/angular-cookies.js"></script> 
+	  	<script src="/media/js/libs/angular/ui-bootstrap-custom-tpls-0.11.0.js"></script>
+		<script src="/media/js/ng/loginCtrl.js"></script>
+		<!-- endbuild -->
+		<!-- split -->
+		<script type="text/javascript">
+			$(function() {
+				// Validation
+				$("#login-form").validate({
+					// Rules for form validation
+					rules : {
+						userName : {
+							required : true
+						},
+						password : {
+							required : true
+						}
+					},
+					// Messages for form validation
+					messages : {
+						userName : {
+							required : '请输入用户名'
+						},
+						password : {
+							required : '请输入密码'
+						}
+					},
+					// Do not change code below
+					errorPlacement : function(error, element) {
+						error.insertAfter(element.parent());
+					}
+				});
+			});
+            $('.carousel.fade').carousel({
+                    interval : 3000,
+                    cycle : true
+            });
+		</script>
+	</body>
+</html>

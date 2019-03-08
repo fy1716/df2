@@ -1,0 +1,72 @@
+<!DOCTYPE html> 
+<html> 
+	<head> 
+		<meta charset="UTF-8"> 
+		<META HTTP-EQUIV="pragma" CONTENT="no-cache">  
+		<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">  
+		<META HTTP-EQUIV="expires" CONTENT="Wed, 26 Feb 1997 08:21:57 GMT"> 
+ 
+		<link rel="stylesheet" type="text/css" href="/media/css/easyui.css"> 
+		<link rel="stylesheet" type="text/css" href="/media/css/icon.css"> 
+		<link rel="stylesheet" type="text/css" href="/media/css/color.css"> 
+		<link rel="stylesheet" type="text/css" href="/media/css/demo.css"> 
+		<link rel="stylesheet" type="text/css" href="/media/css/jquery-ui.css"> 
+		<link rel="stylesheet" type="text/css" href="/media/css/accmanage.css"> 
+ 
+		<script type="text/javascript" src="/media/js/jquery-1.11.2.min.js"></script> 
+		<script type="text/javascript" src="/media/js/jquery.easyui.min.js"></script> 
+		<script type="text/javascript" src="/media/js/maintaincall.js"></script> 
+		<script type="text/javascript" src="/media/js/validate.js"></script> 
+ 
+	</head> 
+ 
+	<body style="padding:0px;"> 
+		<table id="dg" title="保养回访" class="easyui-datagrid" style="width:100%;height:630px" 
+		url="/dfapi?api=601" 
+		method='get' 
+		toolbar="#toolbar" pagination="true" striped="true" 
+		rownumbers="true" fitColumns="true" singleSelect="true" loadMsg="正在查询..."> 
+			<thead> 
+				<tr> 
+					<th field="id" width="60" hidden="true">维修ID</th> 
+					<th field="carFixDate" width="60">维修日期</th> 
+					<th field="carIDNumber" width="60">底盘号</th> 
+					<th field="carNumber" width="60">车牌</th> 
+					<th field="carType" width="30">车型</th> 
+					<th field="carOwner" width="50">车主</th> 
+					<th field="carTel" width="50">电话</th> 
+					<th field="carFixCase" width="50">维修情况</th>
+				</tr> 
+			</thead> 
+		</table> 
+		<div id="toolbar"> 
+			<span>起始日期:</span> 
+			<input id="daystart" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" validType="date" required="true"> 
+			<span>结束日期:</span> 
+			<input id="dayend" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" validType="date" required="true"> 
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="findMaintain()">查询</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editMaintain()">编辑</a>
+		</div> 
+		<!-- 对话框--> 
+		<div id="dlg" class="easyui-dialog" style="width:300px;height:300px;padding:10px 20px" 
+		closed="true" buttons="#dlg-buttons"> 
+			<div class="ftitle">回访记录</div> 
+			<form id="fm" method="post" novalidate> 
+				<div> 
+					<label>备注:</label> 
+					<input name="carFixCase" class="easyui-textbox" width="100px"> 
+					<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> 
+					<p id="hideID"> 
+						<label>ID(不填):</label> 
+						<input name="id" class="easyui-textbox" readonly="true"> 
+					</p> 
+				</div> 
+			</form> 
+		</div> 
+		<div id="dlg-buttons"> 
+			<a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveMaintain()" style="width:90px">保存</a> 
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">取消</a> 
+		</div> 
+	</body> 
+</html> 
+

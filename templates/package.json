@@ -1,0 +1,16 @@
+{
+  "name": "defeng",
+  "version": "1.0.0",
+  "description": "car platform",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "fangyu",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp-html2js": "^0.4.2",
+    "gulp-jshint": "^2.0.0",
+    "jshint": "^2.9.1"
+  }
+}

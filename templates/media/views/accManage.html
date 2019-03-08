@@ -1,0 +1,150 @@
+<style>
+.modal-dialog {
+	width: 700px!important;
+}
+</style>
+<div class="">
+	<section id="table">
+        <div class="row">
+            <div class="col-md-12 show-grid">
+				<div class="jarviswidget jarviswidget-color-orange" id="wid-id-0">
+					<header>
+						<span class="widget-icon"> <i class="fa fa-pencil-square-o"></i> </span>
+						<h2>配件管理</h2>
+					</header>  
+                    <div>
+						<div class="widget-body">
+                            <form class="navbar-form navbar-left ng-pristine ng-valid defeng-navbar-form-left-13" role="search">
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="通用名称/名称/件号" type="text" ng-model="keyword">
+                                </div>
+                                <button class="btn btn-info" type="submit" ng-click="searchAcc()">
+                                    <i class="glyphicon glyphicon-search"></i> 查询
+                                </button>
+                                <button class="btn btn-success" type="submit" ng-click="addAcc()">
+                                    <i class="glyphicon glyphicon-plus"></i> 新增
+                                </button>
+                                <button class="btn btn-warning" type="submit" ng-click="editAcc()" ng-show="currentActiveStatus">
+                                    <i class="glyphicon glyphicon-pencil"></i> 编辑
+                                </button>
+                                <button class="btn btn-danger" type="submit" ng-click="delAcc()" ng-show="currentActiveStatus">
+                                    <i class="glyphicon glyphicon-trash"></i> 删除
+                                </button>
+                            </form>
+							<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
+								<thead>
+									<tr>
+										<th><i class="fa fa-fw fa-bookmark text-muted hidden-md hidden-sm hidden-xs"></i> 通用名称</th>
+										<th><i class="fa fa-fw fa-bookmark-o text-muted hidden-md hidden-sm hidden-xs"></i> 名称</th>
+										<th><i class="fa fa-fw fa-info txt-color-blue hidden-md hidden-sm hidden-xs"></i> 件号</th>
+										<th><i class="fa fa-fw fa-reorder txt-color-blue hidden-md hidden-sm hidden-xs"></i> 类型</th>
+										<th><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> 位置</th>
+										<th><i class="fa fa-fw fa-jpy txt-color-blue hidden-md hidden-sm hidden-xs"></i> 售价</th>
+										<th><i class="fa fa-fw fa-exchange txt-color-blue hidden-md hidden-sm hidden-xs"></i> 数量</th>
+										<th><i class="fa fa-fw fa-comment txt-color-blue hidden-md hidden-sm hidden-xs"></i> 备注</th>
+										<th><i class="fa fa-fw fa-jpy txt-color-blue hidden-md hidden-sm hidden-xs"></i> 进价</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="acc in accList" class="defeng-tr-height" ng-class="{'success': acc.active,'interactive': acc.accIDNumber}"
+                                        ng-click="toggleActive($index)">
+										<td ng-bind="acc.common_name"></td>
+										<td ng-bind="acc.name"></td>
+										<td ng-bind="acc.sn"></td>
+										<td ng-bind="acc.type"></td>
+										<td ng-bind="acc.location"></td>
+										<td ng-bind="acc.price | currency : '￥'"></td>
+										<td ng-bind="acc.count"></td>
+										<td ng-bind="acc.remark"></td>
+										<td ng-bind="acc.cost | currency : '￥'"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div>
+					<span class="defeng-pagination-info">每页{{rows}}条，共{{totalItems}}条</span>
+					<span class="defeng-pagination">
+						<pagination total-items="totalItems" ng-model="page" ng-click="pagination(page)" max-size="3" 
+                            class="pagination-sm" boundary-links="true" rotate="false" num-pages="pageNum" items_per_page="rows"
+                            previous-text="<" next-text=">" first-text="首页" last-text="尾页">
+                        </pagination>
+					</span>
+				</div>
+			</div>
+        </div>
+    </section>
+</div>
+<script type="text/javascript">
+	pageSetUp();
+</script>
+<script type="text/ng-template" id="accOperation.html">
+    <div class="modal-header">
+        <h3 class="modal-title">{{items.title}}</h3>
+    </div>
+    <div class="modal-body">
+		<form name="AccOpForm" role="form" class="form-horizontal ng-pristine ng-valid" novalidate>
+			<fieldset>
+				<div class="form-group">
+					<label for="accCommonName" class="col-md-2 control-label defeng-padding-top-5"> 通用名称</label>
+					<div class="col-md-4" ng-class="{'has-success': AccOpForm.accCommonName.$valid}">
+						<input class="form-control defeng-input-format" type="text" id="accCommonName" name="accCommonName" ng-model="accItem.accCommonName">
+					</div>
+					<label for="accName" class="col-md-2 control-label defeng-padding-top-5">名 称(必填)</label>
+					<div class="col-md-4" ng-class="{'has-error': AccOpForm.accName.$invalid && (AccOpForm.accName.$dirty || dirtyFlag), 'has-success': AccOpForm.accName.$valid}">
+						<input class="form-control defeng-input-format" type="text" id="accName" name="accName" ng-model="accItem.accName" required
+                            ng-class="{'defeng-input-error': AccOpForm.accName.$invalid && (AccOpForm.accName.$dirty || dirtyFlag)}">
+					</div>
+				</div>
+				<div class="form-group" style="margin-top:5px">
+					<label for="accIDNumber" class="col-md-2 control-label defeng-padding-top-5">件 号(必填)</label>
+					<div class="col-md-4" ng-class="{'has-error': AccOpForm.accIDNumber.$invalid && (AccOpForm.accIDNumber.$dirty || dirtyFlag), 'has-success': AccOpForm.accIDNumber.$valid}">
+						<input class="form-control defeng-input-format" type="text" id="accIDNumber" name="accIDNumber" ng-model="accItem.accIDNumber" required
+                            ng-class="{'defeng-input-error': AccOpForm.accIDNumber.$invalid && (AccOpForm.accIDNumber.$dirty || dirtyFlag)}">
+					</div>
+					<label for="accType" class="col-md-2 control-label defeng-padding-top-5">类 型</label>
+					<div class="col-md-4" ng-class="{'has-success': AccOpForm.accType.$valid}">
+						<input class="form-control defeng-input-format" type="text" id="accType" name="accType" ng-model="accItem.accType">
+					</div>
+				</div>
+				<div class="form-group" style="margin-top:5px">
+					<label for="accLocation" class="col-md-2 control-label defeng-padding-top-5">位 置</label>
+					<div class="col-md-4" ng-class="{'has-success': AccOpForm.accLocation.$valid}">
+						<input class="form-control defeng-input-format" type="text" id="accLocation" name="accLocation" ng-model="accItem.accLocation">
+					</div>
+					<label for="accCost" class="col-md-2 control-label defeng-padding-top-5">进 价(必填)</label>
+					<div class="col-md-4" ng-class="{'has-error': AccOpForm.accCost.$invalid && (AccOpForm.accCost.$dirty || dirtyFlag), 'has-success': AccOpForm.accCost.$valid}">
+						<input class="form-control defeng-input-format" type="number" id="accCost" name="accCost" ng-model="accItem.accCost" required
+                            ng-class="{'defeng-input-error': AccOpForm.accCost.$invalid && (AccOpForm.accCost.$dirty || dirtyFlag)}">
+					</div>
+				</div>
+				<div class="form-group" style="margin-top:5px">
+                	<label for="accPrice" class="col-md-2 control-label defeng-padding-top-5">售 价</label>
+					<div class="col-md-4" ng-class="{'has-error': AccOpForm.accPrice.$invalid && (AccOpForm.accPrice.$dirty || dirtyFlag), 'has-success': AccOpForm.accPrice.$valid}">
+						<input class="form-control defeng-input-format" type="number" id="accPrice" name="accPrice" ng-model="accItem.accPrice" ng-pattern="/^(0|[1-9]\d*)$/" 
+                            ng-class="{'defeng-input-error': AccOpForm.accPrice.$invalid && (AccOpForm.accPrice.$dirty || dirtyFlag)}">
+					</div>
+					<label for="accCount" class="col-md-2 control-label defeng-padding-top-5">数 量(必填)</label>
+					<div class="col-md-4" ng-class="{'has-error': AccOpForm.accCount.$invalid && (AccOpForm.accCount.$dirty || dirtyFlag), 'has-success': AccOpForm.accCount.$valid}">
+						<input class="form-control defeng-input-format" type="number" id="accCount" name="accCount" ng-model="accItem.accCount" ng-pattern="/^(0|[1-9]\d*)$/" required
+                            ng-class="{'defeng-input-error': AccOpForm.accCount.$invalid && (AccOpForm.accCount.$dirty || dirtyFlag)}">
+					</div>
+				</div>
+                <div class="form-group" style="margin-top:5px">
+					<label for="accRemark" class="col-md-2 control-label defeng-padding-top-5">备 注</label>
+					<div class="col-md-10" ng-class="{'has-error': AccOpForm.accRemark.$invalid && (AccOpForm.accRemark.$dirty || dirtyFlag), 'has-success': AccOpForm.accRemark.$valid}">
+						<input class="form-control defeng-input-format" type="text" id="accRemark" name="accRemark" ng-maxlength="32" ng-model="accItem.accRemark">
+					</div>
+				</div>
+			</fieldset>
+		</form>
+    </div>
+    <div class="modal-footer">
+        <span class="cloud-operation-info">
+            <span class="text-danger" ng-class="{'defeng-text-okay': Message === '操作成功'}"><span ng-bind="Message"></span></span>
+        </span>
+        <button class="btn btn-primary" ng-click="submitForm(AccOpForm.$valid)">确 认</button>
+        <button class="btn btn-warning" ng-click="cancelForm()">取 消</button>
+    </div>
+</script>

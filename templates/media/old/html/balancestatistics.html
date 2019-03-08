@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<META HTTP-EQUIV="pragma" CONTENT="no-cache"> 
+		<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"> 
+		<META HTTP-EQUIV="expires" CONTENT="Wed, 26 Feb 1997 08:21:57 GMT">
+
+		<link rel="stylesheet" type="text/css" href="/media/css/easyui.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/icon.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/color.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/demo.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/carinfo.css">
+
+		<script type="text/javascript" src="/media/js/jquery-1.11.2.min.js"></script>
+		<script type="text/javascript" src="/media/js/jquery.easyui.min.js"></script>
+		<script type="text/javascript" src="/media/js/balancestatistics.js"></script>
+		<script type="text/javascript" src="/media/js/validate.js"></script>
+	</head>
+
+	<body style="padding:0px;">
+
+		<!-- 表格-->
+		<table id="dg" title="维修财务管理" class="easyui-datagrid" style="width:100%;height:653px"
+		url="/dfapi?api=511"
+		method='get'
+		toolbar="#toolbar" pagination="true" striped="true"
+		rownumbers="true" fitColumns="true" singleSelect="true" loadMsg="正在查询...">
+			<thead>
+				<tr>
+					<th field="id" width="50" hidden="true">ID</th>
+					<th field="balanceDate" width="50">日期</th>
+					<th field="balanceInOut" width="20" data-options="formatter:showImgBalance">收支</th>
+					<th field="balanceRemark" width="150">备注</th>
+					<th field="balanceAmount" width="50">金额</th>
+				</tr>
+			</thead>
+		</table>
+
+		<div id="toolbar">
+
+			<span>起始日期:</span>
+			<input id="daystart" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" validType="date" required="true"> 
+			<span>结束日期:</span>
+			<input id="dayend" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" validType="date" required="true">
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="findBalance()">查询</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newBalance()">新增</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editBalance()">编辑</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyBalance()">删除</a>
+		</div>
+
+		<!-- 对话框-->
+		<div id="dlg" class="easyui-dialog" style="width:350px;height:300px;padding:10px 20px"
+		closed="true" buttons="#dlg-buttons">
+			<div class="ftitle">财务信息</div>
+			<form id="fm" method="post" novalidate>
+				<div class="fitem">
+					<label>日期:</label>
+					<input id="date" name="balanceDate" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" validType="date" required="true">
+				</div>
+				<div class="fitem">
+					<label>是否支出:</label>
+					<input name="balanceInOut" type="checkbox" id="out" value=-1>
+				</div>
+				<div class="fitem">
+					<label>备注:</label>
+					<input name="balanceRemark" class="easyui-textbox" required="true" missingMessage="必填">
+				</div>
+				<div class="fitem">
+					<label>金额:</label>
+					<input name="balanceAmount" class="easyui-textbox" validType="numeric" required="true" missingMessage="必填">
+				</div>
+				<div class="fitem">
+					<p id="hideID">
+						<label>ID(不填):</label>
+						<input name="id" class="easyui-textbox" readonly="true">
+					</p>
+				</div>
+			</form>
+		</div>
+
+		<div id="dlg-buttons">
+
+			<a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveBalance()" style="width:90px">保存</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">取消</a>
+
+		</div>
+
+	</body>
+
+</html>

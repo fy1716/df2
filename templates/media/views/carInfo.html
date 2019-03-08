@@ -1,0 +1,164 @@
+<div class="">
+	<section id="table">
+        <div class="row">
+            <div class="col-md-12 show-grid">
+				<div class="jarviswidget jarviswidget-color-blue" id="wid-id-0">
+					<header>
+						<span class="widget-icon"> <i class="fa fa-pencil-square-o"></i> </span>
+						<h2>车辆信息管理</h2>
+					</header>  
+                    <div>
+						<div class="widget-body">
+                            <form class="navbar-form navbar-left ng-pristine ng-valid defeng-navbar-form-left-13" role="search">
+                                <span>购车起始日期 <input class="form-control defeng-input-width" type="text" id="dayStart" ng-model="dayStart" ng-pattern="/^\d{4}-\d{1,2}-\d{1,2}$/"></span>
+                                <span>结束日期 <input class="form-control defeng-input-width" type="text" id="dayEnd" ng-model="dayEnd" ng-pattern="/^\d{4}-\d{1,2}-\d{1,2}$/"></span>
+                                <div class="form-group">
+                                    <label>类型 </label>
+                                    <select class="form-control" ng-model="searchType">
+                                        <option value="{{$index}}" ng-repeat="type in searchTypeList">{{type}}</option>
+                                    </select>
+                                </div>                                
+                                <div class="form-group">
+                                    <label>关键字 </label>
+                                    <input class="form-control defeng-input-width" placeholder="{{searchTip}}" type="text" ng-model="keyword" ng-keydown="keydown($event)">
+                                </div>
+                                <button class="btn btn-info" type="submit" ng-click="searchCarInfo()">
+                                    <i class="glyphicon glyphicon-search"></i> 查询
+                                </button>
+                                <button class="btn btn-success" type="submit" ng-click="addCarInfo()">
+                                    <i class="glyphicon glyphicon-plus"></i> 新增
+                                </button>
+                                <button class="btn btn-warning" type="submit" ng-click="editCarInfo()" ng-show="currentActiveStatus">
+                                    <i class="glyphicon glyphicon-pencil"></i> 编辑
+                                </button>
+                                <button class="btn btn-danger" type="submit" ng-click="delCarInfo()" ng-show="currentActiveStatus">
+                                    <i class="glyphicon glyphicon-trash"></i> 删除
+                                </button>
+                            </form>
+							<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
+								<thead>
+									<tr>
+										<th><i class="fa fa-fw fa-info txt-color-blue hidden-md hidden-sm hidden-xs"></i> 底盘号</th>
+										<th><i class="fa fa-fw fa-car txt-color-blue hidden-md hidden-sm hidden-xs"></i> 车牌</th>
+										<th><i class="fa fa-fw fa-reorder txt-color-blue hidden-md hidden-sm hidden-xs"></i> 车型</th>
+										<th><i class="fa fa-fw fa-calendar txt-color-blue hidden-md hidden-sm hidden-xs"></i> 购车日期</th>
+										<th><i class="fa fa-fw fa-calendar txt-color-blue hidden-md hidden-sm hidden-xs"></i> 生产日期</th>
+										<th><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i> 车主</th>
+										<th><i class="fa fa-fw fa-mobile txt-color-blue hidden-md hidden-sm hidden-xs"></i> 电话</th>
+										<th><i class="fa fa-fw fa-comment txt-color-blue hidden-md hidden-sm hidden-xs"></i> 备注</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="car in carInfoList" class="defeng-tr-height" ng-class="{'success': car.active,'interactive': car.carType}"
+                                        ng-click="toggleActive($index)">
+										<td ng-bind="car.sn"></td>
+										<td ng-bind="car.number"></td>
+										<td ng-bind="car.type"></td>
+										<td ng-bind="car.buy_date"></td>
+										<td ng-bind="car.pro_date"></td>
+										<td ng-bind="car.owner"></td>
+										<td ng-bind="car.tel"></td>
+										<td ng-bind="car.remark"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div>
+					<span class="defeng-pagination-info">每页{{rows}}条，共{{totalItems}}条</span>
+					<span class="defeng-pagination">
+						<pagination total-items="totalItems" ng-model="page" ng-click="pagination(page)" max-size="3" 
+                            class="pagination-sm" boundary-links="true" rotate="false" num-pages="pageNum" items_per_page="rows"
+                            previous-text="<" next-text=">" first-text="首页" last-text="尾页">
+                        </pagination>
+					</span>
+				</div>
+			</div>
+        </div>
+    </section>
+</div>
+<script type="text/javascript">
+	pageSetUp();
+    $(function() {
+        $( "#dayStart" ).datepicker();
+        $( "#dayEnd" ).datepicker();
+    });
+</script>
+<script type="text/ng-template" id="carInfoOperation.html">
+    <div class="modal-header">
+        <h3 class="modal-title">{{items.title}}</h3>
+    </div>
+    <div class="modal-body">
+		<form name="CarInfoOpForm" role="form" class="form-horizontal ng-pristine ng-valid" novalidate>
+			<fieldset>
+				<div class="form-group">
+					<label for="carIDNumber" class="col-md-2 control-label defeng-padding-top-5"> 底盘号 *</label>
+					<div class="col-md-4" ng-class="{'has-error': CarInfoOpForm.carIDNumber.$invalid && (CarInfoOpForm.carIDNumber.$dirty || dirtyFlag), 'has-success': CarInfoOpForm.carIDNumber.$valid}">
+						<input class="form-control defeng-input-format" type="text" id="carIDNumber" name="carIDNumber" ng-model="carInfoItem.carIDNumber" required
+                            ng-class="{'defeng-input-error': CarInfoOpForm.carIDNumber.$invalid && (CarInfoOpForm.carIDNumber.$dirty || dirtyFlag)}">
+					</div>
+					<label for="carNumber" class="col-md-2 control-label defeng-padding-top-5">车 牌</label>
+					<div class="col-md-4" ng-class="{'has-error': CarInfoOpForm.carNumber.$invalid && (CarInfoOpForm.carNumber.$dirty || dirtyFlag), 'has-success': CarInfoOpForm.carNumber.$valid}">
+						<input class="form-control defeng-input-format" type="text" id="carNumber" name="carNumber" ng-model="carInfoItem.carNumber"
+                            ng-class="{'defeng-input-error': CarInfoOpForm.carNumber.$invalid && (CarInfoOpForm.carNumber.$dirty || dirtyFlag)}">
+					</div>
+				</div>
+				<div class="form-group" style="margin-top:5px">
+					<label for="carType" class="col-md-2 control-label defeng-padding-top-5">车 型</label>
+					<div class="col-md-4" ng-class="{'has-error': CarInfoOpForm.carType.$invalid && (CarInfoOpForm.carType.$dirty || dirtyFlag), 'has-success': CarInfoOpForm.carType.$valid}">
+						<input class="form-control defeng-input-format" type="text" id="carType" name="carType" ng-model="carInfoItem.carType"
+                            ng-class="{'defeng-input-error': CarInfoOpForm.carType.$invalid && (CarInfoOpForm.carType.$dirty || dirtyFlag)}">
+					</div>
+					<label for="carBuyDate" class="col-md-2 control-label defeng-padding-top-5">购车日期</label>
+					<div class="col-md-4" ng-class="{'has-success': CarInfoOpForm.carBuyDate.$valid}">
+						<input class="form-control defeng-input-format" type="text" id="carBuyDate" name="carBuyDate" ng-model="carInfoItem.carBuyDate">
+					</div>
+				</div>
+				<div class="form-group" style="margin-top:5px">
+					<label for="carProDate" class="col-md-2 control-label defeng-padding-top-5">生产日期</label>
+					<div class="col-md-4" ng-class="{'has-success': CarInfoOpForm.carProDate.$valid}">
+						<input class="form-control defeng-input-format" type="text" id="carProDate" name="carProDate" ng-model="carInfoItem.carProDate">
+					</div>
+					<label for="carCard" class="col-md-2 control-label defeng-padding-top-5">信息卡</label>
+					<div class="col-md-4" ng-class="{'has-error': CarInfoOpForm.carCard.$invalid && (CarInfoOpForm.carCard.$dirty || dirtyFlag), 'has-success': CarInfoOpForm.carCard.$valid}">
+						<input class="form-control defeng-input-format" type="text" id="carCard" name="carCard" ng-model="carInfoItem.carCard"
+                            ng-class="{'defeng-input-error': CarInfoOpForm.carCard.$invalid && (CarInfoOpForm.carCard.$dirty || dirtyFlag)}">
+					</div>
+				</div>
+				<div class="form-group" style="margin-top:5px">
+                	<label for="carOwner" class="col-md-2 control-label defeng-padding-top-5">车 主</label>
+					<div class="col-md-4" ng-class="{'has-error': CarInfoOpForm.carOwner.$invalid && (CarInfoOpForm.carOwner.$dirty || dirtyFlag), 'has-success': CarInfoOpForm.carOwner.$valid}">
+						<input class="form-control defeng-input-format" type="text" id="carOwner" name="carOwner" ng-model="carInfoItem.carOwner"
+                            ng-class="{'defeng-input-error': CarInfoOpForm.carOwner.$invalid && (CarInfoOpForm.carOwner.$dirty || dirtyFlag)}">
+					</div>
+					<label for="carTel" class="col-md-2 control-label defeng-padding-top-5">电 话</label>
+					<div class="col-md-4" ng-class="{'has-error': CarInfoOpForm.carTel.$invalid && (CarInfoOpForm.carTel.$dirty || dirtyFlag), 'has-success': CarInfoOpForm.carTel.$valid}">
+						<input class="form-control defeng-input-format" type="text" id="carTel" name="carTel" ng-model="carInfoItem.carTel"
+                            ng-class="{'defeng-input-error': CarInfoOpForm.carTel.$invalid && (CarInfoOpForm.carTel.$dirty || dirtyFlag)}">
+					</div>
+				</div>
+                <div class="form-group" style="margin-top:5px">
+					<label for="carRemark" class="col-md-2 control-label defeng-padding-top-5">备 注</label>
+					<div class="col-md-10" ng-class="{'has-error': CarInfoOpForm.carRemark.$invalid && (CarInfoOpForm.carRemark.$dirty || dirtyFlag), 'has-success': CarInfoOpForm.carRemark.$valid}">
+						<input class="form-control defeng-input-format" type="text" id="carRemark" name="carRemark" ng-maxlength="32" ng-model="carInfoItem.carRemark">
+					</div>
+				</div>
+			</fieldset>
+		</form>
+    </div>
+    <div class="modal-footer">
+        <span class="cloud-operation-info">
+            <span class="text-danger" ng-class="{'defeng-text-okay': Message === '操作成功'}"><span ng-bind="Message"></span></span>
+        </span>
+        <button class="btn btn-primary" ng-click="submitForm(CarInfoOpForm.$valid)">确 认</button>
+        <button class="btn btn-warning" ng-click="cancelForm()">取 消</button>
+    </div>
+	<script type="text/javascript">
+	    $(function() {
+		$( "#carBuyDate" ).datepicker();
+		$( "#carProDate" ).datepicker();
+	    });
+	</script>
+</script>
+

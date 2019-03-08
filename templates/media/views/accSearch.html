@@ -1,0 +1,64 @@
+<div class="">
+	<section id="table">
+        <div class="row">
+            <div class="col-md-12 show-grid">
+				<div class="jarviswidget jarviswidget-color-purple" id="wid-id-0">
+					<header>
+						<span class="widget-icon"> <i class="fa fa-search"></i> </span>
+						<h2>配件查询</h2>
+					</header>  
+                    <div>
+						<div class="widget-body">
+                            <form class="navbar-form navbar-left ng-pristine ng-valid defeng-navbar-form-left-13" role="search">
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="通用名称/名称/件号" type="text" ng-model="keyword">
+                                </div>
+                                <button class="btn btn-info" type="submit" ng-click="searchAcc()">
+                                    <b>查 询</b>
+                                </button>
+                            </form>
+							<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
+								<thead>
+									<tr>
+										<th><i class="fa fa-fw fa-bookmark txt-color-blue hidden-md hidden-sm hidden-xs"></i> 通用名称</th>
+										<th><i class="fa fa-fw fa-bookmark-o txt-color-blue hidden-md hidden-sm hidden-xs"></i> 名称</th>
+										<th><i class="fa fa-fw fa-info txt-color-blue hidden-md hidden-sm hidden-xs"></i> 件号</th>
+										<th><i class="fa fa-fw fa-reorder txt-color-blue hidden-md hidden-sm hidden-xs"></i> 类型</th>
+										<th><i class="fa fa-fw fa-jpy txt-color-blue hidden-md hidden-sm hidden-xs"></i> 单价</th>
+										<th><i class="fa fa-fw fa-exchange txt-color-blue hidden-md hidden-sm hidden-xs"></i> 数量</th>
+										<th><i class="fa fa-fw fa-comment txt-color-blue hidden-md hidden-sm hidden-xs"></i> 备注</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="acc in accList" class="defeng-tr-height">
+										<td ng-bind="acc.accCommonName"></td>
+										<td ng-bind="acc.accName"></td>
+										<td ng-bind="acc.accIDNumber"></td>
+										<td ng-bind="acc.accType"></td>
+										<td ng-bind="acc.accPrice | currency : '￥'"></td>
+										<td ng-bind="acc.accCount"></td>
+										<td ng-bind="acc.accRemark"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div>
+					<span class="defeng-pagination-info">每页{{rows}}条，共{{totalItems}}条</span>
+					<span class="defeng-pagination">
+						<pagination total-items="totalItems" ng-model="page" ng-click="pagination(page)" max-size="3" class="pagination-sm" boundary-links="true" rotate="false" 
+                            num-pages="pageNum" items_per_page="rows" previous-text="上一页" next-text="下一页" first-text="首页" last-text="尾页">
+                        </pagination>
+					</span>
+				</div>
+			</div>
+        </div>
+    </section>
+</div>
+<script type="text/javascript">
+	pageSetUp();
+	$(function() {
+		//$('select').searchableSelect();
+	});
+</script>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en-us" data-ng-app="smartApp">
+	<head>
+		<meta charset="utf-8">
+		<title> 益阳德丰 </title>
+		<meta name="description" content="car manage platform">
+		<meta name="author" content="fy1716">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+		<!-- split -->
+     		<!-- build:css /media/css/index.min.css -->
+		<link rel="stylesheet" type="text/css" media="screen" href="media/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="media/css/font-awesome.min.css">
+
+		<link rel="stylesheet" type="text/css" media="screen" href="media/css/smartadmin-production.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="media/css/smartadmin-skins.min.css">
+       		<link rel="stylesheet" type="text/css" media="screen" href="media/css/bootstrap-datetimepicker.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="media/css/smartadmin-rtl.min.css">
+
+		<link rel="stylesheet" type="text/css" media="screen" href="media/css/global.css">
+
+		<link rel="stylesheet" type="text/css" media="screen" href="media/css/ng.min.css">
+		<link rel="stylesheet" type="text/css" href="media/css/jquery.searchableSelect.css">
+		<!-- 日期 -->
+		<link rel="stylesheet" type="text/css" href="media/libs/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css">
+		<link rel="stylesheet" type="text/css" href="media/libs/angular-datetimepicker/angular-datetimepicker.css" />
+		<!-- endbuild -->
+      		<!-- split -->
+		<link rel="shortcut icon" href="media/favicon.ico" type="image/x-icon">
+		<link rel="icon" href="media/favicon.ico" type="image/x-icon">
+	</head>
+	<body class="" data-ng-controller="SmartAppController">
+		<!-- POSSIBLE CLASSES: minified, fixed-ribbon, fixed-header, fixed-width, top-menu
+			 You can also add different skin classes such as "smart-skin-0", "smart-skin-1" etc...-->
+		<!-- HEADER -->
+		<header id="header" data-ng-include="'/media/includes/header.html'"></header>
+		<!-- END HEADER -->
+
+		<!-- Left panel : Navigation area -->
+		<!-- Note: This width of the aside area can be adjusted through LESS variables -->
+		<aside id="left-panel"><span data-ng-include="'/media/includes/left-panel.html'"></span></aside>
+		<!-- END NAVIGATION -->
+
+		<!-- MAIN PANEL -->
+		<div id="main" role="main">
+
+			<!-- RIBBON -->
+			<div id="ribbon" data-ng-include="'media/includes/ribbon.html'" data-ribbon=""></div>
+			<!-- END RIBBON -->
+
+			<!-- MAIN CONTENT -->
+			<div id="content" data-ng-view="" class="view-animate"></div>
+			<!-- END MAIN CONTENT -->
+
+		</div>
+		<!-- END MAIN PANEL -->
+
+		<!-- PAGE FOOTER -->
+		<div class="page-footer"><span data-ng-include="'media/includes/footer.html'"></span></div>
+		<!-- END FOOTER -->
+
+		<!-- SHORTCUT AREA : With large tiles (activated via clicking user name tag)
+		Note: These tiles are completely responsive,
+		you can add as many as you like
+		-->
+		<div id="shortcut"><span data-ng-include="'media/includes/shortcut.html'"></span></div>
+		<!-- END SHORTCUT AREA -->
+
+		<!--================================================== -->
+
+		<!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)
+		<script data-pace-options='{ "restartOnRequestAfter": true }' src="js/plugin/pace/pace.min.js"></script>-->
+
+		<!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+		<!--  
+		<script src="//cdn.bootcss.com/jquery/2.0.2/jquery.min.js"></script>
+		-->
+		<!--  
+		<script src="//cdn.bootcss.com/jqueryui/1.10.3/jquery-ui.min.js"></script>
+		-->
+		<!-- timepicker -->
+		<!--[if IE 8]>
+			<h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
+		<![endif]-->
+
+		<!-- AngularJS -->
+		<!--
+		<script src="//cdn.bootcss.com/angular.js/1.2.16/angular.min.js"></script>
+		<script src="//cdn.bootcss.com/angular.js/1.2.16/angular-animate.min.js"></script>
+		<script src="//cdn.bootcss.com/angular.js/1.2.16/angular-cookies.min.js"></script>
+		<script src="//cdn.bootcss.com/angular.js/1.2.16/angular-route.min.js"></script>
+		 -->
+		<!-- split -->
+      		<!-- build:js /media/scripts/index.min.js -->
+		<script src="media/js/jquery.min.js"></script>
+		<script src="media/js/jquery-ui.min.js"></script>
+		<script src="media/js/jquery.searchableSelect.js"></script>
+		<script src="media/js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script>
+		<script src="media/js/bootstrap/bootstrap.min.js"></script>
+		<script src="media/js/notification/SmartNotification.min.js"></script>
+		<script src="media/js/smartwidgets/jarvis.widget.min.js"></script>
+		<script src="media/js/plugin/jquery-validate/jquery.validate.min.js"></script>
+		<script src="media/js/plugin/masked-input/jquery.maskedinput.min.js"></script>
+		<script src="media/js/plugin/select2/select2.min.js"></script>
+		<script src="media/js/plugin/bootstrap-slider/bootstrap-slider.min.js"></script>
+		<script src="media/js/plugin/msie-fix/jquery.mb.browser.min.js"></script>
+		<script src="media/js/plugin/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
+		<script src="media/js/plugin/fastclick/fastclick.min.js"></script>
+		<script src="media/js/jquery.datepicker-zh-CN.js"></script>
+ 		<script src="media/js/libs/angular/angular.js"></script>
+	    	<script src="media/js/libs/angular/angular-cookies.js"></script>
+	  	<script src="media/js/libs/angular/angular-route.js"></script>
+	  	<script src="media/js/libs/angular/angular-animate.js"></script>
+	  	<script src="media/js/libs/angular/ui-bootstrap-custom-tpls-0.11.0.js"></script>
+		<script src="http://s1.bdstatic.com/r/www/cache/ecom/esl/1-6-10/esl.js"></script>
+		<!-- 日期 -->
+		<script type="text/javascript" src="media/libs/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+		<script type="text/javascript" src="media/libs/angular-datetimepicker/angular-datetimepicker.js"></script>
+		<!-- endbuild -->
+                <!-- split -->
+                <!-- build:js /media/scripts/indexapp.min.js -->
+		<script src="media/js/app.js"></script>
+		<script src="media/js/common.js"></script>
+	  	<script src="media/js/ng/ng.app.js"></script>
+	  	<script src="media/js/ng/ng.controllers.js"></script>
+		<script src="media/js/ng/validator.js"></script>
+		<script src="media/js/ng/ng.directives.js"></script>
+	  	<script src="media/js/ng/overviewCtrl.js"></script>
+	  	<script src="media/js/ng/accSearchCtrl.js"></script>
+	  	<script src="media/js/ng/accManageCtrl.js"></script>
+	  	<script src="media/js/ng/carInfoCtrl.js"></script>
+		<script src="media/js/ng/employeeCtrl.js"></script>
+	  	<script src="media/js/ng/carFixCtrl.js"></script>
+	  	<script src="media/js/ng/financeCtrl.js"></script>
+	  	<script src="media/js/ng/accUsageCtrl.js"></script>  
+	  	<script src="media/js/ng/portCtrl.js"></script>
+	  	<script src="media/js/ng/dashboardCtrl.js"></script>
+	  	<script src="media/js/ng/userManageCtrl.js"></script>
+	  	<script src="media/js/ng/plunker.js"></script>
+		<script src="media/js/ng/test.js"></script>
+		<!-- endbuild -->
+		<!-- split -->
+		<!-- build:js /media/scripts/template.min.js -->
+		<!-- endbuild -->
+		<!-- split -->
+	</body>
+</html>

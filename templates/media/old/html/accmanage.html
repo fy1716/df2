@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<META HTTP-EQUIV="pragma" CONTENT="no-cache"> 
+		<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"> 
+		<META HTTP-EQUIV="expires" CONTENT="Wed, 26 Feb 1997 08:21:57 GMT">
+
+		<link rel="stylesheet" type="text/css" href="/media/css/easyui.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/icon.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/color.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/demo.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/jquery-ui.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/accmanage.css">
+
+		<script type="text/javascript" src="/media/js/jquery-1.11.2.min.js"></script>
+		<script type="text/javascript" src="/media/js/jquery.easyui.min.js"></script>
+		<script type="text/javascript" src="/media/js/accmanage.js"></script>
+		<script type="text/javascript" src="/media/js/validate.js"></script>
+
+	</head>
+
+	<body style="padding:0px;">
+		<table id="dg" title="配件管理" class="easyui-datagrid" style="width:100%;height:653px"
+		url="/dfapi?api=101"
+		method='get'
+		toolbar="#toolbar" pagination="true" striped="true"
+		rownumbers="true" fitColumns="true" singleSelect="true" loadMsg="正在查询...">
+			<thead>
+				<tr>
+					<th field="id" width="50" hidden="true">ID</th>
+					<th field="accCommonName" width="50">通用名称</th>
+					<th field="accName" width="140">名称</th>
+					<th field="accIDNumber" width="50">件号</th>
+					<th field="accType" width="20">类型</th>
+					<th field="accLocation" width="30">位置</th>
+					<th field="accPrice" width="20">单价</th>
+					<th field="accCount" width="20">数量</th>
+					<th field="accSafeCount" width="30">安全库存</th>
+					<th field="accCommonCount" width="30">正常库存</th>
+					<th field="accRemark" width="30">备注</th>
+					<th field="accCost" width="20">材料费</th>
+				</tr>
+			</thead>
+		</table>
+
+		<div id="toolbar">
+
+			<span>名称:</span>
+			<input id="accName" name="acc" class="easyui-combobox" style="width:250px;" data-options=
+				"loader: btsloader, mode: 'remote', valueField: 'id', textField: 'name'"/>
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="findAcc()">查询</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newAcc()">新增</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editAcc()">编辑</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyAcc()">删除</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-redo" plain="true" onclick="outAcc()">配件导出</a>
+		</div>
+		<div id="dlg" class="easyui-dialog" style="width:550px;height:320px;padding:10px 20px"
+		closed="true" buttons="#dlg-buttons">
+			<div class="ftitle">配件信息</div>
+			<form id="fm" method="post" novalidate>
+				<div class="fitem">
+					<label>通用名称:</label>
+					<input name="accCommonName" class="easyui-textbox">
+				<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<label>名称:</label>
+					<input name="accName" class="easyui-textbox" required="true" validType="notnull" missingMessage="必填">
+				</div>
+				<div class="fitem">
+					<label>件号:</label>
+					<input id="fmid" name="accIDNumber" class="easyui-textbox" required="true" validType="notnull" missingMessage="必填">
+				<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<label>类型:</label>
+					<input name="accType" class="easyui-textbox">
+				</div>
+				<div class="fitem">
+					<label>位置:</label>
+					<input name="accLocation" class="easyui-textbox">
+				<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<label>材料费:</label>
+					<input name="accCost" class="easyui-textbox" required="true" 
+						validType="numeric" missingMessage="必填">
+				</div>
+				<div class="fitem">
+					<label>单价:</label>
+					<input name="accPrice" class="easyui-textbox" validType="positive_int">
+				<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<label>数量:</label>
+					<input name="accCount" class="easyui-textbox" data-options="required: 'true',
+					validType: 'positive_int'" missingMessage="必填">
+				</div>
+				<div class="fitem">
+					<label>安全库存:</label>
+					<input name="accSafeCount" class="easyui-textbox" validType="numeric">
+				<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<label>正常库存:</label>
+					<input name="accCommonCount" class="easyui-textbox" validType="numeric">
+				</div>
+				<div class="fitem">
+					<label>备注:</label>
+					<input name="accRemark" class="easyui-textbox">
+				<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<p id="hideID">
+						<label>ID(不填):</label>
+						<input name="id" class="easyui-textbox" readonly="true">  
+					</p>
+				</div>
+			</form>
+		</div>
+
+		<div id="dlg-buttons">
+
+			<a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveAcc()" style="width:90px">保存</a>
+
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">取消</a>
+
+		</div>
+	</body>
+</html>

@@ -1,0 +1,81 @@
+<script type="text/javascript" src="media/js/ajaxfileupload.js"></script>
+<div class="">
+	<section id="table">
+        <div class="row">
+            <div class="col-md-12 show-grid">
+				<div class="jarviswidget jarviswidget-color-blue" id="wid-id-0" style="margin-bottom:15px!important">
+					<header>
+						<span class="widget-icon"> <i class="fa fa-pencil-square-o"></i> </span>
+						<h2>数据导入导出</h2>
+					</header>  
+					<div class="widget-body">
+                        <div class="form-group defeng-margin-bottom-5">
+                            <label><b>数据模板导出类型 </b></label>
+                            <select class="form-control defeng-input-width-150" ng-model="templateType">
+                                <option value="acc">配件模板</option>
+                                <option value="carinfo">车辆信息模板</option>
+                                <option value="carfix">车辆维修模板</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-default defeng-margin-bottom-5" type="submit" ng-click="outTemplate()">
+                            <i class="glyphicon glyphicon-share"></i> 导出
+                        </button>
+                        </br>
+                        <small class="text-warning" ng-show="templateType === 'acc'">注：配件模板文件对应列分别为名称、件号、数量、进价</small>
+                        <small class="text-warning" ng-show="templateType === 'carinfo'">注：车辆信息模板文件对应列分别为底盘号、车牌、车型、购车日期（格式：2012/11/14）、生产日期（格式：2012/11/14）、信息卡情况、车主、电话、备注</small>
+                        <small class="text-warning" ng-show="templateType === 'carfix'">注：车辆维修模板文件对应列分别为底盘号、公里数、维修日期（格式：2012/11/14）、维修金额、维修人员、下次优惠、备注、维修情况</small>
+                        <div class="form-group defeng-margin-bottom-5 defeng-padding-top-30">
+                            <label><b>数据导出类型 </b></label>
+                            <select class="form-control defeng-input-width-150" ng-model="dataType">
+                                <option value="acc">配件数据</option>
+                                <option value="carinfo">车辆信息数据</option>
+                                <option value="carfix">车辆维修数据</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-default defeng-margin-bottom-5" type="submit" ng-click="outData()">
+                            <i class="glyphicon glyphicon-share"></i> 导出
+                        </button>
+                        </br>
+                        <div class="form-group defeng-margin-bottom-5 defeng-padding-top-30">
+                            <label><b>数据导入类型 </b></label>
+                            <select class="form-control defeng-input-width-150" ng-model="importType">
+                                <option value="acc">配件数据</option>
+                                <option value="carinfo">车辆信息数据</option>
+                                <option value="carfix">车辆维修数据</option>
+                            </select>
+                        </div>
+                        <ol class="breadcrumb defeng-ol">
+                            <li class="interactive cloud-manager-operation file-box">
+                                <form id="accImport" name="accImport" ng-show="importType === 'acc'" action="/download/newacc" method="post" enctype="multipart/form-data" style="display: inline-flex;">
+                                    <input type='text' name='textNewacc' id='textNewacc' class='license-txt' style="margin-right:4px;" required/>  
+                                    <input type='button' class='license-btn' value='浏览...' style="margin-right:4px; padding: 0px 12px;" />
+                                    <input type="file" name="newAcc" class="license-file" id="newAcc" size="28" onchange="document.getElementById('textNewacc').value=this.value" />
+                                    <input type="submit" name="submit" class="license-btn" value="导入" style="width:100px;padding: 0px 12px;background-color:#00c0ef;border-color:#00acd6;" ng-disabled="accImport.$invalid"/>
+                                </form>
+                                <form id="carinfoImport" name="carinfoImport" ng-show="importType === 'carinfo'" action="/download/newcar" method="post" enctype="multipart/form-data" style="display: inline-flex;">
+                                    <input type='text' name='textNewcar' id='textNewcar' class='license-txt' style="margin-right:4px;" required/>  
+                                    <input type='button' class='license-btn' value='浏览...' style="margin-right:4px; padding: 0px 12px;" />
+                                    <input type="file" name="newCar" class="license-file" id="newCar" size="28" onchange="document.getElementById('textNewcar').value=this.value" />
+                                    <input type="submit" name="submit" class="license-btn" value="导入" style="width:100px;padding: 0px 12px;background-color:#00c0ef;border-color:#00acd6;" ng-disabled="carinfoImport.$invalid"/>
+                                </form>
+                                <form id="carfixImport" name="carfixImport" ng-show="importType === 'carfix'" action="/download/carfix" method="post" enctype="multipart/form-data" style="display: inline-flex;">
+                                    <input type='text' name='textfield' id='textfield' class='license-txt' style="margin-right:4px;" required/>  
+                                    <input type='button' class='license-btn' value='浏览...' style="margin-right:4px; padding: 0px 12px;" />
+                                    <input type="file" name="fileField" class="license-file" id="fileField" size="28" onchange="document.getElementById('textfield').value=this.value"/>
+                                    <input type="submit" name="submit" class="license-btn" value="导入" style="width:100px;padding: 0px 12px;background-color:#00c0ef;border-color:#00acd6;" ng-disabled="carfixImport.$invalid"/>
+                                </form>
+                            </li>
+                        </ol>
+                        </br>
+                        <small class="text-warning" ng-show="importType === 'acc'">注：配件文件对应列分别为名称、件号、数量、进价</small>
+                        <small class="text-warning" ng-show="importType === 'carinfo'">注：车辆信息文件对应列分别为底盘号、车牌、车型、购车日期（格式：2012/11/14）、生产日期（格式：2012/11/14）、信息卡情况、车主、电话、备注</small>
+                        <small class="text-warning" ng-show="importType === 'carfix'">注：车辆维修文件对应列分别为底盘号、公里数、维修日期（格式：2012/11/14）、维修金额、维修人员、下次优惠、备注、维修情况</small>
+					</div>
+				</div>
+			</div>
+        </div>
+    </section>
+</div>
+<script type="text/javascript">
+	pageSetUp();
+</script>

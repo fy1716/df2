@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>维修结算</title>
+	<link rel="stylesheet" type="text/css" href="/media/css/easyui.css">
+	<link rel="stylesheet" type="text/css" href="/media/css/icon.css">
+	<link rel="stylesheet" type="text/css" href="/media/css/color.css">
+	<link rel="stylesheet" type="text/css" href="/media/css/demo.css">
+	<link rel="stylesheet" type="text/css" href="/media/css/jquery-ui.css">
+	<link rel="stylesheet" type="text/css" href="/media/css/sum.css">
+	<script type="text/javascript" src="/media/js/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="/media/js/jquery.easyui.min.js"></script>
+
+</head>
+<body onload="manageFeedback();" >
+	<h1 align="center">东风小康益阳德丰服务站车辆结算单</h1>
+	<small>操作员:何国辉&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;售后服务电话:0737-4225875&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日期:{{ feedbackInfo.date }}</small>
+	<hr />
+	<b style="font-size:120%;">车辆基本信息：</b> 
+	</br>
+	<table align="center" width="600" border="0" bordercolor="black" cellspacing="0">
+		<tr>
+			<td width=40%>车牌号:{{feedbackInfo.carNumber}}</td>
+			<td width=27%>车主:{{feedbackInfo.carOwner}}</td>
+			<td width=33%>底盘号:{{feedbackInfo.carTailNumber}}</td>
+		</tr>
+		<tr>
+			<td width=40%>购车日期:{{ feedbackInfo.carBuyDate }}</td>
+			<td width=27%>车型:{{ feedbackInfo.carType }}</td>
+			<td width=33%>行驶距离:{{ feedbackInfo.distance }} KM</td>
+		</tr>
+	</table>
+	<hr />
+		<table align="center" width="700" border="2" bordercolor="black" cellspacing="0">
+		<tr>
+			<td width=35% align="center">项目</td>
+			<td width=25% align="center">件号</td>
+			<td width=5% align="center">数量</td>
+			<td width=10% align="center">单价</td>
+			<td width=25% align="center">备注</td>
+		</tr>
+		
+		{% for name,info in feedbackInfo.data.items %}	
+		<tr>
+			<td align="center">{{ name }}</td>
+			{% for item in info %}
+				<td align="center">{{ item }}</td>
+			{% endfor %}
+			{% if forloop.first %}
+				<td rowspan=20> {{feedbackInfo.note}}</td>
+			{% endif %}
+		</tr>
+		{% endfor %}
+		<td align="center" style="font-weight:bold;">共计：</td>
+		<td width=10% align="center"> - </td>
+		<td width=10% align="center"> - </td>
+		<td width=10% align="center" style="font-weight:bold;">{{ feedbackInfo.sum }}</td>
+		</table>
+	<br/>
+	<b style="font-weight:600;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环车检查员:{{feedbackInfo.carFixMan}}</b>
+	<br/>
+	<small align="center">温馨提示:为了您的自身权益,请每隔5000KM按时进行例行保养,可在三包期内享受三包政策.</small>
+</body>
+</html>

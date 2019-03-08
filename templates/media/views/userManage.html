@@ -1,0 +1,137 @@
+<div class="">
+	<section id="table">
+        <div class="row">
+            <div class="col-md-12 show-grid">
+				<div class="jarviswidget jarviswidget-color-orange" id="wid-id-0">
+					<header>
+						<span class="widget-icon"> <i class="fa fa-pencil-square-o"></i> </span>
+						<h2>用户管理</h2>
+					</header>  
+                    <div>
+						<div class="widget-body">
+                            <form class="navbar-form navbar-right ng-pristine ng-valid defeng-navbar-form-left-13" role="search">
+<!--                                 <div class="form-group">
+                                    <input class="form-control" placeholder="用户名" type="text" ng-model="keyword">
+                                </div> -->
+<!--                                 <button class="btn btn-info" type="submit" ng-click="searchUser()">
+                                    <i class="glyphicon glyphicon-search"></i> 查询
+                                </button> -->
+                                <button class="btn btn-success" type="submit" ng-click="addUser()">
+                                    <i class="glyphicon glyphicon-plus"></i> 新增
+                                </button>
+                                <button class="btn btn-warning" type="submit" ng-click="editUser()" ng-show="currentActiveStatus">
+                                    <i class="glyphicon glyphicon-pencil"></i> 编辑
+                                </button>
+                                <button class="btn btn-danger" type="submit" ng-click="delUser(systemFlag)" ng-show="currentActiveStatus">
+                                    <i class="glyphicon glyphicon-trash"></i> 删除
+                                </button>
+                                <button class="btn btn-default" type="submit" ng-click="switchUser()" ng-show="currentActiveStatus && systemFlag">
+                                    <i class="glyphicon glyphicon-adjust"></i> 启用/禁用 
+                                </button>
+                            </form>
+							<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
+								<thead>
+									<tr>
+										<th><i class="fa fa-fw fa-bank txt-color-blue hidden-md hidden-sm hidden-xs"></i> 服务站</th>
+										<th><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i> 用户名</th>
+										<th><i class="fa fa-fw fa-credit-card txt-color-blue hidden-md hidden-sm hidden-xs"></i> 系统角色</th>
+										<th><i class="fa fa-fw fa-mobile-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i> 联系电话</th>
+										<th><i class="fa fa-fw fa-qrcode txt-color-blue hidden-md hidden-sm hidden-xs"></i> 职位</th>
+										<th ng-show="systemFlag"><i class="fa fa-fw fa-adjust txt-color-blue hidden-md hidden-sm hidden-xs"></i> 状态</th>
+										<th><i class="fa fa-fw fa-comment-o txt-color-blue hidden-md hidden-sm hidden-xs"></i> 备注</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="user in userList" class="defeng-tr-height" ng-class="{'success': user.active,'interactive': user.userName}"
+                                        ng-click="toggleActive($index)">
+										<td ng-bind="user.stationName"></td>
+										<td ng-bind="user.userName"></td>
+										<td>
+											<span ng-show="user.role === 1">管理员</span>
+											<span ng-show="user.role === 2">操作员</span>
+											<span ng-show="user.role === 4">客户</span>
+										</td>
+										<td ng-bind="user.telphone"></td>
+										<td ng-bind="user.position"></td>
+										<td ng-show="systemFlag">
+											<span ng-show="user.disable === 0">启用</span>
+											<span ng-show="user.disable === 1">禁用</span>
+										</td>
+										<td ng-bind="user.description"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div>
+					<span class="defeng-pagination-info">每页{{rows}}条，共{{totalItems}}条</span>
+					<span class="defeng-pagination">
+						<pagination total-items="totalItems" ng-model="page" ng-click="pagination(page)" max-size="3" 
+                            class="pagination-sm" boundary-links="true" rotate="false" num-pages="pageNum" items_per_page="rows"
+                            previous-text="<" next-text=">" first-text="首页" last-text="尾页">
+                        </pagination>
+					</span>
+				</div>
+			</div>
+        </div>
+    </section>
+</div>
+<script type="text/javascript">
+	pageSetUp();
+</script>
+<script type="text/ng-template" id="userOperation.html">
+    <div class="modal-header">
+        <h3 class="modal-title">{{items.title}}</h3>
+    </div>
+    <div class="modal-body">
+		<form name="UserOpForm" role="form" class="form-horizontal ng-pristine ng-valid" novalidate>
+			<fieldset>
+				<div class="form-group">
+					<label for="userName" class="col-md-2 control-label defeng-padding-top-5">用户(必填)</label>
+					<div class="col-md-4" ng-class="{'has-error': UserOpForm.userName.$invalid && (UserOpForm.userName.$dirty || dirtyFlag), 'has-success': UserOpForm.userName.$valid}">
+						<input class="form-control defeng-input-format" type="text" id="userName" name="userName" ng-model="userItem.userName" required
+                            ng-class="{'defeng-input-error': UserOpForm.userName.$invalid && (UserOpForm.userName.$dirty || dirtyFlag)}">
+					</div>
+					<label for="password" class="col-md-2 control-label defeng-padding-top-5" ng-hide="items.type === 'edit'">密码(必填)</label>
+					<div class="col-md-4" ng-hide="items.type === 'edit'" ng-class="{'has-error': UserOpForm.password.$invalid && (UserOpForm.password.$dirty || dirtyFlag), 'has-success': UserOpForm.password.$valid}">
+						<input class="form-control defeng-input-format" type="password" id="password" name="password" ng-model="userItem.password" required
+                            ng-class="{'defeng-input-error': UserOpForm.password.$invalid && (UserOpForm.password.$dirty || dirtyFlag)}">
+					</div>
+				</div>
+				<div class="form-group" style="margin-top:5px">
+					<label for="telphone" class="col-md-2 control-label defeng-padding-top-5">联系电话</label>
+					<div class="col-md-4" ng-class="{'has-success': UserOpForm.telphone.$valid}">
+						<input class="form-control defeng-input-format" type="text" id="telphone" name="telphone" ng-model="userItem.telphone">
+					</div>
+					<label for="position" class="col-md-2 control-label defeng-padding-top-5">职 位</label>
+					<div class="col-md-4" ng-class="{'has-error': UserOpForm.position.$invalid && (UserOpForm.position.$dirty || dirtyFlag), 'has-success': UserOpForm.position.$valid}">
+						<input class="form-control defeng-input-format" type="text" id="position" name="position" ng-model="userItem.position"
+                            ng-class="{'defeng-input-error': UserOpForm.position.$invalid && (UserOpForm.position.$dirty || dirtyFlag)}">
+					</div>
+				</div>
+                <div class="form-group" style="margin-top:5px">
+					<label for="role" class="col-md-2 control-label defeng-padding-top-5">系统角色</label>
+					<div class="col-md-4" ng-class="{'has-success': UserOpForm.role.$valid}">
+						<select class="form-control defeng-input-format" id="role" name="role" ng-model="userItem.role" ng-disabled="items.type === 'edit'">
+							<option ng-show="items.type === 'edit'" value="1">管理员</option>
+                            <option value="2">操作员</option>
+                            <option value="4">客户</option>
+                        </select>
+					</div>
+					<label for="description" class="col-md-2 control-label defeng-padding-top-5">备 注</label>
+					<div class="col-md-4" ng-class="{'has-error': UserOpForm.description.$invalid && (UserOpForm.description.$dirty || dirtyFlag), 'has-success': UserOpForm.description.$valid}">
+						<input class="form-control defeng-input-format" type="text" id="description" name="description" ng-maxlength="32" ng-model="userItem.description">
+					</div>
+				</div>
+			</fieldset>
+		</form>
+    </div>
+    <div class="modal-footer">
+        <span class="cloud-operation-info">
+            <span class="text-danger" ng-class="{'defeng-text-okay': Message === '操作成功'}"><span ng-bind="Message"></span></span>
+        </span>
+        <button class="btn btn-primary" ng-click="submitForm(UserOpForm.$valid)">确 认</button>
+        <button class="btn btn-warning" ng-click="cancelForm()">取 消</button>
+    </div>
+</script>

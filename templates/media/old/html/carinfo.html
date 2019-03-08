@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<META HTTP-EQUIV="pragma" CONTENT="no-cache"> 
+		<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"> 
+		<META HTTP-EQUIV="expires" CONTENT="Wed, 26 Feb 1997 08:21:57 GMT">
+
+		<link rel="stylesheet" type="text/css" href="/media/css/easyui.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/icon.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/color.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/demo.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/carinfo.css">
+
+		<script type="text/javascript" src="/media/js/jquery-1.11.2.min.js"></script>
+		<script type="text/javascript" src="/media/js/jquery.easyui.min.js"></script>
+		<script type="text/javascript" src="/media/js/carinfo.js"></script>
+		<script type="text/javascript" src="/media/js/validate.js"></script>
+	</head>
+
+	<body style="padding:0px;">
+
+		<!-- 表格-->
+		<table id="dg" title="车辆信息管理" class="easyui-datagrid" style="width:100%;height:653px"
+		url="/dfapi?api=201"
+		method='get'
+		toolbar="#toolbar" pagination="true" striped="true"
+		rownumbers="true" fitColumns="true" singleSelect="true" loadMsg="正在查询...">
+			<thead>
+				<tr>
+					<th field="id" width="50" hidden="true">ID</th>
+					<th field="carIDNumber" width="50">底盘号</th>
+					<th field="carNumber" width="50">车牌</th>
+					<th field="carType" width="50">车型</th>
+					<th field="carBuyDate" width="50">购车日期</th>
+					<th field="carProDate" width="50">生产日期</th>
+					<th field="carCard" width="50">信息卡</th>
+					<th field="carOwner" width="50">车主</th>
+					<th field="carTel" width="50">电话</th>
+					<th field="carRemark" width="50">备注</th>
+				</tr>
+			</thead>
+		</table>
+
+		<div id="toolbar">
+
+			<span>购车起始日期:</span>
+			<input id="daystart" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser,width:'100px'" validType="date">
+			<span>结束日期:</span>
+			<input id="dayend" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser,width:'100px'" validType="date">
+			<span>底盘号:</span><input type="text" id="carIDNumber" value="" size=10 />
+			<span>车牌:</span><input type="text" id="carNumber" value="" size=10 />
+			<span>车主:</span><input type="text" id="carOwner" value="" size=10 />
+			<span>电话号:</span><input type="text" id="carTel" value="" size=10 />
+
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="findCarInfo()">查询</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newCarInfo()">新增</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editCarInfo()">编辑</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyCarInfo()">删除</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-redo" plain="true" onclick="outCar()">车辆导出</a>
+		</div>
+
+		<!-- 对话框-->
+		<div id="dlg" class="easyui-dialog" style="width:550px;height:300px;padding:10px 20px"
+		closed="true" buttons="#dlg-buttons">
+			<div class="ftitle">车辆信息</div>
+			<form id="fm" method="post" novalidate>
+				<div class="fitem">
+					<label>底盘号:</label>
+					<input id="fmid" name="carIDNumber" class="easyui-textbox" required="true" validType="notnull" 
+						missingMessage="必填">
+					<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<label>车牌:</label>
+					<input id="fmid" name="carNumber" class="easyui-textbox">
+				</div>
+				<div class="fitem">
+					<label>车型:</label>
+					<input name="carType" class="easyui-textbox">
+					<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<label>购车日期:</label>
+					<input name="carBuyDate" class="easyui-textbox" validType="extenddate">
+				</div>
+				<div class="fitem">
+					<label>生产日期:</label>
+					<input name="carProDate" class="easyui-textbox" validType="extenddate">
+					<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<label>信息卡:</label>
+					<input name="carCard" class="easyui-textbox">
+				</div>
+				<div class="fitem">
+					<label>车主:</label>
+					<input name="carOwner" class="easyui-textbox">
+					<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<label>电话:</label>
+					<input name="carTel" class="easyui-textbox">
+				</div>
+				<div class="fitem">
+					<label>备注:</label>
+					<input name="carRemark" class="easyui-textbox">
+					<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<p id="hideID">
+					<label>ID(不填):</label>
+					<input name="id" class="easyui-textbox" readonly="true">
+					</p>
+				</div>
+			</form>
+		</div>
+
+		<div id="dlg-buttons">
+
+			<a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveCarInfo()" style="width:90px">保存</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">取消</a>
+
+		</div>
+
+	</body>
+
+</html>

@@ -1,0 +1,61 @@
+<section id="widget-grid" class="">
+	<div class="row">
+		<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false">
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>概览</h2>
+				</header>
+				<div>
+					<div class="jarviswidget-editbox">
+					</div>
+					<div class="widget-body">
+						<div id="chart-container">收支数据</div>
+						<div class="table-responsive">
+                            当天维修记录
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<!-- <th><i class="fa fa-fw fa-calendar txt-color-blue hidden-md hidden-sm hidden-xs"></i> 维修日期</th> -->
+										<th><i class="fa fa-fw fa-car txt-color-blue hidden-md hidden-sm hidden-xs"></i> 车牌</th>
+										<th><i class="fa fa-fw fa-reorder txt-color-blue hidden-md hidden-sm hidden-xs"></i> 车型</th>
+										<th><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i> 车主</th>
+										<th><i class="fa fa-fw fa-dashboard txt-color-blue hidden-md hidden-sm hidden-xs"></i> 公里数</th>
+										<th style="text-align:center"><i class="fa fa-fw fa-save txt-color-blue hidden-md hidden-sm hidden-xs"></i> 录入</th>
+										<th><i class="fa fa-fw fa-yen txt-color-blue hidden-md hidden-sm hidden-xs"></i> 维修金额</th>
+										<th ng-show="financeFlag"><i class="fa fa-fw fa-krw txt-color-blue hidden-md hidden-sm hidden-xs"></i> 利润</th>
+                                        <th><i class="fa fa-fw fa-gears txt-color-blue hidden-md hidden-sm hidden-xs"></i> 更换配件</th>
+									</tr>
+								</thead>
+								<tbody>
+                                    <tr ng-repeat="car in carFixList" class="defeng-tr-height"
+										ng-click="toggleActive($index)">
+										<!-- <td ng-bind="car.carFixDate"></td> -->
+										<td ng-bind="car.carNumber"></td>
+										<td ng-bind="car.carType"></td>
+										<td ng-bind="car.carOwner"></td>
+										<td ng-bind="car.carFixODO"></td>
+                                        <td style="text-align:center"><i class="fa fa-lg fa-times text-warning" ng-show="car.carFixLogging === 0"></i>
+											<i class="fa fa-lg fa-check text-success" ng-show="car.carFixLogging === 1"></i></td>
+										<td ng-bind="car.carFixIncome | currency : '￥'"></td>
+										<td ng-show="financeFlag"><span ng-show="car.carAccName" ng-bind="car.carFixIncome - car.carAccCost | currency : '￥'"></span></td>
+										<td ng-bind="car.carAccName"></td>
+									</tr>
+								</tbody>
+							</table>
+							<div>
+								<span class="defeng-pagination-info">每页{{rows}}条，共{{totalItems}}条</span>
+								<span class="defeng-pagination-overview">
+									<pagination total-items="totalItems" ng-model="page" ng-click="pagination(page)" max-size="3" 
+										class="pagination-sm" boundary-links="true" rotate="false" num-pages="pageNum" items_per_page="rows"
+										previous-text="<" next-text=">" first-text="首页" last-text="尾页">
+									</pagination>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+  		</article>
+	</div>
+</section>

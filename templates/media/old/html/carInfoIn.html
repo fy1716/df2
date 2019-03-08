@@ -1,0 +1,39 @@
+<html>
+	<head>
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="/media/css/easyui.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/icon.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/color.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/demo.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/jquery-ui.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/accmanage.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/accIn.css">	
+
+		<script type="text/javascript" src="/media/js/jquery-1.11.2.min.js"></script>
+		<script type="text/javascript" src="/media/js/jquery.easyui.min.js"></script>
+	</head>
+	<body style="padding:0px;">
+	<!--
+		<div style="margin:20px 0 10px 0;"></div>
+		<div class="file-box">
+			<form action="/download/carfile" method="post" enctype="multipart/form-data">
+				<input type='text' name='textfield' id='textfield' class='txt' />  
+				<input type='button' class='btn' value='浏览...' />
+				<input type="file" name="fileField" class="file" id="fileField" size="28" onchange="document.getElementById('textfield').value=this.value" />
+				<input type="submit" name="submit" class="btn" value="上传" />
+				<label>(原始车辆信息上传)</label>
+			</form>
+		</div>
+	-->
+		<div style="margin:30px 0 30px 0;"></div>
+		<div class="file-box">
+			<form action="/download/newcar" method="post" enctype="multipart/form-data">
+				<input type='text' name='textNewcar' id='textNewcar' class='txt' />  
+				<input type='button' class='btn' value='浏览...' />
+				<input type="file" name="newCar" class="file" id="newCar" size="28" onchange="document.getElementById('textNewcar').value=this.value" />
+				<input type="submit" name="submit" class="btn" value="上传" />
+				<label>(新增车辆信息上传)</label>
+			</form>
+		</div>
+	</body>
+</html>

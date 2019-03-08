@@ -1,0 +1,129 @@
+.defeng-navbar-form-left-13 {
+    margin-left: -13px!important;
+}
+.defeng-pagination {
+    float: right;
+    margin: -30px 10px -20px 10px;
+}
+.defeng-pagination-overview {
+    float: right;
+    margin: -20px 10px -10px 10px;
+}
+.defeng-pagination-info {
+    float: left;
+}
+.defeng-title-yellow>header {
+    border-color: #638167!important;
+    background-color: #F9D45C;
+}
+/* .modal-dialog {
+    margin: 160px auto;
+} */
+.defeng-padding-top-5 {
+    padding-top: 5px;
+}
+.defeng-padding-top-30 {
+    padding-top: 30px;
+}
+.defeng-padding-top-50 {
+    padding-top: 50px;
+}
+.defeng-text-okay {
+    color: #468847;
+}
+.defeng-input-error {
+    background-color: antiquewhite!important;
+}
+.defeng-input-format {
+	border-radius: 5px!important;
+}
+.defeng-input-width {
+	width: 95px!important;
+}
+.defeng-input-width-150 {
+	width: 150px!important;
+}
+.selected:after {
+    border-top: 30px solid #0091d9!important;
+}
+.defeng-margin-top-0 {
+	margin-top: 0px!important;
+}
+.defeng-margin-bottom-5 {
+	margin-bottom: 5px!important;
+}
+.defeng-padding-top-20 {
+	padding-top: 20px!important;
+}
+.defeng-padding-0 {
+	padding: 0px!important;
+}
+.defeng-tr-height {
+	height:38px!important;
+}
+.interactive {
+  cursor: pointer!important;
+}
+.defeng-logo {
+	margin-top: 7px!important;
+    margin-left: 9px!important;
+}
+.defeng-ol {
+	padding: 0px!important;
+	margin-bottom: 3px!important;
+    background-color: #fff!important;
+}
+.file-box{
+    position:relative;
+    width:340px
+}
+.license-txt{
+    height:30px;
+    border:1px solid #cdcdcd;
+    width:172px
+}
+.license-btn{
+    background-color:#FFF;
+    border:1px solid #CDCDCD;
+    height:31px;
+    width:70px
+}
+.license-file{
+    position:absolute;
+    top:0;right:80px;
+    height:31px;
+    filter:alpha(opacity:0);
+    opacity:0;
+    width:260px
+}
+.defeng-header {
+	text-align: center;
+	font-size: large;
+}
+.defeng-register-tip {
+	float: left;
+	margin: 10px 0 0 5px;
+	font: 300 15px/29px 'Open Sans',Helvetica,Arial,sans-serif;
+}
+h5 {
+    margin:0!important;
+}
+.defeng-login-bk {
+    background: -ms-linear-gradient(top, #E8F0F3, #D0E2E6);
+    background: -moz-linear-gradient(top,#E8F0F3,#D0E2E6);
+    background: -webkit-linear-gradient(top, #E8F0F3, #D0E2E6);
+    background: -o-linear-gradient(top, #E8F0F3, #D0E2E6);
+}
+a:hover {
+	text-decoration:none!important;
+	cursor: pointer;
+}
+.defeng-income {
+	color: green;
+}
+.defeng-pay {
+	color: red;
+}
+nav ul li a, nav ul ul li>a, body{
+	font-size: 15px!important;
+}

@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>维修总结</title>
+</head>
+<body style="font-size:19px;">
+	<h3 align="center">维修总结</h3>
+	<div style="text-align:center"><b>总计:{{ fixTotal }}元</b> <b>总数:{{ reportItems.total }}</b> <span style="padding-left:10px">打印日期: {{today}}</span></div>
+	<hr>
+	<table align="center" width="900" border="2" bordercolor="black" cellspacing="0">
+		<tr>
+			<td width=12% align="center">维修日期</td>
+			<td width=12% align="center">车牌</td>
+			<td width=10% align="center">车型</td>
+			<td width=8% align="center">车主</td>
+			<td width=10% align="center">公里数</td>
+			<td width=9% align="center">维修金额</td>
+			<td width=9% align="center">实收</td>
+			<td width=30% align="center">更换配件及备注</td>
+		</tr>
+		{% for report in reportItems %}
+		<tr>
+			<td align="center">{{ report.date }}</td>
+			<td align="center">{{ report.car.number }}</td>
+			<td align="center">{{ report.car.type }}</td>
+			<td align="center">{{ report.car.owner }}</td>
+			<td align="center">{{ report.odo }}</td>
+			<td align="center">{{ report.carAccPrice }}</td>
+			<td align="center" style="font-weight:600;">{{ report.income }}</td>
+			<td align="center">{{ report.carAccName }}---- <b>{{ report.remark }}</b></td>
+		</tr>
+		{% endfor %}
+	</table>
+</body>
+</html>

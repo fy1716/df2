@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<META HTTP-EQUIV="pragma" CONTENT="no-cache"> 
+		<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"> 
+		<META HTTP-EQUIV="expires" CONTENT="Wed, 26 Feb 1997 08:21:57 GMT">
+		<link rel="stylesheet" type="text/css" href="/media/css/easyui.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/icon.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/color.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/demo.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/jquery-ui.css">
+		<link rel="stylesheet" type="text/css" href="/media/css/accmanage.css">
+		<script type="text/javascript" src="/media/js/jquery-1.11.2.min.js"></script>
+		<script type="text/javascript" src="/media/js/jquery.easyui.min.js"></script>
+		<script type="text/javascript" src="/media/js/accmanage.js"></script>
+		<script type="text/javascript" src="/media/js/validate.js"></script>
+	</head>
+	<body style="padding:0px;">
+		<table id="dg" title="配件查询" class="easyui-datagrid" style="width:100%;height:653px"
+		url="/dfapi?api=101"
+		method='get'
+		toolbar="#toolbar" pagination="true" striped="true"
+		rownumbers="true" fitColumns="true" singleSelect="true" loadMsg="正在查询...">
+			<thead>
+				<tr>
+					<th field="id" width="50" hidden="true">ID</th>
+					<th field="accCommonName" width="50">通用名称</th>
+					<th field="accName" width="130">名称</th>
+					<th field="accIDNumber" width="50">件号</th>
+					<th field="accType" width="30">类型</th>
+					<th field="accPrice" width="30">单价</th>
+					<th field="accCount" width="30">数量</th>
+					<th field="accRemark" width="50">备注</th>
+				</tr>
+			</thead>
+		</table>
+		<div id="toolbar">
+			<span>名称:</span>
+			<input id="accName" name="acc" class="easyui-combobox" style="width:250px;" data-options=
+				"loader: btsloader, mode: 'remote', valueField: 'id', textField: 'name'"/>
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="findAcc()">查询</a>
+		</div>
+	</body>
+</html>

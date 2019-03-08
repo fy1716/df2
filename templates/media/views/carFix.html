@@ -1,0 +1,651 @@
+<style>
+    .modal-dialog {
+        width: 700px;
+    }
+</style>
+<div class="">
+    <section id="table">
+        <div class="row">
+            <div class="col-md-12 show-grid">
+                <div class="defeng-padding-0">
+                    <div class="widget-body">
+                        <div class="panel-group smart-accordion-default" id="accordion">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title"><a id="disPage"> <i
+                                            class="fa fa-lg fa-angle-down pull-right"></i> <i
+                                            class="fa fa-lg fa-angle-up pull-right"></i> <i
+                                            class="fa fa-file-text-o"></i> 维修记录 </a></h4>
+                                </div>
+                                <div id="collapseOne" class="panel-collapse collapse"
+                                     ng-class="{'in': !collapseTwoFlag}">
+                                    <div class="panel-body">
+                                        <form class="navbar-form navbar-left ng-pristine ng-valid defeng-navbar-form-left-13"
+                                              role="search">
+                                            <span>起始日期 <input class="form-control defeng-input-width" type="text"
+                                                              id="dayStart" ng-model="dayStart"
+                                                              ng-pattern="/^\d{4}-\d{1,2}-\d{1,2}$/"></span>
+                                            <span>结束日期 <input class="form-control defeng-input-width" type="text"
+                                                              id="dayEnd" ng-model="dayEnd"
+                                                              ng-pattern="/^\d{4}-\d{1,2}-\d{1,2}$/"></span>
+                                            <div class="form-group">
+                                                <label>类型 </label>
+                                                <select class="form-control" ng-model="searchType">
+                                                    <option value="{{$index}}"
+                                                            ng-repeat="type in searchTypeList">{{ type }}</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>关键字 </label>
+                                                <input class="form-control defeng-input-width"
+                                                       placeholder="{{ searchTip }}" type="text" ng-model="keyword"
+                                                       ng-keydown="keydown($event)">
+                                            </div>
+                                            <button class="btn btn-default" type="submit" ng-click="searchCarFix()">
+                                                <i class="glyphicon glyphicon-search"></i> 查询
+                                            </button>
+                                            <a class="btn btn-default" ng-click="addCarFix()">
+                                                <i class="glyphicon glyphicon-plus"></i> 新增
+                                            </a>
+                                            <a class="btn btn-default" ng-click="editCarFix()"
+                                               ng-show="currentActiveStatus">
+                                                <i class="glyphicon glyphicon-pencil"></i> 编辑
+                                            </a>
+                                            <button class="btn btn-default" type="submit" ng-click="delCarFix()"
+                                                    ng-show="currentActiveStatus">
+                                                <i class="glyphicon glyphicon-trash"></i> 删除
+                                            </button>
+                                            <button class="btn btn-default" type="submit" ng-click="printReport()">
+                                                <i class="glyphicon glyphicon-share"></i> 总结
+                                            </button>
+                                            <button class="btn btn-default" type="submit" ng-click="printCarFix()"
+                                                    ng-show="currentActiveStatus">
+                                                <i class="glyphicon glyphicon-print"></i> 打印
+                                            </button>
+                                        </form>
+                                        <table id="dt_basic" class="table table-striped table-bordered table-hover"
+                                               width="100%">
+                                            <thead>
+                                            <tr>
+                                                <th>
+                                                    <i class="fa fa-fw fa-calendar txt-color-blue hidden-md hidden-sm hidden-xs"></i>
+                                                    维修日期
+                                                </th>
+                                                <th>
+                                                    <i class="fa fa-fw fa-info txt-color-blue hidden-md hidden-sm hidden-xs"></i>
+                                                    底盘号
+                                                </th>
+                                                <th>
+                                                    <i class="fa fa-fw fa-car txt-color-blue hidden-md hidden-sm hidden-xs"></i>
+                                                    车牌
+                                                </th>
+                                                <th>
+                                                    <i class="fa fa-fw fa-reorder txt-color-blue hidden-md hidden-sm hidden-xs"></i>
+                                                    车型
+                                                </th>
+                                                <th>
+                                                    <i class="fa fa-fw fa-calendar txt-color-blue hidden-md hidden-sm hidden-xs"></i>
+                                                    购车日期
+                                                </th>
+                                                <th>
+                                                    <i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>
+                                                    车主
+                                                </th>
+                                                <th>
+                                                    <i class="fa fa-fw fa-dashboard txt-color-blue hidden-md hidden-sm hidden-xs"></i>
+                                                    公里数
+                                                </th>
+                                                <th>
+                                                    <i class="fa fa-fw fa-wrench txt-color-blue hidden-md hidden-sm hidden-xs"></i>
+                                                    保养
+                                                </th>
+                                                <th>
+                                                    <i class="fa fa-fw fa-yen txt-color-blue hidden-md hidden-sm hidden-xs"></i>
+                                                    实收
+                                                </th>
+                                                <th>
+                                                    <i class="fa fa-fw fa-save txt-color-blue hidden-md hidden-sm hidden-xs"></i>
+                                                    录入
+                                                </th>
+                                                <th>
+                                                    <i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>
+                                                    维修
+                                                </th>
+                                                <th>
+                                                    <i class="fa fa-fw fa-gears txt-color-blue hidden-md hidden-sm hidden-xs"></i>
+                                                    更换配件
+                                                </th>
+                                                <th>
+                                                    <i class="fa fa-fw fa-comment txt-color-blue hidden-md hidden-sm hidden-xs"></i>
+                                                    备注
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr ng-repeat="car in carFixList" class="defeng-tr-height"
+                                                ng-class="{'success': car.active,'interactive': car.carFixDate}"
+                                                ng-click="toggleActive($index)">
+                                                <td ng-bind="car.date"></td>
+                                                <td ng-bind="car.car.sn"></td>
+                                                <td ng-bind="car.car.number"></td>
+                                                <td ng-bind="car.car.type"></td>
+                                                <td ng-bind="car.car.buy_date"></td>
+                                                <td ng-bind="car.car.owner"></td>
+                                                <td ng-bind="car.odo"></td>
+                                                <td style="text-align:center"><i class="fa fa-lg fa-times text-warning"
+                                                                                 ng-show="car.maintain === 0"></i>
+                                                    <i class="fa fa-lg fa-check text-success"
+                                                       ng-show="car.maintain === 1"></i></td>
+                                                <td ng-bind="car.income"></td>
+                                                <td style="text-align:center"><i class="fa fa-lg fa-times text-warning"
+                                                                                 ng-show="car.logging === 0"></i>
+                                                    <i class="fa fa-lg fa-check text-success"
+                                                       ng-show="car.logging === 1"></i></td>
+                                                <td ng-bind="car.fix_man.name"></td>
+                                                <td><a ng-click="checkAccDetail($index)" ng-show="car.car.sn">详情</a>
+                                                </td>
+                                                <td ng-bind="car.remark"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <div>
+                                            <span class="defeng-pagination-info defeng-padding-top-20">每页{{ rows }}条，共{{ totalItems }}条</span>
+                                            <span class="defeng-pagination defeng-margin-top-0">
+												<pagination total-items="totalItems" ng-model="page"
+                                                            ng-click="pagination(page)" max-size="3"
+                                                            class="pagination-sm" boundary-links="true" rotate="false"
+                                                            num-pages="pageNum" items_per_page="rows"
+                                                            previous-text="<" next-text=">" first-text="首页"
+                                                            last-text="尾页">
+												</pagination>
+											</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title"><a id="opPage" class="collapsed"> <i
+                                            class="fa fa-lg fa-angle-down pull-right"></i> <i
+                                            class="fa fa-lg fa-angle-up pull-right"></i> <i class="fa fa-paste"></i>
+                                        维修登记 {{ opTitle }}</a></h4>
+                                </div>
+                                <div id="collapseTwo" class="panel-collapse collapse" ng-class="{'in': collapseTwoFlag}"
+                                     style="min-height:100%">
+                                    <div class="panel-body">
+                                        <ul id="myTab1" class="nav nav-tabs bordered">
+                                            <li ng-show="carFixIDN">
+                                                <a href="#s1" data-toggle="tab"><i class="fa fa-fw fa-lg fa-gears"></i>
+                                                    更换配件</a>
+                                            </li>
+                                            <li class="active">
+                                                <a href="#s2" data-toggle="tab"><i class="fa fa-fw fa-lg fa-info"></i>
+                                                    基本信息</a>
+                                            </li>
+                                        </ul>
+                                        <div id="myTabContent1" class="tab-content padding-10">
+                                            <div class="tab-pane fade" id="s1">
+                                                <form class="navbar-form navbar-left ng-pristine ng-valid defeng-navbar-form-left-13"
+                                                      role="search">
+                                                    <label>配件查询 </label>
+                                                    <select id="accSelect">
+                                                        <option ng-repeat="acc in accList"
+                                                                value="{{ acc.sn }}">{{ acc.common_name }} {{ acc.name }} {{ acc.sn }} {{ acc.type }}</option>
+                                                    </select>
+                                                    <button class="btn btn-default" type="submit"
+                                                            ng-click="addFixAcc()">
+                                                        <i class="glyphicon glyphicon-plus"></i> 新增
+                                                    </button>
+                                                    <button class="btn btn-default" type="submit"
+                                                            ng-click="editFixAcc()" ng-show="currentAccActiveStatus">
+                                                        <i class="glyphicon glyphicon-pencil"></i> 编辑
+                                                    </button>
+                                                    <button class="btn btn-default" type="submit" ng-click="delFixAcc()"
+                                                            ng-show="currentAccActiveStatus">
+                                                        <i class="glyphicon glyphicon-trash"></i> 删除
+                                                    </button>
+                                                    <button class="btn btn-default" type="submit"
+                                                            ng-click="scanFixAcc()">
+                                                        <i class="glyphicon glyphicon-qrcode"></i> 扫描导入
+                                                    </button>
+                                                </form>
+                                                <table id="dt_basic"
+                                                       class="table table-striped table-bordered table-hover"
+                                                       width="100%">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>
+                                                            <i class="fa fa-fw fa-bookmark-o text-muted hidden-md hidden-sm hidden-xs"></i>
+                                                            名称
+                                                        </th>
+                                                        <th>
+                                                            <i class="fa fa-fw fa-info text-muted hidden-md hidden-sm hidden-xs"></i>
+                                                            件号
+                                                        </th>
+                                                        <th>
+                                                            <i class="fa fa-fw fa-reorder text-muted hidden-md hidden-sm hidden-xs"></i>
+                                                            类型
+                                                        </th>
+                                                        <th>
+                                                            <i class="fa fa-fw fa-jpy text-muted hidden-md hidden-sm hidden-xs"></i>
+                                                            售价
+                                                        </th>
+                                                        <th>
+                                                            <i class="fa fa-fw fa-exchange text-muted hidden-md hidden-sm hidden-xs"></i>
+                                                            数量
+                                                        </th>
+                                                        <th>
+                                                            <i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i>
+                                                            更换人员
+                                                        </th>
+                                                        <th style="text-align:center"><i
+                                                                class="fa fa-fw fa-shield text-muted hidden-md hidden-sm hidden-xs"></i>
+                                                            三包
+                                                        </th>
+                                                        <th>
+                                                            <i class="fa fa-fw fa-bookmark text-muted hidden-md hidden-sm hidden-xs"></i>
+                                                            校验码
+                                                        </th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr ng-repeat="acc in fixAccList" class="defeng-tr-height"
+                                                        ng-class="{'success': acc.active,'interactive': acc.sn}"
+                                                        ng-click="toggleAccActive($index)">
+                                                        <td ng-bind="acc.name"></td>
+                                                        <td ng-bind="acc.sn"></td>
+                                                        <td ng-bind="acc.type"></td>
+                                                        <td ng-bind="acc.price | currency : '￥'"></td>
+                                                        <td ng-bind="acc.usage"></td>
+                                                        <td ng-bind="acc.fix_man_name"></td>
+                                                        <td style="text-align:center"><i class="fa fa-lg fa-times"
+                                                                                         ng-show="acc.guarantee === false"></i>
+                                                            <i class="fa fa-lg fa-check" ng-show="acc.guarantee"></i>
+                                                        </td>
+                                                        <td ng-bind="acc.carAccPID"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                                <span><b
+                                                        ng-show="sum">共计: {{ sum }}元</b> 每页{{ accRows }}条，共{{ accTotalItems }}条</span>
+                                                <span class="defeng-pagination">
+                                                    <pagination total-items="accTotalItems" ng-model="accPage"
+                                                                ng-click="accPagination(accPage)" max-size="3"
+                                                                class="pagination-sm" boundary-links="true"
+                                                                rotate="false" num-pages="pageNum"
+                                                                items_per_page="accRows"
+                                                                previous-text="<" next-text=">" first-text="首页"
+                                                                last-text="尾页">
+                                                    </pagination>
+                                                </span>
+                                            </div>
+                                            <div class="tab-pane fade in active" id="s2">
+                                                <form name="CarFixInfoForm" role="form"
+                                                      class="form-horizontal ng-pristine ng-valid" novalidate>
+                                                    <fieldset>
+                                                        <div class="form-group">
+                                                            <label for="carFixDate"
+                                                                   class="col-md-1 control-label defeng-padding-top-5">维修日期</label>
+                                                            <div class="col-md-3"
+                                                                 ng-class="{'has-error': CarFixInfoForm.carFixDate.$invalid && (CarFixInfoForm.carFixDate.$dirty || dirtyFlag), 'has-success': CarFixInfoForm.carFixDate.$valid}">
+                                                                <input class="form-control defeng-input-format"
+                                                                       type="text" id="carFixDate" name="carFixDate"
+                                                                       ng-class="{'defeng-input-error': CarFixInfoForm.carFixDate.$invalid && (CarFixInfoForm.carFixDate.$dirty || dirtyFlag)}">
+                                                            </div>
+                                                            <label for="carFixODO"
+                                                                   class="col-md-1 control-label defeng-padding-top-5">公里数</label>
+                                                            <div class="col-md-3"
+                                                                 ng-class="{'has-error': CarFixInfoForm.carFixODO.$invalid && (CarFixInfoForm.carFixODO.$dirty || dirtyFlag), 'has-success': CarFixInfoForm.carFixODO.$valid}">
+                                                                <input class="form-control defeng-input-format"
+                                                                       type="number" id="carFixODO" name="carFixODO"
+                                                                       ng-model="carFixInfo.carFixODO"
+                                                                       ng-class="{'defeng-input-error': CarFixInfoForm.carFixODO.$invalid && (CarFixInfoForm.carFixODO.$dirty || dirtyFlag)}">
+                                                            </div>
+                                                            <label for="carFixMan"
+                                                                   class="col-md-1 control-label defeng-padding-top-5">维修人员</label>
+                                                            <div class="col-md-3"
+                                                                 ng-class="{'has-error': CarFixInfoForm.carFixMan.$invalid && (CarFixInfoForm.carFixMan.$dirty || dirtyFlag), 'has-success': CarFixInfoForm.carFixMan.$valid}">
+                                                                <select class="form-control defeng-input-format"
+                                                                        type="text" id="carFixMan" name="carFixMan"
+                                                                        ng-model="carFixInfo.carFixMan" required
+                                                                        ng-class="{'defeng-input-error': CarFixInfoForm.carFixMan.$invalid && (CarFixInfoForm.carFixMan.$dirty || dirtyFlag)}"
+                                                                        ng-options="employee for employee in employeeList">
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group" style="margin-top:5px">
+                                                            <label for="carFixIncome"
+                                                                   class="col-md-1 control-label defeng-padding-top-5">实
+                                                                收</label>
+                                                            <div class="col-md-3"
+                                                                 ng-class="{'has-error': CarFixInfoForm.carFixIncome.$invalid && (CarFixInfoForm.carFixIncome.$dirty || dirtyFlag), 'has-success': CarFixInfoForm.carFixIncome.$valid}">
+                                                                <input class="form-control defeng-input-format"
+                                                                       type="number" id="carFixIncome"
+                                                                       name="carFixIncome"
+                                                                       ng-model="carFixInfo.carFixIncome"
+                                                                       ng-pattern="/^(0|[1-9]\d*)$/"
+                                                                       ng-class="{'defeng-input-error': CarFixInfoForm.carFixIncome.$invalid && (CarFixInfoForm.carFixIncome.$dirty || dirtyFlag)}">
+                                                            </div>
+                                                            <label for="carFixFavorable"
+                                                                   class="col-md-1 control-label defeng-padding-top-5">下次优惠</label>
+                                                            <div class="col-md-3"
+                                                                 ng-class="{'has-success': CarFixInfoForm.carFixFavorable.$valid}">
+                                                                <input class="form-control defeng-input-format"
+                                                                       type="number" id="carFixFavorable"
+                                                                       name="carFixFavorable"
+                                                                       ng-model="carFixInfo.carFixFavorable"
+                                                                       ng-pattern="/^(0|[1-9]\d*)$/"
+                                                                       ng-class="{'defeng-input-error': CarFixInfoForm.carFixFavorable.$invalid && (CarFixInfoForm.carFixFavorable.$dirty || dirtyFlag)}">
+                                                            </div>
+                                                            <label for="carFixRemark"
+                                                                   class="col-md-1 control-label defeng-padding-top-5">维修备注</label>
+                                                            <div class="col-md-3"
+                                                                 ng-class="{'has-success': CarFixInfoForm.carFixRemark.$valid}">
+                                                                <input class="form-control defeng-input-format"
+                                                                       type="text" id="carFixRemark" name="carFixRemark"
+                                                                       ng-model="carFixInfo.carFixRemark">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group" style="margin-top:5px">
+                                                            <label for="carIDNumber"
+                                                                   class="col-md-1 control-label defeng-padding-top-5">底盘号</label>
+                                                            <div class="col-md-3" style="display: flex"
+                                                                 ng-class="{'has-error': CarFixInfoForm.carIDNumber.$invalid && (CarFixInfoForm.carIDNumber.$dirty || dirtyFlag), 'has-success': CarFixInfoForm.carIDNumber.$valid}">
+                                                                <input class="form-control defeng-input-format"
+                                                                       type="text" id="carIDNumber" name="carIDNumber"
+                                                                       ng-model="carFixInfo.carIDNumber" required
+                                                                       ng-class="{'defeng-input-error': CarFixInfoForm.carIDNumber.$invalid && (CarFixInfoForm.carIDNumber.$dirty || dirtyFlag)}">
+                                                                <button class="btn btn-success"
+                                                                        style="margin-left: 5px;"
+                                                                        ng-click="getCarInfo()">更新
+                                                                </button>
+                                                            </div>
+                                                            <label for="carNumber"
+                                                                   class="col-md-1 control-label defeng-padding-top-5">车
+                                                                牌</label>
+                                                            <div class="col-md-3"
+                                                                 ng-class="{'has-error': CarFixInfoForm.carNumber.$invalid && (CarFixInfoForm.carNumber.$dirty || dirtyFlag), 'has-success': CarFixInfoForm.carNumber.$valid}">
+                                                                <input class="form-control defeng-input-format"
+                                                                       type="text" id="carNumber" name="carNumber"
+                                                                       ng-model="carFixInfo.carNumber"
+                                                                       ng-class="{'defeng-input-error': CarFixInfoForm.carNumber.$invalid && (CarFixInfoForm.carNumber.$dirty || dirtyFlag)}">
+                                                            </div>
+                                                            <label for="carType"
+                                                                   class="col-md-1 control-label defeng-padding-top-5">车
+                                                                型</label>
+                                                            <div class="col-md-3"
+                                                                 ng-class="{'has-error': CarFixInfoForm.carType.$invalid && (CarFixInfoForm.carType.$dirty || dirtyFlag), 'has-success': CarFixInfoForm.carType.$valid}">
+                                                                <input class="form-control defeng-input-format"
+                                                                       type="text" id="carType" name="carType"
+                                                                       ng-model="carFixInfo.carType"
+                                                                       ng-class="{'defeng-input-error': CarFixInfoForm.carType.$invalid && (CarFixInfoForm.carType.$dirty || dirtyFlag)}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group" style="margin-top:5px">
+                                                            <label for="carBuyDate"
+                                                                   class="col-md-1 control-label defeng-padding-top-5">购车日期</label>
+                                                            <div class="col-md-3"
+                                                                 ng-class="{'has-error': CarFixInfoForm.carBuyDate.$invalid && (CarFixInfoForm.carBuyDate.$dirty || dirtyFlag), 'has-success': CarFixInfoForm.carBuyDate.$valid}">
+                                                                <input class="form-control defeng-input-format"
+                                                                       type="text" id="carBuyDate" name="carBuyDate"
+                                                                       ng-class="{'defeng-input-error': CarFixInfoForm.carBuyDate.$invalid && (CarFixInfoForm.carBuyDate.$dirty || dirtyFlag)}">
+                                                            </div>
+                                                            <label for="carProDate"
+                                                                   class="col-md-1 control-label defeng-padding-top-5">生产日期</label>
+                                                            <div class="col-md-3"
+                                                                 ng-class="{'has-error': CarFixInfoForm.carProDate.$invalid && (CarFixInfoForm.carProDate.$dirty || dirtyFlag), 'has-success': CarFixInfoForm.carProDate.$valid}">
+                                                                <input class="form-control defeng-input-format"
+                                                                       type="text" id="carProDate" name="carProDate"
+                                                                       ng-class="{'defeng-input-error': CarFixInfoForm.carProDate.$invalid && (CarFixInfoForm.carProDate.$dirty || dirtyFlag)}">
+                                                            </div>
+                                                            <label for="carFixMaintain"
+                                                                   class="col-md-1 control-label defeng-padding-top-5">是否保养</label>
+                                                            <div class="col-md-3"
+                                                                 ng-class="{'has-error': CarFixInfoForm.carFixMaintain.$invalid && (CarFixInfoForm.carFixMaintain.$dirty || dirtyFlag), 'has-success': CarFixInfoForm.carFixMaintain.$valid}">
+                                                                <input class="" type="checkbox" id="carFixMaintain"
+                                                                       name="carFixMaintain"
+                                                                       ng-model="carFixInfo.carFixMaintain">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group" style="margin-top:5px">
+                                                            <label for="carOwner"
+                                                                   class="col-md-1 control-label defeng-padding-top-5">车
+                                                                主</label>
+                                                            <div class="col-md-3"
+                                                                 ng-class="{'has-error': CarFixInfoForm.carOwner.$invalid && (CarFixInfoForm.carOwner.$dirty || dirtyFlag), 'has-success': CarFixInfoForm.carOwner.$valid}">
+                                                                <input class="form-control defeng-input-format"
+                                                                       type="text" id="carOwner" name="carOwner"
+                                                                       ng-model="carFixInfo.carOwner"
+                                                                       ng-class="{'defeng-input-error': CarFixInfoForm.carOwner.$invalid && (CarFixInfoForm.carOwner.$dirty || dirtyFlag)}">
+                                                            </div>
+                                                            <label for="carTel"
+                                                                   class="col-md-1 control-label defeng-padding-top-5">电
+                                                                话</label>
+                                                            <div class="col-md-3"
+                                                                 ng-class="{'has-error': CarFixInfoForm.carTel.$invalid && (CarFixInfoForm.carTel.$dirty || dirtyFlag), 'has-success': CarFixInfoForm.carTel.$valid}">
+                                                                <input class="form-control defeng-input-format"
+                                                                       type="text" id="carTel" name="carTel"
+                                                                       ng-model="carFixInfo.carTel"
+                                                                       ng-class="{'defeng-input-error': CarFixInfoForm.carTel.$invalid && (CarFixInfoForm.carTel.$dirty || dirtyFlag)}">
+                                                            </div>
+                                                            <label for="carFixLogging"
+                                                                   class="col-md-1 control-label defeng-padding-top-5">是否录入</label>
+                                                            <div class="col-md-3"
+                                                                 ng-class="{'has-error': CarFixInfoForm.carFixLogging.$invalid && (CarFixInfoForm.carFixLogging.$dirty || dirtyFlag), 'has-success': CarFixInfoForm.carFixLogging.$valid}">
+                                                                <input class="" type="checkbox" id="carFixLogging"
+                                                                       name="carFixLogging"
+                                                                       ng-model="carFixInfo.carFixLogging">
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </form>
+                                                <hr>
+                                                <div style="text-align: right;">
+                                                    <span class="text-danger"
+                                                          ng-class="{'defeng-text-okay': Message === '操作成功'}"><span
+                                                            ng-bind="Message"></span></span>
+                                                    <button class="btn btn-warning" ng-click="cancelInfoForm()"><i
+                                                            class="fa fa-fw fa-reply-all hidden-md hidden-sm hidden-xs"></i>取消
+                                                    </button>
+                                                    <button ng-hide="carFixIDN" class="btn btn-primary"
+                                                            ng-click="submitCarInfoForm(CarFixInfoForm.$valid)"><i
+                                                            class="fa fa-fw fa-save hidden-md hidden-sm hidden-xs"></i>下一步
+                                                    </button>
+                                                    <button ng-show="carFixIDN" class="btn btn-primary"
+                                                            ng-click="submitInfoForm(CarFixInfoForm.$valid)"><i
+                                                            class="fa fa-fw fa-save hidden-md hidden-sm hidden-xs"></i>保存
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script type="text/javascript">
+    pageSetUp();
+    $(function () {
+        $("#dayStart").datepicker();
+        $("#dayEnd").datepicker();
+        $("#carFixDate").datepicker();
+        $("#carBuyDate").datepicker();
+        $("#carProDate").datepicker();
+    });
+</script>
+<script type="text/ng-template" id="accDetail.html">
+
+    <div class="modal-header">
+        <h3 class="modal-title">更换配件详情</h3>
+    </div>
+    <div class="modal-body">
+        <div style="max-height:300px;overflow-y:auto;">
+            <table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
+                <thead>
+                <tr>
+                    <th><i class="fa fa-fw fa-bookmark-o text-muted hidden-md hidden-sm hidden-xs"></i> 名称</th>
+                    <th><i class="fa fa-fw fa-info text-muted hidden-md hidden-sm hidden-xs"></i> 件号</th>
+                    <th><i class="fa fa-fw fa-reorder text-muted hidden-md hidden-sm hidden-xs"></i> 类型</th>
+                    <th><i class="fa fa-fw fa-jpy text-muted hidden-md hidden-sm hidden-xs"></i> 售价</th>
+                    <th><i class="fa fa-fw fa-exchange text-muted hidden-md hidden-sm hidden-xs"></i> 数量</th>
+                    <th><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> 更换人员</th>
+                    <th><i class="fa fa-fw fa-shield text-muted hidden-md hidden-sm hidden-xs"></i> 三包</th>
+                    <th ng-show="financeFlag"><i class="fa fa-fw fa-krw text-muted hidden-md hidden-sm hidden-xs"></i>
+                        利润
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="acc in items.fixAccList" class="defeng-tr-height"
+                    ng-class="{'success': acc.active,'interactive': acc.sn}"
+                    ng-click="toggleAccActive($index)">
+                    <td ng-bind="acc.name"></td>
+                    <td ng-bind="acc.sn"></td>
+                    <td ng-bind="acc.type"></td>
+                    <td ng-bind="acc.price | currency : '￥'"></td>
+                    <td ng-bind="acc.usage"></td>
+                    <td ng-bind="acc.fix_man_show"></td>
+                    <td style="text-align:center"><i class="fa fa-lg fa-times" ng-show="acc.guarantee === false"></i>
+                        <i class="fa fa-lg fa-check" ng-show="acc.guarantee === true"></i></td>
+                    <td ng-show="financeFlag">
+                        <span ng-show="acc.guarantee === 0"
+                              ng-bind="(acc.price - acc.cost) * acc.usage | number : 2"></span>
+                        <span ng-show="acc.guarantee === 1">0</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer" style="margin-top:0px;">
+        <span style="float:left;margin-right:20px;"><b>配件种类: {{ items.fixAccList.length }}</b></span>
+        <span style="float:left"><b ng-show="items.sum">共计: {{ items.sum }}元</b></span>
+        <button class="btn btn-warning" ng-click="confirmDetail()">确 定</button>
+    </div>
+</script>
+<script type="text/ng-template" id="accScan.html">
+    <div class="modal-header">
+        <h3 class="modal-title">扫描配件列表</h3>
+    </div>
+    <div class="modal-body">
+        <table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
+            <thead>
+            <tr>
+                <th><i class="fa fa-fw fa-check-square-o text-muted hidden-md hidden-sm hidden-xs"></i></th>
+                <th><i class="fa fa-fw fa-bookmark-o text-muted hidden-md hidden-sm hidden-xs"></i> 名称</th>
+                <th><i class="fa fa-fw fa-info text-muted hidden-md hidden-sm hidden-xs"></i> 件号</th>
+                <th><i class="fa fa-fw fa-reorder text-muted hidden-md hidden-sm hidden-xs"></i> 类型</th>
+                <th><i class="fa fa-fw fa-bookmark text-muted hidden-md hidden-sm hidden-xs"></i> 校验码</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="acc in scanAccList" class="defeng-tr-height">
+                <td class="inbox-table-icon" style="padding-top:0;padding-bottom:0;">
+                    <div class="checkbox" style="margin:6px 0">
+                        <label>
+                            <input type="checkbox" class="checkbox style-2" ng-model="acc.checked">
+                            <span></span> </label>
+                    </div>
+                </td>
+                <td ng-bind="acc.accName"></td>
+                <td ng-bind="acc.accIDNumber"></td>
+                <td ng-bind="acc.accType"></td>
+                <td ng-bind="acc.accPID"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+	    <span class="cloud-operation-info">
+           	 <span class="text-danger" ng-class="{'defeng-text-okay': Message === '操作成功'}"><span
+                     ng-bind="Message"></span></span>
+            </span>
+        <button class="btn btn-success" ng-click="confirmScan()">确 定</button>
+        <button class="btn btn-danger" ng-click="delScan()">删 除</button>
+        <button class="btn btn-warning" ng-click="cancelScan()">取 消</button>
+    </div>
+</script>
+<script type="text/ng-template" id="accEdit.html">
+    <div class="modal-header">
+        <h3 class="modal-title">编辑维修配件信息</h3>
+    </div>
+    <div class="modal-body">
+        <form name="AccOpForm" role="form" class="form-horizontal ng-pristine ng-valid" novalidate>
+            <fieldset>
+                <div class="form-group">
+                    <label for="carAccName" class="col-md-2 control-label defeng-padding-top-5">名 称(必填)</label>
+                    <div class="col-md-4"
+                         ng-class="{'has-error': AccOpForm.carAccName.$invalid && (AccOpForm.carAccName.$dirty || dirtyFlag), 'has-success': AccOpForm.carAccName.$valid}">
+                        <input class="form-control defeng-input-format" type="text" id="carAccName" name="carAccName"
+                               ng-model="accItem.name" required
+                               ng-class="{'defeng-input-error': AccOpForm.carAccName.$invalid && (AccOpForm.carAccName.$dirty || dirtyFlag)}">
+                    </div>
+                    <label for="carAccIDNumber" class="col-md-2 control-label defeng-padding-top-5">件 号(必填)</label>
+                    <div class="col-md-4"
+                         ng-class="{'has-error': AccOpForm.carAccIDNumber.$invalid && (AccOpForm.carAccIDNumber.$dirty || dirtyFlag), 'has-success': AccOpForm.carAccIDNumber.$valid}">
+                        <input class="form-control defeng-input-format" type="text" id="carAccIDNumber"
+                               name="carAccIDNumber" ng-model="accItem.sn" required
+                               ng-class="{'defeng-input-error': AccOpForm.carAccIDNumber.$invalid && (AccOpForm.carAccIDNumber.$dirty || dirtyFlag)}">
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top:5px">
+                    <label for="carAccType" class="col-md-2 control-label defeng-padding-top-5">类 型</label>
+                    <div class="col-md-4" ng-class="{'has-success': AccOpForm.carAccType.$valid}">
+                        <input class="form-control defeng-input-format" type="text" id="carAccType" name="carAccType"
+                               ng-model="accItem.type">
+                    </div>
+                    <label for="carAccPrice" class="col-md-2 control-label defeng-padding-top-5">售 价(必填)</label>
+                    <div class="col-md-4"
+                         ng-class="{'has-error': AccOpForm.carAccPrice.$invalid && (AccOpForm.carAccPrice.$dirty || dirtyFlag), 'has-success': AccOpForm.carAccPrice.$valid}">
+                        <input class="form-control defeng-input-format" type="number" id="carAccPrice"
+                               name="carAccPrice" ng-model="accItem.price" ng-pattern="/^(0|[1-9]\d*)$/" required
+                               ng-class="{'defeng-input-error': AccOpForm.carAccPrice.$invalid && (AccOpForm.carAccPrice.$dirty || dirtyFlag)}">
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top:5px">
+                    <label for="carAccUsage" class="col-md-2 control-label defeng-padding-top-5">数 量(必填)</label>
+                    <div class="col-md-4"
+                         ng-class="{'has-error': AccOpForm.carAccUsage.$invalid && (AccOpForm.carAccUsage.$dirty || dirtyFlag), 'has-success': AccOpForm.carAccUsage.$valid}">
+                        <input class="form-control defeng-input-format" type="number" id="carAccUsage"
+                               name="carAccUsage" ng-model="accItem.usage" ng-pattern="/^(0|[1-9]\d*)$/" required
+                               ng-class="{'defeng-input-error': AccOpForm.carAccUsage.$invalid && (AccOpForm.carAccUsage.$dirty || dirtyFlag)}">
+                    </div>
+                    <div class="form-group" style="margin-top:5px">
+                        <label for="carAccGuarantee" class="col-md-2 control-label defeng-padding-top-5">是否三包</label>
+                        <div class="col-md-4"
+                             ng-class="{'has-error': AccOpForm.carAccGuarantee.$invalid && (CarFixInfoForm.carAccGuarantee.$dirty || dirtyFlag), 'has-success': CarFixInfoForm.carAccGuarantee.$valid}">
+                            <input class="" type="checkbox" id="carAccGuarantee" name="carAccGuarantee"
+                                   ng-model="accItem.guarantee">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top:5px">
+                    <label for="carFixMan"
+                           class="col-md-2 control-label defeng-padding-top-5">维修人员</label>
+                    <div class="col-md-4"
+                         ng-class="{'has-error': AccOpForm.carFixMan.$invalid && (AccOpForm.carFixMan.$dirty || dirtyFlag), 'has-success': AccOpForm.carFixMan.$valid}">
+                        <select class="form-control defeng-input-format"
+                                type="text" id="carFixMan" name="carFixMan"
+                                ng-model="accItem.fix_man" required
+                                ng-class="{'defeng-input-error': AccOpForm.carFixMan.$invalid && (AccOpForm.carFixMan.$dirty || dirtyFlag)}"
+                                ng-options="employee.id as employee.name for employee in employeeList">
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer">
+	    <span class="cloud-operation-info">
+            <span class="text-danger" ng-class="{'defeng-text-okay': Message === '操作成功'}"><span
+                    ng-bind="Message"></span></span>
+        </span>
+        <button class="btn btn-primary" ng-click="submitAccForm(AccOpForm.$valid)">确 认</button>
+        <button class="btn btn-warning" ng-click="cancelAccForm()">取 消</button>
+    </div>
+</script>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Accordion Tools - jQuery EasyUI Demo</title>
+	<link rel="stylesheet" type="text/css" href="/media/css/easyui.css">
+	<link rel="stylesheet" type="text/css" href="/media/css/icon.css">
+	<link rel="stylesheet" type="text/css" href="/media/css/demo.css" >
+	<link rel="stylesheet" type="text/css" href="/media/css/carfix.css" >
+	<script type="text/javascript" src="/media/js/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="/media/js/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="/media/js/accsellmanage.js"></script>
+	<script type="text/javascript" src="/media/js/validate.js"></script>
+</head>
+<body style="padding:0px;font-size:15px;">
+	<div id="car_accordion" class="easyui-accordion" style="width:100%;height:650px;">
+		<div title="配件管理" data-options="iconCls:'icon-home'" style="overflow:auto;padding:0px;">
+			<!-- 表格-->
+			<table id="dg_car" title="提货记录" class="easyui-datagrid" style="width:100%;height:100%"
+			url="/dfapi?api=111"
+			method='get'
+			toolbar="#toolbar_car" pagination="true" striped="true"
+			rownumbers="true" fitColumns="true" singleSelect="true" loadMsg="正在查询...">
+				<thead>
+					<tr>
+						<th field="id" width="30">ID</th>
+						<th field="accSellName" width="50">购买单位</th>
+						<th field="accSellDate" width="45">购买日期</th>
+						<th field="accSellSum" width="35">配件金额</th>
+						<th field="accSellFlag" width="30" data-options="formatter:showImgLogging">是否结算</th>
+						<th field="accSellRemark" width="200">配件及备注</th>
+					</tr>
+				</thead>
+			</table>
+
+			<div id="toolbar_car">
+				<span>起始日期:</span>
+				<input id="daystart" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser,width:'100px'" validType="date">
+				<span>结束日期:</span>
+				<input id="dayend" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser,width:'100px'" validType="date">
+				<span>购买单位:</span><input type="text" id="accSellName" value="" size=10 />
+
+				<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="findCarFixInfo()">查询</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newCarFixInfo()">新增</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editCarFixInfo()">编辑</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyCarFixInfo()">删除</a>
+			</div>
+
+		</div>
+
+		<div title="配件明细" data-options="iconCls:'icon-edit'" style="padding:0px;">
+		<table id="dg_acc" title="配件管理" class="easyui-datagrid" style="width:100%;height:290px"
+		url="/dfapi?api=121"
+		method='get'
+		toolbar="#toolbar_acc" pagination="true" striped="true" 
+		rownumbers="true" fitColumns="true" singleSelect="true" loadMsg="正在查询...">
+			<thead>
+				<tr>
+					<th field="id" width="50">提货ID</th>
+					<th field="accName" width="50">名称</th>
+					<th field="accIDNumber" width="50">件号</th>
+					<th field="accType" width="50">类型</th>
+					<th field="accCost" width="50">材料费</th>
+					<th field="accCount" width="50">数量</th>
+					<th id="accGuaranteeFlag" field="accGuaranteeFlag" width="50" data-options="formatter:showImgGuaranty">三包</th>
+				</tr>
+			</thead>
+		</table>
+
+		<div id="toolbar_acc">
+
+			<input id="accName" name="acc" class="easyui-combobox" style="width:250px;" data-options=
+			                "loader: btsloader, mode: 'remote', valueField: 'id', textField: 'name'"/>
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="fixAddAcc()">添加</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="fixEditAcc()">编辑</a>
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="fixDestroyAcc()">删除</a>
+		</div>
+
+		<div id="dlg" class="easyui-dialog" style="width:400px;height:360px;padding:10px 20px"
+		closed="true" buttons="#dlg-buttons">
+			<div class="ftitle">配件信息</div>
+			<form id="fm" method="post" novalidate>
+				<div class="fitem">
+					<p id="hideaccID">
+						<label>ID(不填):</label>
+						<input id="fmid" name="id" class="easyui-textbox" readonly="true">
+					</p>
+				</div>
+				<div class="fitem">
+					<label>名称:</label>
+					<input name="accName" class="easyui-textbox">
+				</div>
+				<div class="fitem">
+					<label>件号:</label>
+					<input id="fmidnumber" name="accIDNumber" class="easyui-textbox" required="true" validType="notnull" missingMessage="必填">
+				</div>
+				<div class="fitem">
+					<label>类型:</label>
+					<input name="accType" class="easyui-textbox">
+				</div>
+				<div class="fitem">
+					<label>材料费:</label>
+					<input name="accCost" class="easyui-textbox" required="true" validType="numeric" missingMessage="必填">
+				</div>
+				<div class="fitem">
+					<label>数量:</label>
+					<input name="accCount" class="easyui-textbox" required="true" validType="positive_int" missingMessage="必填">
+				</div>
+				<div class="fitem">
+					<label>三包:</label>
+					<input name="accGuaranteeFlag" type="checkbox" id="guarantee" value=1>
+				</div>
+			</form>
+		</div>
+
+		<div id="dlg-buttons">
+
+			<a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="fixSaveAcc()" style="width:90px">保存</a>
+
+			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">取消</a>
+
+		</div>
+		<div id="car_fix_basic" class="easyui-panel" title="提货信息" style="height:165px;width:100%;padding:10px 20px">
+			<form id="fm_fix_detail" method="post" novalidate>
+				<div class="fitem_fix">
+					<label>购买日期:</label>
+					<input id="detailFixDate" name="accSellDate" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" validType="date" required="true" missingMessage="必填">
+				<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+
+					<label>购买单位:</label>
+					<select id="detailaccSellName" class="easyui-combobox" name="accSellName" style="width:113px;" required="true" validType="notnull" missingMessage="必填"> 
+						<option value=""></option>
+						<option value="东坪">东坪</option> 
+						<option value="梅城">梅城</option> 
+						<option value="桃江东康">桃江东康</option> 
+						<option value="马迹塘">马迹塘</option> 
+						<option value="南县">南县</option>
+					</select> 
+					<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<label>实收:</label>
+					<input id="detailaccSellSum" name="accSellSum" class="easyui-textbox" validType="numeric">
+					<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<label>备注:</label>
+					<input id="detailaccSellRemark" name="accSellRemark" class="easyui-textbox">
+					<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<label>是否结算:</label>
+					<input name="accSellFlag" type="checkbox" id="detailaccSellFlag" value=1>				
+					<p id="hideID">
+						<label>ID(不填):</label>
+						<input id="id" name="id" class="easyui-textbox" value="-1" readonly="true"/>
+					</p>
+				</div>
+			</form>
+			<div align="right">
+				<a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-save" onclick="saveCarFixInfo()" style="width:88px;margin-right:100px;">保存</a>
+				<a href="javascript:void(0)" id="sum" class="easyui-linkbutton c6" target="_blank" iconCls="icon-print" onclick="printCarFix()" style="width:88px;margin-right:170px;">打印</a>
+			</div>
+		</div>
+
+		</div>
+	</div>
+</body>
+</html>
+

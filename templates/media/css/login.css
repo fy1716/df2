@@ -1,0 +1,6 @@
+.defeng-login-bk {
+    background: -ms-linear-gradient(top, rgba(255, 255, 255, 0.44), rgba(79, 132, 185, 0.58))!important;
+    background: -moz-linear-gradient(top, rgba(255, 255, 255, 0.44), rgba(79, 132, 185, 0.58))!important;
+    background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.44), rgba(79, 132, 185, 0.58))!important;
+    background: -o-linear-gradient(top, rgba(255, 255, 255, 0.44), rgba(79, 132, 185, 0.58))!important;
+}
