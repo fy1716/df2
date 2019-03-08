@@ -3,7 +3,8 @@ from rest_framework import viewsets
 import django_filters.rest_framework
 from rest_framework import filters
 
-from app.staff.models import EmployeeManage, EmployeeBonusManage
+from app.staff.models import EmployeeManage
+from app.car.models import EmployeeBonusManage
 from app.staff.filters import EmployeeBonusFilter
 from app.staff.serializer import EmployeeSerializer, EmployeeBonusSerializer
 
