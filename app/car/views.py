@@ -65,6 +65,7 @@ class FixAccViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Retri
     def perform_create(self, serializer):
         fix_id = self.request.data['fix_id']
         id_number = self.request.data['id_number']
+        common_util.debug(id_number)
         acc = {
             "sn": id_number,
             "name": '',
@@ -77,12 +78,14 @@ class FixAccViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Retri
             acc = {k: data[k] for k in acc}
         except Exception as e:
             pass
+        common_util.debug(acc)
         fix_acc = CarFixAccManage(**acc, fix_id=fix_id)
         fix_acc.save()
 
     def perform_destroy(self, instance):
         instance.delete()
 
+    # 在view中重写编辑方法，外键字段不要加_id
     def perform_update(self, serializer):
         common_util.debug(serializer)
         serializer.save()

@@ -5,11 +5,13 @@
 # Time: 2019/3/6 8:44
 __author__ = 'Peter.Fang'
 
+import os
 import requests
 import datetime
 import subprocess
 
 s = requests.session()
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 data = [
     ('serverName', 'dcms.dfsk.com.cn'),
     ('visistBrowser', 'CHROME'),
@@ -38,7 +40,7 @@ today = datetime.datetime.now().strftime('%Y-%m-%d')
 def parse_info_html(res):
     from bs4 import BeautifulSoup
     soup = BeautifulSoup(res.text, 'html.parser')
-    format = ["number", "car_type", "buy_date", "pro_date", "owner", "tel"]
+    format = ["number", "type", "buy_date", "pro_date", "owner", "tel"]
     number = soup.find(name='input', attrs={"id": "LICENSE_NOID"}).get('value')
     car_type = soup.find(name='td', text={"物料："}).findNext('td').contents[0]
     buy_date = soup.find(name='td', text={"购车日期："}).findNext('td').contents[0].strip()
@@ -90,11 +92,11 @@ def get_gurantee(day_start=today, day_end=today):
     ]
     r = s.post(
         'http://idcs.dfsk.com.cn/claim/dealerClaimMng/ClaimBillTrack/export.do', data_download)
-    with open('../db_tools/data/download_gurantee.xls', 'wb') as f:
+    with open(os.path.join(BASE_DIR, 'db_tools/data/download_gurantee.xls'), 'wb') as f:
         f.write(r.content)
 
     # 导入db
-    subprocess.run(['python', '../db_tools/gurantee_sync.py', day_start, day_end])
+    subprocess.run(['python', os.path.join(BASE_DIR, 'db_tools/gurantee_sync.py'), day_start, day_end])
 
 
 def do_sync_gurantee():

@@ -9,6 +9,7 @@ from rest_framework import serializers
 from .models import CarInfoManage, CarFixManage, CarFixAccManage
 from app.staff.models import EmployeeManage
 from app.staff.serializer import EmployeeSerializer
+from util import common_util
 
 
 class CarInfoSerializer(serializers.ModelSerializer):
@@ -24,7 +25,7 @@ class CarInfoSerializer(serializers.ModelSerializer):
 
 
 class FixAccSerializer(serializers.ModelSerializer):
-    fix_man_name = serializers.SerializerMethodField()  # 增加展示的外来字段
+    fix_man_name = serializers.SerializerMethodField(read_only=True)  # 增加展示的外来字段
 
     class Meta:
         model = CarFixAccManage
@@ -51,7 +52,6 @@ class CarFixSerializer(serializers.ModelSerializer):
     @staticmethod
     def _get_fix_man(name):
         try:
-            print(name)
             return EmployeeManage.objects.get(name=name).id
         except Exception as e:
             print(e)
@@ -65,9 +65,15 @@ class CarFixSerializer(serializers.ModelSerializer):
         return car_info
 
     def update(self, instance, validated_data):
-        print(validated_data)
-
+        common_util.debug(validated_data)
         instance.car_id = self.context['request'].data['car_id']
         instance.fix_man_id = self._get_fix_man(self.context['request'].data['fix_man_id'])
+        instance.odo = validated_data.get('odo', instance.odo)
+        instance.date = validated_data.get('date', instance.date)
+        instance.odo = validated_data.get('odo', instance.odo)
+        instance.income = validated_data.get('income', instance.income)
+        instance.remark = validated_data.get('remark', instance.remark)
+        instance.logging = validated_data.get('logging', instance.logging)
+        instance.maintain = validated_data.get('maintain', instance.maintain)
         instance.save()
         return instance

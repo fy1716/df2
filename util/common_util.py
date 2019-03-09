@@ -6,6 +6,7 @@
 __author__ = 'Peter.Fang'
 import os
 import logging
+import datetime
 import traceback
 from django.http import JsonResponse
 
@@ -73,3 +74,10 @@ def json_response(flag, data=None, message=''):
 
 def excel_float(data):
     return float(str(data).replace(',', ''))
+
+
+def get_today(str_flag=True):
+    today = datetime.date.today()
+    if str_flag:
+        return today.strftime('%Y-%m-%d')
+    return today

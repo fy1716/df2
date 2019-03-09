@@ -18,7 +18,13 @@ def init_db(sender, **kwargs):
     if sender.name == config.name:
         if not model.objects.exists():
             model.objects.create_superuser(username='root', password='eisoo.com', email='909364345@qq.com', role=0)
-            model.objects.create_superuser(username='fy1716', password='eisoo.com', email='909364345@qq.com', role=1)
+            model.objects.create_user(username='zxl', password='000000', email='909364345@qq.com', role=1)
+            model.objects.create_user(username='test', password='eisoo.com', email='909364345@qq.com', role=1)
+            model.objects.create_user(username='fy1716', password='000000', email='909364345@qq.com', role=2)
+            model.objects.create_user(username='TYLAN', password='000000', email='909364345@qq.com', role=2)
+            model.objects.create_user(username='fangyan', password='000000', email='909364345@qq.com', role=2)
+            model.objects.create_user(username='defeng', password='000000', email='909364345@qq.com', role=2)
+            model.objects.create_user(username='yydf', password='000000', email='909364345@qq.com', role=2)
 
 
 post_migrate.connect(init_db)

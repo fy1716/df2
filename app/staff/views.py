@@ -17,7 +17,7 @@ class EmployeeViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
     serializer_class = EmployeeSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter)
     ordering_fields = ('id',)
-    ordering = ('-id',)
+    ordering = ('id',)
     search_fields = ('name',)
 
 
