@@ -1,34 +1,33 @@
 angular.module('app.controllers')
-    .controller('employeeCtrl', ['$scope', '$rootScope', '$http', '$filter', '$modal', function($scope, $rootScope, $http, $filter, $modal) {
+    .controller('employeeCtrl', ['$scope', '$rootScope', '$http', '$filter', '$modal', function ($scope, $rootScope, $http, $filter, $modal) {
         //清空选中item状态
-        $scope.clearSelectedItem = function() {
+        $scope.clearSelectedItem = function () {
             $scope.EmployeeInfoActiveItem = {};   //清空被选中item
             $scope.currentActiveStatus = false;   //未激活状态
             $scope.currentActiveIndex = null;    //清空被选中item索引
         };
         //获取配件列表
-        $scope.queryEmployeeInfoList = function() {
+        $scope.queryEmployeeInfoList = function () {
             $scope.EmployeeInfoList = $filter('fillArray')([], $scope.rows);
             $scope.clearSelectedItem();
-            $http.get('/dfapi', {
+            $http.get('/df/v2/api/employee/', {
                 params: {
-                    "api": 801,
                     "page": $scope.page,
                     "rows": $scope.rows,
                 }
             })
-            .success(function(response) { 
-                $scope.EmployeeInfoList = $filter('fillArray')(response.rows, $scope.rows);
-                $scope.totalItems = response.total;
-                if (response.rows.length === 0 && $scope.page !== 1) {
-                    $scope.page = $scope.page - 1;
-                    $scope.lastPage = $scope.page;
-                    $scope.queryEmployeeInfoList();
-                }
-            });	
+                .success(function (response) {
+                    $scope.EmployeeInfoList = $filter('fillArray')(response.results, $scope.rows);
+                    $scope.totalItems = response.count;
+                    if (response.results.length === 0 && $scope.page !== 1) {
+                        $scope.page = $scope.page - 1;
+                        $scope.lastPage = $scope.page;
+                        $scope.queryEmployeeInfoList();
+                    }
+                });
         };
         //查询
-        $scope.searchEmployeeInfo = function() {
+        $scope.searchEmployeeInfo = function () {
             $scope.page = 1;
             $scope.lastPage = 1;
             $scope.queryEmployeeInfoList();
@@ -40,7 +39,7 @@ angular.module('app.controllers')
             }
         };
         //点击item操作
-        $scope.toggleActive = function(index) {
+        $scope.toggleActive = function (index) {
             //点击已选中item
             if ($scope.currentActiveIndex === index) {
                 $scope.currentActiveIndex = null;
@@ -65,7 +64,7 @@ angular.module('app.controllers')
             $scope.EmployeeInfoActiveItem = $scope.EmployeeInfoList[index];
         };
         //分页
-        $scope.pagination = function(page) {
+        $scope.pagination = function (page) {
             if ($scope.lastPage !== page) {
                 $scope.page = page;
                 $scope.lastPage = page;
@@ -122,45 +121,42 @@ angular.module('app.controllers')
             $scope.openOpPage();
         };
         //删除结果处理
-        $scope.dealDelRet = function() {
+        $scope.dealDelRet = function () {
             $.smallBox({
-                title : "删除结果",
-                content : $scope.delMessage + "<p class='text-align-right'><a href='javascript:void(0);' class='btn btn-primary btn-sm'>确定</a></p>",
-                color : $scope.tipColor,
+                title: "删除结果",
+                content: $scope.delMessage + "<p class='text-align-right'><a href='javascript:void(0);' class='btn btn-primary btn-sm'>确定</a></p>",
+                color: $scope.tipColor,
                 timeout: 5000,
-                icon : "fa fa-bell swing animated"
+                icon: "fa fa-bell swing animated"
             });
         };
         //确认删除
-        $scope.delEmployeeInfoConfirm = function() {
-            $http.post('/dfapi?api=804', {
-                id: $scope.EmployeeInfoActiveItem.id
-            })
-            .success(function(response) {
-                $scope.delMessage = response.Message;
-                if (response.Result === 'success') {
+        $scope.delEmployeeInfoConfirm = function () {
+            $http.delete('/df/v2/api/employee/' + $scope.EmployeeInfoActiveItem.id + '/')
+                .success(function (response) {
+                    $scope.delMessage = "操作成功";
                     $scope.tipColor = "#739E73";
-                } else {
+                    $scope.dealDelRet();
+                    $scope.queryEmployeeInfoList();
+                })
+                .error(function (response) {
+                    for (var key in response) {
+                        $scope.delMessage = response[key];
+                        break
+                    }
                     $scope.tipColor = "#C46A69";
-                }
-                $scope.dealDelRet();
-                $scope.queryEmployeeInfoList();
-            })
-            .error(function(response) {
-                $scope.tipColor = "#C46A69";
-                $scope.delMessage = "服务器无响应，请稍后重试！";
-                $scope.dealDelRet();
-            });			
+                    $scope.dealDelRet();
+                });
         };
         //删除操作
-        $scope.delEmployeeInfo = function() {
-            if(confirm("确定要删除该信息吗？")) {
+        $scope.delEmployeeInfo = function () {
+            if (confirm("确定要删除该信息吗？")) {
                 $scope.delEmployeeInfoConfirm();
             }
         };
         /******************************************** 初始化操作 ******************************************/
         //初始化
-        $scope.init = function() {
+        $scope.init = function () {
             $scope.page = 1;
             $scope.lastPage = 1;
             $scope.rows = 8;
@@ -170,27 +166,30 @@ angular.module('app.controllers')
         };
         $scope.init();
     }])
-    .controller('EmployeeInfoOpCtrl', ['$scope', '$modalInstance', '$http', '$timeout', 'items', function($scope, $modalInstance, $http, $timeout, items) {
+    .controller('EmployeeInfoOpCtrl', ['$scope', '$modalInstance', '$http', '$timeout', 'items', function ($scope, $modalInstance, $http, $timeout, items) {
         //新增EmployeeInfo
-        $scope.opEmployeeInfoItem = function (urlNo, EmployeeInfoId) {
-            $http.post('/dfapi?api=' + urlNo, {
-                id: EmployeeInfoId,
+        $scope.opEmployeeInfoItem = function (method, url) {
+            data = {
                 name: $scope.EmployeeInfoItem.name,
+                em_type: 1,
                 remark: $scope.EmployeeInfoItem.remark
+            };
+            $http({
+                method: method,
+                url: url,
+                data: data
             })
-            .success(function(response) {
-                if (response.Result === 'success') {
+                .success(function (response) {
                     $scope.Message = "操作成功";
-                    $timeout(function() {
+                    $timeout(function () {
                         $modalInstance.close();
                     }, 500);
-                } else {
-                    $scope.Message = response.errorMsg;
+                }).error(function (response) {
+                for (var key in response) {
+                    $scope.Message = response[key];
+                    break
                 }
-            }).error(function(response) {
-                $scope.Message = "服务器无响应，请稍后重试！";
             });
-            
         };
         //提交表单
         $scope.submitForm = function (retValid) {
@@ -200,10 +199,10 @@ angular.module('app.controllers')
                 return null;
             }
             if (items.type === 'add') {
-                $scope.opEmployeeInfoItem(802, 0);
+                $scope.opEmployeeInfoItem('POST', '/df/v2/api/employee/');
             }
             if (items.type === 'edit') {
-                $scope.opEmployeeInfoItem(803, items.EmployeeInfoItem.id);
+                $scope.opEmployeeInfoItem('PUT', '/df/v2/api/employee/' + items.EmployeeInfoItem.id + '/');
             }
         };
         //取消表单
@@ -211,19 +210,19 @@ angular.module('app.controllers')
             $modalInstance.dismiss('cancel');
         };
         //清空输入框
-        $scope.clearInput = function() {
+        $scope.clearInput = function () {
             $scope.EmployeeInfoItem.name = "";
             $scope.EmployeeInfoItem.remark = "";
         };
         //初始化输入框
-        $scope.initInput = function() {
+        $scope.initInput = function () {
             var EmployeeInfo = items.EmployeeInfoItem;
             $scope.EmployeeInfoItem.name = EmployeeInfo.name;
             $scope.EmployeeInfoItem.remark = EmployeeInfo.remark;
         };
         /******************************************** 初始化操作 ******************************************/
         //初始化        
-        $scope.init = function() {
+        $scope.init = function () {
             $scope.items = items;
             $scope.dirtyFlag = false;
             $scope.Message = "";
