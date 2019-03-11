@@ -9,6 +9,7 @@ import logging
 import datetime
 import traceback
 from django.http import JsonResponse
+from rest_framework.pagination import PageNumberPagination
 
 from df2 import settings
 
@@ -83,3 +84,8 @@ def get_today(day=0, str_flag=True):
     if str_flag:
         return today.strftime('%Y-%m-%d')
     return today
+
+
+# 根据rows不同来获取数据的多少
+class GeneralPagination(PageNumberPagination):
+    page_size_query_param = 'rows'
