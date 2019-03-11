@@ -9,7 +9,8 @@ import sys
 import xlrd
 
 pwd = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(pwd + "../")
+main_dir = os.path.dirname(pwd)
+sys.path.append(main_dir)
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "df2.settings")
 
 import django

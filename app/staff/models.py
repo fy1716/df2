@@ -20,16 +20,3 @@ class EmployeeManage(models.Model):
     def __str__(self):
         return self.name
 
-
-# 员工绩效
-class EmployeeBonusManage(models.Model):
-    date = models.DateField()
-    employee = models.ForeignKey('EmployeeManage', on_delete=models.CASCADE)
-    fix_id = models.ForeignKey('car.CarFixManage', on_delete=models.CASCADE, related_name='fix_bonus')
-    acc_id = models.OneToOneField('car.CarFixAccManage', on_delete=models.CASCADE, related_name='acc_bonus', null=True)
-    profit = models.FloatField()
-    bonus = models.FloatField(default=0)
-
-    class Meta:
-        db_table = 'bonus'
-        # unique_together = ('date', 'fix_id', 'acc_id')

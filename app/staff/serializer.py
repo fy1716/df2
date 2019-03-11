@@ -6,7 +6,8 @@
 __author__ = 'Peter.Fang'
 
 from rest_framework import serializers
-from .models import EmployeeManage, EmployeeBonusManage
+from .models import EmployeeManage
+from app.car.models import EmployeeBonusManage
 
 
 class EmployeeSerializer(serializers.ModelSerializer):

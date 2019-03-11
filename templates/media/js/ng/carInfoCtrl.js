@@ -21,12 +21,18 @@ angular.module('app.controllers')
         $scope.queryCarInfoList = function () {
             $scope.carInfoList = $filter('fillArray')([], $scope.rows);
             $scope.clearSelectedItem();
+            var day_start = $scope.dayStart;
+            var day_end = $scope.dayEnd;
+            if ($scope.keyword) {
+                day_start = null;
+                day_end = null;
+            }
             $http.get('/df/v2/api/car_info/', {
                 params: {
                     "page": $scope.page,
                     "rows": $scope.rows,
-                    "day_start": $scope.dayStart,
-                    "day_end": $scope.dayEnd,
+                    "day_start": day_start,
+                    "day_end": day_end,
                     "search": $scope.searchItemList[0] + $scope.searchItemList[1] + $scope.searchItemList[2] + $scope.searchItemList[3],
                 }
             })

@@ -5,11 +5,13 @@
 # Time: 2019/3/6 8:44
 __author__ = 'Peter.Fang'
 
+import os
 import requests
 import datetime
 import subprocess
 
 s = requests.session()
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 data = [
     ('serverName', 'dcms.dfsk.com.cn'),
     ('visistBrowser', 'CHROME'),
@@ -38,7 +40,7 @@ today = datetime.datetime.now().strftime('%Y-%m-%d')
 def parse_info_html(res):
     from bs4 import BeautifulSoup
     soup = BeautifulSoup(res.text, 'html.parser')
-    format = ["number", "car_type", "buy_date", "pro_date", "owner", "tel"]
+    format = ["number", "type", "buy_date", "pro_date", "owner", "tel"]
     number = soup.find(name='input', attrs={"id": "LICENSE_NOID"}).get('value')
     car_type = soup.find(name='td', text={"物料："}).findNext('td').contents[0]
     buy_date = soup.find(name='td', text={"购车日期："}).findNext('td').contents[0].strip()
@@ -78,7 +80,7 @@ def get_info(VIN):
             return parse_info_html(r)
 
 
-def get_gurantee(day_start=today, day_end=today):
+def get_gurantee(day_start, day_end):
     login()
     s.get(
         'http://dcms.dfsk.com.cn/DCMS/sysmng/usemng/DcsFuncMapping/pageIntegration.do?funcId=88888888')
@@ -90,17 +92,16 @@ def get_gurantee(day_start=today, day_end=today):
     ]
     r = s.post(
         'http://idcs.dfsk.com.cn/claim/dealerClaimMng/ClaimBillTrack/export.do', data_download)
-    with open('../db_tools/data/download_gurantee.xls', 'wb') as f:
+    with open(os.path.join(BASE_DIR, 'db_tools/data/download_gurantee.xls'), 'wb') as f:
         f.write(r.content)
 
     # 导入db
-    subprocess.run(['python', '../db_tools/gurantee_sync.py', day_start, day_end])
+    subprocess.run(['python', os.path.join(BASE_DIR, 'db_tools/gurantee_sync.py'), day_start, day_end])
 
 
-def do_sync_gurantee():
-    today = datetime.date.today()
-    day_start = today - datetime.timedelta(days=3)
-    get_gurantee(day_start=day_start.strftime('%Y-%m-%d'))
+def do_sync_gurantee(day_start=(datetime.date.today() - datetime.timedelta(days=3)).strftime('%Y-%m-%d'),
+                     day_end=(datetime.date.today()+datetime.timedelta(days=1)).strftime('%Y-%m-%d')):
+    get_gurantee(day_start, day_end)
 
 
 if __name__ == "__main__":
@@ -127,4 +128,4 @@ if __name__ == "__main__":
     # print('湘H0FY90' in r.text)
     # parse_html(r)
     # print(get_info("JA042894"))
-    do_sync_gurantee()
+    do_sync_gurantee(day_start="2019-03-01")

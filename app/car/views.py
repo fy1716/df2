@@ -3,6 +3,7 @@ from rest_framework import mixins
 from rest_framework import viewsets
 import django_filters.rest_framework
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.exceptions import ValidationError
 
 from rest_framework import filters
 from app.acc.models import AccManage
@@ -57,6 +58,11 @@ class FixAccViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Retri
     ordering = ('-id',)
     filter_class = FixAccFilter
 
+    @staticmethod
+    def _check_duplicate(fix_id, sn):
+        ret = CarFixAccManage.objects.filter(fix=fix_id, sn=sn).exists()
+        return ret
+
     def get_queryset(self):
         fix_id = self.request.data.get('car_fix_id') or self.request.query_params.get('car_fix_id')
         query_set = CarFixAccManage.objects.filter(fix_id=fix_id)
@@ -65,6 +71,8 @@ class FixAccViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Retri
     def perform_create(self, serializer):
         fix_id = self.request.data['fix_id']
         id_number = self.request.data['id_number']
+        if self._check_duplicate(fix_id, id_number):
+            raise ValidationError('该配件已添加，请检查!')
         acc = {
             "sn": id_number,
             "name": '',
@@ -73,16 +81,19 @@ class FixAccViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Retri
             "cost": 0,
         }
         try:
+            # 获取维修负责人id
+            fix_man_id = CarFixManage.objects.get(id=fix_id).fix_man_id
             data = model_to_dict(AccManage.objects.get(sn=id_number))
             acc = {k: data[k] for k in acc}
         except Exception as e:
-            pass
-        fix_acc = CarFixAccManage(**acc, fix_id=fix_id)
+            raise e
+        fix_acc = CarFixAccManage(**acc, fix_id=fix_id, fix_man_id=fix_man_id)
         fix_acc.save()
 
     def perform_destroy(self, instance):
         instance.delete()
 
+    # 在view中重写编辑方法，外键字段不要加_id
     def perform_update(self, serializer):
         common_util.debug(serializer)
         serializer.save()

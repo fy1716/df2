@@ -22,12 +22,18 @@ angular.module('app.controllers')
         $scope.queryCarFixList = function () {
             $scope.carFixList = $filter('fillArray')([], $scope.rows);
             $scope.clearSelectedItem();
+            var day_start = $scope.dayStart;
+            var day_end = $scope.dayEnd;
+            if ($scope.keyword) {
+                day_start = null;
+                day_end = null;
+            }
             $http.get('/df/v2/api/car_fix', {
                 params: {
                     "page": $scope.page,
                     "rows": $scope.rows,
-                    "day_start": $scope.dayStart,
-                    "day_end": $scope.dayEnd,
+                    "day_start": day_start,
+                    "day_end": day_end,
                     "search": $scope.searchItemList[1] + $scope.searchItemList[2] + $scope.searchItemList[0]
                 }
             })
@@ -149,9 +155,11 @@ angular.module('app.controllers')
         };
         //填充车辆信息
         $scope.fillCarInfo = function (carInfo) {
-            // $scope.carFixInfo.carIDNumber = carInfo.sn;
+            if (carInfo.sn) {
+                $scope.carFixInfo.carIDNumber = carInfo.sn;
+            }
             $scope.carFixInfo.carNumber = carInfo.number;
-            $scope.carFixInfo.carType = carInfo.car_type;
+            $scope.carFixInfo.carType = carInfo.type;
             //$scope.carFixInfo.carBuyDate = carInfo.carBuyDate;
             //$scope.carFixInfo.carProDate = carInfo.carProDate;
             $scope.carBuyDate.value = carInfo.buy_date;
@@ -222,6 +230,7 @@ angular.module('app.controllers')
         $scope.initAddCarFix = function () {
             $scope.opType = "add";
             $scope.opTitle = "新增车辆信息";
+            $scope.Message = "请先填写车辆信息，然后点击下一步，再填写配件信息";
             $scope.sum = 0;
             $scope.carFixID = -1;
             $scope.carFixIDN = "";
@@ -341,6 +350,7 @@ angular.module('app.controllers')
             $http.post('/df/v2/api/car_fix/', {
                 car_id: car.id,
                 date: $scope.carFixDate.value,
+                reg_time: new Date().Format("hh:mm:ss"),
                 odo: $scope.carFixInfo.carFixODO,
                 fix_man_id: $scope.carFixInfo.carFixMan,
                 income: $scope.carFixInfo.carFixIncome,
@@ -375,7 +385,14 @@ angular.module('app.controllers')
             })
                 .success(function (response) {
                     console.log(response)
-                    $scope.fillCarInfo(response.data);
+                    if (response.result === 'failed') {
+                        $scope.tipColor = "#C46A69";
+                        $scope.retMessage = response.message;
+                        $scope.showRetMsg();
+                    }
+                    if (response.result === 'success') {
+                        $scope.fillCarInfo(response.data);
+                    }
                 })
                 .error(function (response) {
                     $scope.tipColor = "#C46A69";
@@ -451,7 +468,7 @@ angular.module('app.controllers')
         };
         //总结操作
         $scope.printReport = function () {
-            window.open('/df/v2/platform/daily_report?day_start=' + $scope.dayStart + '&day_end=' + $scope.dayEnd );
+            window.open('/df/v2/platform/daily_report?day_start=' + $scope.dayStart + '&day_end=' + $scope.dayEnd);
         };
         /******************************************** 配件操作 ******************************************/
         //清空选中配件状态
@@ -464,6 +481,7 @@ angular.module('app.controllers')
         $scope.getFixAcc = function (flag) {
             if (flag) {
                 var row = 5;
+                $scope.carFixIDN = '';
             } else {
                 var row = $scope.accRows;
             }
@@ -476,7 +494,7 @@ angular.module('app.controllers')
                 }
             })
                 .success(function (response) {
-                    $scope.sum = response.sum;
+
                     console.log($scope.raw_employee_list);
                     $scope.fixAccList = $filter('fillArray')(response.results, $scope.accRows);
                     $scope.accTotalItems = response.count;
@@ -485,6 +503,14 @@ angular.module('app.controllers')
                         $scope.lastPageSub = $scope.accPage;
                         $scope.getFixAcc(false);
                     }
+                    var sum = 0;
+                    for (var i=0;i<response.results.length;i++) {
+                        var item = response.results[i];
+                        if (!item.guarantee) {
+                            sum += item.price * item.usage;
+                        }
+                    }
+                    $scope.sum = sum;
                     if (flag) {
                         $scope.fixAccList = response.results;
                         $scope.showAccDetail();
@@ -528,7 +554,7 @@ angular.module('app.controllers')
         $scope.addFixAcc = function () {
             $http.post('/df/v2/api/fix_acc/', {
                 fix_id: $scope.carFixIDN,
-                id_number: localStorage.accKey
+                id_number: localStorage.accKey,
             })
                 .success(function (response) {
                     $scope.accPage = 1;
@@ -748,13 +774,14 @@ angular.module('app.controllers')
         $scope.editAccItem = function () {
             $http.put('/df/v2/api/fix_acc/' + items.accItem.id + '/', {
                 car_fix_id: $scope.accItem.fix,
+                fix: $scope.accItem.fix,
                 name: $scope.accItem.name,
                 sn: $scope.accItem.sn,
                 type: $scope.accItem.type,
                 price: $scope.accItem.price,
                 usage: $scope.accItem.usage,
                 guarantee: $scope.accItem.guarantee,
-                fix_man_id: $scope.accItem.fix_man,
+                fix_man: $scope.accItem.fix_man,
             })
                 .success(function (response) {
                     $scope.Message = "操作成功";

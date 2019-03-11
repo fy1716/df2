@@ -13,14 +13,8 @@
                                 <span>购车起始日期 <input class="form-control defeng-input-width" type="text" id="dayStart" ng-model="dayStart" ng-pattern="/^\d{4}-\d{1,2}-\d{1,2}$/"></span>
                                 <span>结束日期 <input class="form-control defeng-input-width" type="text" id="dayEnd" ng-model="dayEnd" ng-pattern="/^\d{4}-\d{1,2}-\d{1,2}$/"></span>
                                 <div class="form-group">
-                                    <label>类型 </label>
-                                    <select class="form-control" ng-model="searchType">
-                                        <option value="{{$index}}" ng-repeat="type in searchTypeList">{{type}}</option>
-                                    </select>
-                                </div>                                
-                                <div class="form-group">
                                     <label>关键字 </label>
-                                    <input class="form-control defeng-input-width" placeholder="{{searchTip}}" type="text" ng-model="keyword" ng-keydown="keydown($event)">
+                                    <input class="form-control" style="width: 180px;" placeholder="底盘号、车牌、车主或电话" type="text" ng-model="keyword" ng-keydown="keydown($event)">
                                 </div>
                                 <button class="btn btn-info" type="submit" ng-click="searchCarInfo()">
                                     <i class="glyphicon glyphicon-search"></i> 查询

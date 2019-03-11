@@ -36,6 +36,7 @@ urlpatterns = [
     path('docs/', include_docs_urls(title='df2')),
     path('api/', include(router.urls)),
     path('login/', obtain_jwt_token),
+    path('stat/', include('statistic.urls')),
     path('platform/', include('other.urls')),
 ]
 

@@ -6,7 +6,7 @@
 __author__ = 'Peter.Fang'
 
 import django_filters
-from .models import EmployeeBonusManage
+from app.car.models import EmployeeBonusManage
 
 
 class EmployeeBonusFilter(django_filters.rest_framework.FilterSet):
