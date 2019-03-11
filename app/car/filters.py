@@ -24,13 +24,12 @@ class CarFixFilter(django_filters.rest_framework.FilterSet):
     """
     按维修日期过滤
     """
-    station_id = django_filters.NumberFilter(field_name="station_id")
     day_start = django_filters.DateFilter(field_name="date", lookup_expr="gte")
     day_end = django_filters.DateFilter(field_name="date", lookup_expr="lte")
 
     class Meta:
         model = CarFixManage
-        fields = ['station_id', 'day_start', 'day_end']
+        fields = ['day_start', 'day_end']
 
 
 class FixAccFilter(django_filters.rest_framework.FilterSet):

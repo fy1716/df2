@@ -57,7 +57,7 @@ class CarFixAccManage(models.Model):
     # 记录下配件信息，而不是外键，这样保证存留历史快照
     name = models.CharField(max_length=50, blank=True)
     sn = models.CharField(max_length=50, null=True, blank=True)
-    type = models.CharField(max_length=30, null=True)
+    type = models.CharField(max_length=30, null=True, blank=True)
     price = models.SmallIntegerField(blank=True, null=True)
     usage = models.SmallIntegerField(default=1)
     cost = models.FloatField(default=0)
