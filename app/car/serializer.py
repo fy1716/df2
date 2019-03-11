@@ -108,3 +108,9 @@ class CarFixSerializer(common_util.BaseSerializer):
         except Exception as e:
             raise e
 
+
+
+class GuaranteeSerializer(common_util.BaseSerializer):
+    class Meta:
+        model = CarInfoManage
+        fields = "__all__"

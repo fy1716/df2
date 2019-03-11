@@ -17,7 +17,7 @@ from django.urls import path, include, re_path
 import xadmin
 from rest_framework.documentation import include_docs_urls
 from rest_framework.routers import DefaultRouter
-from car.views import CarInfoViewSet, CarFixViewSet, FixAccViewSet
+from car.views import CarInfoViewSet, CarFixViewSet, FixAccViewSet, GuaranteeViewSet
 from acc.views import AccListViewSet
 from staff.views import EmployeeViewSet, EmployeeBonusListView
 from rest_framework_jwt.views import obtain_jwt_token
@@ -27,6 +27,7 @@ router.register(r'acc', AccListViewSet)
 router.register(r'car_info', CarInfoViewSet, base_name='car_info')
 router.register(r'car_fix', CarFixViewSet, base_name='car_fix')
 router.register(r'fix_acc', FixAccViewSet, base_name='fix_acc')
+router.register(r'guarantee', GuaranteeViewSet, base_name='guarantee')
 router.register(r'employee', EmployeeViewSet)
 router.register(r'employee_bonus', EmployeeBonusListView)
 

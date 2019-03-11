@@ -6,9 +6,9 @@ import django_filters.rest_framework
 from rest_framework.exceptions import ValidationError
 
 from app.acc.models import AccManage
-from app.car.models import CarInfoManage, CarFixManage, CarFixAccManage
-from app.car.serializer import CarInfoSerializer, CarFixSerializer, FixAccSerializer
-from app.car.filters import CarInfoFilter, CarFixFilter, FixAccFilter
+from app.car.models import CarInfoManage, CarFixManage, CarFixAccManage, Gurantee
+from app.car.serializer import CarInfoSerializer, CarFixSerializer, FixAccSerializer, GuaranteeSerializer
+from app.car.filters import CarInfoFilter, CarFixFilter, FixAccFilter, GuaranteeFilter
 from util import common_util
 
 
@@ -83,3 +83,16 @@ class FixAccViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Retri
     # def perform_update(self, serializer):
     #     common_util.debug(serializer)
     #     serializer.save()
+
+
+class GuaranteeViewSet(viewsets.ModelViewSet):
+    queryset = Gurantee.objects.all()
+    serializer_class = GuaranteeSerializer
+    pagination_class = common_util.GeneralPagination
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter)
+    filter_class = GuaranteeFilter
+    # 新增的放最前边
+    ordering_fields = ('id',)
+    ordering = ('-id',)
+    # 搜索字段， 对应到前端的参数是 search
+    search_fields = ('order_no', 'car_sn')

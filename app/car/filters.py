@@ -5,7 +5,7 @@
 # Time: 2019/2/28 15:21
 __author__ = 'Peter.Fang'
 import django_filters
-from .models import CarInfoManage, CarFixManage, CarFixAccManage
+from .models import CarInfoManage, CarFixManage, CarFixAccManage, Gurantee
 
 
 class CarInfoFilter(django_filters.rest_framework.FilterSet):
@@ -44,3 +44,15 @@ class FixAccFilter(django_filters.rest_framework.FilterSet):
     class Meta:
         model = CarFixAccManage
         fields = ['fix_id']
+
+
+class GuaranteeFilter(django_filters.rest_framework.FilterSet):
+    """
+    按申请日期过滤
+    """
+    day_start = django_filters.DateFilter(field_name="apply_date", lookup_expr="gte")
+    day_end = django_filters.DateFilter(field_name="apply_date", lookup_expr="lte")
+
+    class Meta:
+        model = Gurantee
+        fields = ['day_start', 'day_end']
