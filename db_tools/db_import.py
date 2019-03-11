@@ -12,8 +12,8 @@ import django
 django.setup()
 
 from app.acc.models import AccManage
-from app.car.models import CarInfoManage, CarFixManage, CarFixAccManage
-from app.staff.models import EmployeeBonusManage, EmployeeManage
+from app.car.models import CarInfoManage, CarFixManage, CarFixAccManage, EmployeeBonusManage
+from app.staff.models import EmployeeManage
 
 # 分页获取原始数据
 import MySQLdb
@@ -219,9 +219,9 @@ if __name__ == '__main__':
     try:
         # acc()  # 同步配件
         # car_info()
-        # car_fix()
+        car_fix()
         # car_acc()
-        bonus()
+        # bonus()
     except Exception as e:
         print(traceback.print_exc())
         print(e)

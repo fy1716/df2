@@ -5,8 +5,11 @@
 # Time: 2019/2/27 10:48
 __author__ = 'Peter.Fang'
 
+
 from django.forms.models import model_to_dict
 from rest_framework import serializers
+from rest_framework.fields import SkipField
+from rest_framework.relations import PKOnlyObject
 from rest_framework.validators import UniqueTogetherValidator
 
 from .models import CarInfoManage, CarFixManage, CarFixAccManage
@@ -16,7 +19,7 @@ from app.staff.serializer import EmployeeSerializer
 from util import common_util
 
 
-class CarInfoSerializer(serializers.ModelSerializer):
+class CarInfoSerializer(common_util.BaseSerializer):
     class Meta:
         model = CarInfoManage
         fields = "__all__"
@@ -33,7 +36,7 @@ class CarInfoSerializer(serializers.ModelSerializer):
         return car_info
 
 
-class FixAccSerializer(serializers.ModelSerializer):
+class FixAccSerializer(common_util.BaseSerializer):
     fix_man_name = serializers.SerializerMethodField(read_only=True)  # 增加展示的外来字段
 
     class Meta:
@@ -74,7 +77,7 @@ class FixAccSerializer(serializers.ModelSerializer):
             raise e
 
 
-class CarFixSerializer(serializers.ModelSerializer):
+class CarFixSerializer(common_util.BaseSerializer):
     car_detail = serializers.SerializerMethodField(read_only=True)
     fix_man_detail = serializers.SerializerMethodField(read_only=True)
 
@@ -104,3 +107,4 @@ class CarFixSerializer(serializers.ModelSerializer):
             return EmployeeManage.objects.get(name=name).id
         except Exception as e:
             raise e
+

@@ -89,3 +89,38 @@ def get_today(day=0, str_flag=True):
 # 根据rows不同来获取数据的多少
 class GeneralPagination(PageNumberPagination):
     page_size_query_param = 'rows'
+
+
+from collections import OrderedDict
+from rest_framework import serializers
+from rest_framework.fields import SkipField
+from rest_framework.relations import PKOnlyObject
+
+
+# 通过重写ModelSerializer的to_representation，将None设置为''
+class BaseSerializer(serializers.ModelSerializer):
+    def to_representation(self, instance):
+        """
+        Object instance -> Dict of primitive datatypes.
+        """
+        ret = OrderedDict()
+        fields = self._readable_fields
+
+        for field in fields:
+            try:
+                attribute = field.get_attribute(instance)
+            except SkipField:
+                continue
+
+            # We skip `to_representation` for `None` values so that fields do
+            # not have to explicitly deal with that case.
+            #
+            # For related fields with `use_pk_only_optimization` we need to
+            # resolve the pk value.
+            check_for_none = attribute.pk if isinstance(attribute, PKOnlyObject) else attribute
+            if check_for_none is None:
+                ret[field.field_name] = ''
+            else:
+                ret[field.field_name] = field.to_representation(attribute)
+
+        return ret
