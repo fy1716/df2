@@ -17,10 +17,15 @@ class CarInfoSerializer(serializers.ModelSerializer):
         model = CarInfoManage
         fields = "__all__"
 
+    # 重写了新增方法，因为这里要改成新增或修改
     def create(self, validated_data):
+        # validated_data是提交的数据，**但是只有模型范围内的字段**
+        # 通过self.context['request'].data['xxx']可以获取提交过来的其他数据
         sn = validated_data.pop('sn', None)
+        # update_or_create 修改或新增 **kwargs是关键词， defaults是要存入的内容
         car_info, created = CarInfoManage.objects.update_or_create(
             sn=sn, defaults=validated_data)
+        # 直接操作model对象，并返回
         return car_info
 
 
@@ -29,22 +34,20 @@ class FixAccSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CarFixAccManage
+        # all可以展示origin和新增的所有字段
         fields = "__all__"
-        # fields = ('fix', 'fix_man', 'name', 'sn', 'type', 'price', 'usage', 'cost', 'guarantee', 'guarantee_price',
-        #           'guarantee_time', 'guarantee_time_fee', 'fix_man_name')
 
-    def get_fix_man_name(self, obj):
+    @staticmethod
+    def get_fix_man_name(obj):
         try:
             return obj.fix_man.name
         except Exception as e:
-            return None
+            raise e
 
 
 class CarFixSerializer(serializers.ModelSerializer):
     car = CarInfoSerializer(read_only=True)
-    # fix_acc = FixAccSerializer(many=True, read_only=True)  # 被外键的字段，添加在这就可以直接显示
     fix_man = EmployeeSerializer(read_only=True)
-    # reg_time = serializers.TimeField(read_only=True, format='%H:%M')
 
     class Meta:
         model = CarFixManage
@@ -55,8 +58,7 @@ class CarFixSerializer(serializers.ModelSerializer):
         try:
             return EmployeeManage.objects.get(name=name).id
         except Exception as e:
-            print(e)
-            raise
+            raise e
 
     def create(self, validated_data):
         # 由于read_only将car_id自动过滤，只能通过获取参数值，来创建car_fix

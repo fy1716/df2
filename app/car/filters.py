@@ -12,13 +12,12 @@ class CarInfoFilter(django_filters.rest_framework.FilterSet):
     """
     按购车日期过滤
     """
-    station_id = django_filters.NumberFilter(field_name="station_id")
     day_start = django_filters.DateFilter(field_name="buy_date", lookup_expr="gte")
     day_end = django_filters.DateFilter(field_name="buy_date", lookup_expr="lte")
 
     class Meta:
         model = CarInfoManage
-        fields = ['station_id', 'day_start', 'day_end']
+        fields = ['day_start', 'day_end']
 
 
 class CarFixFilter(django_filters.rest_framework.FilterSet):
