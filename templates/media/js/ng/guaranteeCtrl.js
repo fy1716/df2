@@ -112,8 +112,10 @@ angular.module('app.controllers')
             });
         };
         //确认删除
-        $scope.delGuaranteeConfirm = function () {
-            $http.delete('/df/v2/api/guarantee/' + $scope.GuaranteeActiveItem.id + '/')
+        $scope.changeIsFake = function () {
+            $http.put('/df/v2/api/guarantee/' + $scope.GuaranteeActiveItem.id + '/', {
+                "is_fake": !$scope.GuaranteeActiveItem.is_fake
+            })
                 .success(function (response) {
                     $scope.delMessage = "操作成功";
                     $scope.tipColor = "#739E73";

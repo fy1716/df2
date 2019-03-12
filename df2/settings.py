@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 import sys
+import datetime
 from . import config
 from django.utils.translation import ugettext_lazy as _
 
@@ -152,9 +153,14 @@ REST_FRAMEWORK = {
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        # 'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-        'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        # 'rest_framework.permissions.AllowAny',
     )
+}
+# 自定义认证返回的字段，包含用户信息，方便获取角色
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),  # 生成的token有效期
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'user.config.jwt_response_payload_handler',  # response中token的payload部分处理函数
 }
 
 # 跨域增加忽略

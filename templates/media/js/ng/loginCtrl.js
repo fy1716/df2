@@ -16,6 +16,7 @@ angular.module('loginApp')
                         localStorage.loginFlag = true;
                         localStorage.username = $scope.userName;
                         localStorage.JWT_TOKEN = response.token;
+                        $cookies.role = response.role;
                         $timeout(function () {
                             $window.location.href = '/index.html';
                             return null;

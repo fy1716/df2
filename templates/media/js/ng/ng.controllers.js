@@ -99,7 +99,6 @@ angular.module('app.controllers', [])
         };
         $rootScope.userNameGlobal = $cookies.userName;
         $rootScope.lastLoginGlobal = eval($cookies.lastLogin);
-        $cookies.role = 2;
         switch (Number($cookies.role)) {
             case 0:
                 $rootScope.systemFlag = true;
