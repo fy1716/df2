@@ -5,14 +5,11 @@
 # Time: 2019/2/27 10:48
 __author__ = 'Peter.Fang'
 
-
 from django.forms.models import model_to_dict
 from rest_framework import serializers
-from rest_framework.fields import SkipField
-from rest_framework.relations import PKOnlyObject
 from rest_framework.validators import UniqueTogetherValidator
 
-from .models import CarInfoManage, CarFixManage, CarFixAccManage
+from .models import CarInfoManage, CarFixManage, CarFixAccManage, Gurantee
 from app.acc.models import AccManage
 from app.staff.models import EmployeeManage
 from app.staff.serializer import EmployeeSerializer
@@ -56,7 +53,7 @@ class FixAccSerializer(common_util.BaseSerializer):
         try:
             return obj.fix_man.name
         except Exception as e:
-            raise e
+            return ''
 
     def create(self, validated_data):
         acc = {
@@ -109,8 +106,10 @@ class CarFixSerializer(common_util.BaseSerializer):
             raise e
 
 
-
 class GuaranteeSerializer(common_util.BaseSerializer):
+    apply_date = serializers.DateTimeField(format="%Y-%m-%d", required=False, read_only=True)
+    check_date = serializers.DateTimeField(format="%Y-%m-%d", required=False, read_only=True)
+
     class Meta:
-        model = CarInfoManage
+        model = Gurantee
         fields = "__all__"

@@ -128,4 +128,5 @@ if __name__ == "__main__":
     # print('湘H0FY90' in r.text)
     # parse_html(r)
     # print(get_info("JA042894"))
-    do_sync_gurantee(day_start="2019-03-01")
+    do_sync_gurantee()
+    # do_sync_gurantee(day_start="2019-03-01")

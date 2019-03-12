@@ -36,6 +36,7 @@ class FixAccFilter(django_filters.rest_framework.FilterSet):
     """
     按维修ID过滤
     """
+
     # fix_id = django_filters.NumberFilter(name="fix__id", method='fix_id_filter')
 
     # def fix_id_filter(self, queryset, name, value):

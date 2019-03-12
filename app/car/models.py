@@ -76,16 +76,16 @@ class CarFixAccManage(models.Model):
 
 # gurantee table unit is acc
 class Gurantee(models.Model):
-    order_no = models.CharField('单号', max_length=50)
-    apply_date = models.DateTimeField(null=True)
-    check_date = models.DateTimeField(null=True)
-    repair_type = models.CharField('维修类型', max_length=10)
-    gurantee_type = models.CharField('索赔类型', max_length=10)
-    check_state = models.CharField('审核状态', max_length=50)
-    car_sn = models.CharField('VIN', max_length=50)
-    car_type = models.CharField('车型', max_length=50)
-    acc_sn = models.CharField('配件代码', max_length=50)
-    acc_name = models.CharField('配件名称', max_length=50)
+    order_no = models.CharField('单号', max_length=50, null=True)
+    apply_date = models.DateTimeField('申请日期', null=True)
+    check_date = models.DateTimeField('审核日期', null=True)
+    repair_type = models.CharField('维修类型', max_length=10, null=True)
+    gurantee_type = models.CharField('索赔类型', max_length=10, null=True)
+    check_state = models.CharField('审核状态', max_length=50, null=True)
+    car_sn = models.CharField('VIN', max_length=50, null=True)
+    car_type = models.CharField('车型', max_length=50, null=True)
+    acc_sn = models.CharField('配件代码', max_length=50, null=True)
+    acc_name = models.CharField('配件名称', max_length=50, null=True)
     acc_unit = models.FloatField('配件单价', default=0)
     acc_count = models.FloatField('配件数', default=0)
     acc_fee = models.FloatField('配件费', default=0)
@@ -98,6 +98,7 @@ class Gurantee(models.Model):
     total_fee = models.FloatField('总金额', default=0)
     is_sync = models.BooleanField('是否同步', default=False)
     is_fake = models.BooleanField('是否真实', default=False)
+    remark = models.CharField('备注', max_length=1024, null=True, blank=True, default='')
 
     class Meta:
         db_table = 'gurantee'

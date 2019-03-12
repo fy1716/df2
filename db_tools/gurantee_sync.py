@@ -23,6 +23,7 @@ django.setup()
 
 from app.car.models import Gurantee, CarFixAccManage
 from util import common_util
+
 limit = 100
 
 
@@ -40,12 +41,12 @@ def read_excel():
     gurantee_list = []
     param_dict = {}
     try:
-        print(day_start)
-        print(day_end)
+        print("开始时间", day_start)
+        print("结束时间", day_end)
         data = Gurantee.objects.filter(apply_date__range=(day_start, day_end))
         order_no_list = [item.order_no for item in data]
         not_check_list = [(item.order_no, item.acc_sn) for item in data if item.check_date is None]  # 未审核
-        print(not_check_list)
+        print("未审核", not_check_list)
         # 获取一条最新的有效数据
         param_list = ["order_no", "apply_date", "check_date", "repair_type", "gurantee_type",
                       "check_state", "car_sn", "car_type", "acc_sn", "acc_name",
@@ -73,7 +74,7 @@ def read_excel():
                 # 更新
                 order_no = param_dict.pop('order_no')
                 acc_sn = param_dict.pop('acc_sn')
-
+                print("更新", order_no)
                 Gurantee.objects.filter(order_no=order_no, acc_sn=acc_sn).update(**param_dict)
                 continue
             if param_dict['order_no'] in order_no_list:  # 过滤已存在的
@@ -88,6 +89,7 @@ def read_excel():
                 gurantee_list = []  # 存入列表重置
                 Gurantee.objects.bulk_create(gurantee_list)  # 批量存入数据库
         if gurantee_list:
+            print("新增", gurantee_list)
             Gurantee.objects.bulk_create(gurantee_list)  # 批量存入数据库
         # 更新到对应的车辆
         subprocess.run(['python', os.path.join(common_util.BASE_DIR, 'db_tools/gurantee2fixacc.py')])

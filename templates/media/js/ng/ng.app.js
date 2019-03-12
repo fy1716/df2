@@ -60,6 +60,12 @@ smartApp.config(['$routeProvider', '$provide', '$httpProvider', function ($route
             },
             controller: 'employeeCtrl'
         })
+        .when('/guarantee', {   // 数据--三包信息
+            templateUrl: function () {
+                return 'media/views/guarantee.html';
+            },
+            controller: 'guaranteeCtrl'
+        })
         .when('/accUsage', {   // 数据--配件用量
             templateUrl: function () {
                 return 'media/views/accUsage.html';
