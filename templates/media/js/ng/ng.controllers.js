@@ -172,8 +172,6 @@ angular.module('app.controllers', [])
             if (!$location.path()) {
                 $location.path($scope.url);
             }
-            console.log(localStorage.JWT_TOKEN);
-            console.log(localStorage.loginFlag);
             if (!localStorage.JWT_TOKEN || !localStorage.loginFlag) {
                 $cookies.userName = "";
                 $cookies.code = "";

@@ -173,9 +173,10 @@ angular.module('app.controllers')
             $http.get('/df/v2/api/employee/')
                 .success(function (response) {
                     $scope.raw_employee_list = response;
-                    $scope.employeeList = response.results.map(function (item) {
-                        return item.name;
-                    });
+                    $scope.employeeList = response.results;
+                    // $scope.employeeList = response.results.map(function (item) {
+                    //     return item.name;
+                    // });
                 })
                 .error(function (response) {
                     $scope.tipColor = "#C46A69";
@@ -251,7 +252,7 @@ angular.module('app.controllers')
         $scope.initEditCarFix = function () {
             fix_man_name = '';
             if ($scope.carFixActiveItem.fix_man) {
-                fix_man_name = $scope.carFixActiveItem.fix_man.name
+                fix_man_name = $scope.carFixActiveItem.fix_man
             }
             $scope.opType = "edit";
             $scope.opTitle = "编辑车辆信息";
@@ -263,14 +264,14 @@ angular.module('app.controllers')
             $scope.carFixInfo.carFixMan = fix_man_name;
             $scope.carFixInfo.carFixIncome = $scope.carFixActiveItem.income;
             $scope.carFixInfo.carFixRemark = $scope.carFixActiveItem.remark;
-            $scope.carFixInfo.carIDNumber = $scope.carFixActiveItem.car.sn;
-            $scope.carFixInfo.carNumber = $scope.carFixActiveItem.car.number;
-            $scope.carFixInfo.carType = $scope.carFixActiveItem.car.type;
-            $scope.carBuyDate.value = $scope.carFixActiveItem.car.buy_date;
-            $scope.carProDate.value = $scope.carFixActiveItem.car.pro_date;
+            $scope.carFixInfo.carIDNumber = $scope.carFixActiveItem.car_detail.sn;
+            $scope.carFixInfo.carNumber = $scope.carFixActiveItem.car_detail.number;
+            $scope.carFixInfo.carType = $scope.carFixActiveItem.car_detail.type;
+            $scope.carBuyDate.value = $scope.carFixActiveItem.car_detail.buy_date;
+            $scope.carProDate.value = $scope.carFixActiveItem.car_detail.pro_date;
             $scope.carFixInfo.carFixMaintain = $scope.carFixActiveItem.maintain;
-            $scope.carFixInfo.carOwner = $scope.carFixActiveItem.car.owner;
-            $scope.carFixInfo.carTel = $scope.carFixActiveItem.car.tel;
+            $scope.carFixInfo.carOwner = $scope.carFixActiveItem.car_detail.owner;
+            $scope.carFixInfo.carTel = $scope.carFixActiveItem.car_detail.tel;
             $scope.carFixInfo.carFixLogging = $scope.carFixActiveItem.logging;
             $scope.getEmployee();
         };
@@ -297,10 +298,10 @@ angular.module('app.controllers')
                 $scope.carFixLogging = 0;
             }
             $http.put('/df/v2/api/car_fix/' + $scope.carFixIDN + '/', {
-                car_id: car.id,
+                car: car.id,
                 date: $scope.carFixDate.value,
                 odo: $scope.carFixInfo.carFixODO,
-                fix_man_id: $scope.carFixInfo.carFixMan,
+                fix_man: $scope.carFixInfo.carFixMan,
                 income: $scope.carFixInfo.carFixIncome,
                 remark: $scope.carFixInfo.carFixRemark,
                 maintain: $scope.carFixMaintain,
@@ -348,11 +349,11 @@ angular.module('app.controllers')
         };
         $scope.save_car_fix = function (car) {
             $http.post('/df/v2/api/car_fix/', {
-                car_id: car.id,
+                car: car.id,
                 date: $scope.carFixDate.value,
                 reg_time: new Date().Format("hh:mm:ss"),
                 odo: $scope.carFixInfo.carFixODO,
-                fix_man_id: $scope.carFixInfo.carFixMan,
+                fix_man: $scope.carFixInfo.carFixMan,
                 income: $scope.carFixInfo.carFixIncome,
                 remark: $scope.carFixInfo.carFixRemark,
                 maintain: $scope.carFixMaintain,
@@ -553,8 +554,8 @@ angular.module('app.controllers')
         //新增配件
         $scope.addFixAcc = function () {
             $http.post('/df/v2/api/fix_acc/', {
-                fix_id: $scope.carFixIDN,
-                id_number: localStorage.accKey,
+                fix: $scope.carFixIDN,
+                sn: localStorage.accKey,
             })
                 .success(function (response) {
                     $scope.accPage = 1;

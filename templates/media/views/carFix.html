@@ -119,11 +119,11 @@
                                                 ng-class="{'success': car.active,'interactive': car.carFixDate}"
                                                 ng-click="toggleActive($index)">
                                                 <td ng-bind="car.date"></td>
-                                                <td ng-bind="car.car.sn"></td>
-                                                <td ng-bind="car.car.number"></td>
-                                                <td ng-bind="car.car.type"></td>
-                                                <td ng-bind="car.car.buy_date"></td>
-                                                <td ng-bind="car.car.owner"></td>
+                                                <td ng-bind="car.car_detail.sn"></td>
+                                                <td ng-bind="car.car_detail.number"></td>
+                                                <td ng-bind="car.car_detail.type"></td>
+                                                <td ng-bind="car.car_detail.buy_date"></td>
+                                                <td ng-bind="car.car_detail.owner"></td>
                                                 <td ng-bind="car.odo"></td>
                                                 <td style="text-align:center"><i class="fa fa-lg fa-times text-warning"
                                                                                  ng-show="car.maintain === false"></i>
@@ -134,8 +134,8 @@
                                                                                  ng-show="car.logging === false"></i>
                                                     <i class="fa fa-lg fa-check text-success"
                                                        ng-show="car.logging === true"></i></td>
-                                                <td ng-bind="car.fix_man.name"></td>
-                                                <td><a ng-click="checkAccDetail($index)" ng-show="car.car.sn">详情</a>
+                                                <td ng-bind="car.fix_man_detail.name"></td>
+                                                <td><a ng-click="checkAccDetail($index)" ng-show="car.car_detail.sn">详情</a>
                                                 </td>
                                                 <td ng-bind="car.remark"></td>
                                             </tr>
@@ -302,7 +302,7 @@
                                                                         type="text" id="carFixMan" name="carFixMan"
                                                                         ng-model="carFixInfo.carFixMan" required
                                                                         ng-class="{'defeng-input-error': CarFixInfoForm.carFixMan.$invalid && (CarFixInfoForm.carFixMan.$dirty || dirtyFlag)}"
-                                                                        ng-options="employee for employee in employeeList">
+                                                                        ng-options="employee.id as employee.name for employee in employeeList">
                                                                 </select>
                                                             </div>
                                                         </div>
