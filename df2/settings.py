@@ -157,6 +157,23 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     )
 }
+
+# 配置缓存为redis
+CACHES = {
+    'default': {
+        'BACKEND': 'redis_cache.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379',
+        "OPTIONS": {
+            "CLIENT_CLASS": "redis_cache.client.DefaultClient",
+        },
+    },
+}
+# drf-extensions的设置
+REST_FRAMEWORK_EXTENSIONS = {
+    # 过期时间  单位是秒
+    'DEFAULT_CACHE_RESPONSE_TIMEOUT': 60 * 60
+}
+
 # 自定义认证返回的字段，包含用户信息，方便获取角色
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),  # 生成的token有效期

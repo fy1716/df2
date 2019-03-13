@@ -18,12 +18,13 @@ import xadmin
 from rest_framework.documentation import include_docs_urls
 from rest_framework.routers import DefaultRouter
 from car.views import CarInfoViewSet, CarFixViewSet, FixAccViewSet, GuaranteeViewSet
-from acc.views import AccListViewSet
+from acc.views import AccListViewSet, AccList1ViewSet
 from staff.views import EmployeeViewSet, EmployeeBonusListView, SubSiteViewSet
 from rest_framework_jwt.views import obtain_jwt_token
 
 router = DefaultRouter()
 router.register(r'acc', AccListViewSet)
+router.register(r'acc1', AccList1ViewSet)
 router.register(r'car_info', CarInfoViewSet, base_name='car_info')
 router.register(r'car_fix', CarFixViewSet, base_name='car_fix')
 router.register(r'fix_acc', FixAccViewSet, base_name='fix_acc')
