@@ -101,6 +101,41 @@ angular.module('app.controllers')
                 console.log('cancel CarFix operation');
             });
         };
+        $scope.syncItem = function () {
+            $http.post('/df/v2/platform/sync_guarantee/', {})
+                .success(function (response) {
+                    $scope.delMessage = response.message;
+                    $scope.tipColor = "#739E73";
+                    $scope.dealDelRet();
+                    $scope.queryGuaranteeList();
+                })
+                .error(function (response) {
+                    $scope.delMessage = "操作失败，请联系管理员";
+                    $scope.tipColor = "#C46A69";
+                    $scope.dealDelRet();
+                });
+        };
+        $scope.editItem = function () {
+            $scope.items = {
+                'EmployeeInfoItem': $scope.GuaranteeActiveItem
+            };
+            var modalInstance = $modal.open({
+                //size: size,
+                backdrop: 'static',
+                templateUrl: 'EmployeeInfoOperation.html',
+                controller: 'EmployeeInfoOpCtrl',
+                resolve: {
+                    items: function () {
+                        return $scope.items;
+                    }
+                }
+            });
+            modalInstance.result.then(function (selectedItem) {
+                $scope.queryGuaranteeList();
+            }, function () {
+                console.log('cancel operation');
+            });
+        };
         //删除结果处理
         $scope.dealDelRet = function () {
             $.smallBox({
@@ -111,7 +146,6 @@ angular.module('app.controllers')
                 icon: "fa fa-bell swing animated"
             });
         };
-        //确认删除
         $scope.changeIsFake = function () {
             $http.put('/df/v2/api/guarantee/' + $scope.GuaranteeActiveItem.id + '/', {
                 "is_fake": !$scope.GuaranteeActiveItem.is_fake
@@ -131,12 +165,6 @@ angular.module('app.controllers')
                     $scope.dealDelRet();
                 });
         };
-        //删除操作
-        $scope.delGuarantee = function () {
-            if (confirm("确定要删除该信息吗？")) {
-                $scope.delGuaranteeConfirm();
-            }
-        };
         /******************************************** 初始化操作 ******************************************/
         //初始化
         $scope.init = function () {
@@ -145,8 +173,10 @@ angular.module('app.controllers')
             $scope.rows = 8;
             $scope.totalItems = 0;
             $scope.keyword = "";
+            var startDate = new Date();
+            var startStamp = startDate.setDate(startDate.getDate() + 1);
             $scope.dayStart = new Date().Format("yyyy-MM-dd");
-            $scope.dayEnd = new Date().Format("yyyy-MM-dd");
+            $scope.dayEnd = new Date(startStamp).Format("yyyy-MM-dd");
             $scope.queryGuaranteeList();
         };
         $scope.init();
@@ -158,5 +188,72 @@ angular.module('app.controllers')
         $scope.confirmDetail = function () {
             $modalInstance.dismiss('cancel');
         };
+    }])
+    .controller('EmployeeInfoOpCtrl', ['$scope', '$modalInstance', '$http', '$timeout', 'items', function ($scope, $modalInstance, $http, $timeout, items) {
+        //新增EmployeeInfo
+        $scope.opEmployeeInfoItem = function (method, url) {
+            data = {
+                sub_site: $scope.EmployeeInfoItem.carFixMan,
+                remark: $scope.EmployeeInfoItem.remark,
+            };
+            $http({
+                method: method,
+                url: url,
+                data: data
+            })
+                .success(function (response) {
+                    $scope.Message = "操作成功";
+                    $timeout(function () {
+                        $modalInstance.close();
+                    }, 500);
+                }).error(function (response) {
+                for (var key in response) {
+                    $scope.Message = response[key];
+                    break
+                }
+            });
+        };
+        //提交表单
+        $scope.submitForm = function (retValid) {
+            $scope.dirtyFlag = true;
+            if (!retValid) {
+                $scope.Message = "请确认输入格式正确！";
+                return null;
+            }
+            $scope.opEmployeeInfoItem('PUT', '/df/v2/api/guarantee/' + items.EmployeeInfoItem.id + '/');
+        };
+        //取消表单
+        $scope.cancelForm = function () {
+            $modalInstance.dismiss('cancel');
+        };
+        //初始化输入框
+        $scope.initInput = function () {
+            var EmployeeInfo = items.EmployeeInfoItem;
+            $scope.EmployeeInfoItem.carFixMan = EmployeeInfo.sub_site;
+            $scope.EmployeeInfoItem.remark = EmployeeInfo.remark;
+        };
+        $scope.getSubSite = function () {
+            $http.get('/df/v2/api/sub_site/', {
+                params: {
+                    "page": $scope.page,
+                    "rows": 50,
+                }
+            })
+                .success(function (response) {
+                    $scope.subSiteList = response.results;
+                    $scope.totalItems = response.count;
+                });
+        };
+        /******************************************** 初始化操作 ******************************************/
+        //初始化
+        $scope.init = function () {
+            $scope.items = items;
+            $scope.dirtyFlag = false;
+            $scope.Message = "";
+            $scope.EmployeeInfoItem = {};
+            $scope.getSubSite();
+            $scope.initInput();
+        };
+        $scope.init();
     }]);
     

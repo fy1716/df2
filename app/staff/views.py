@@ -3,10 +3,10 @@ from rest_framework import viewsets
 import django_filters.rest_framework
 from rest_framework import filters
 
-from app.staff.models import EmployeeManage
+from app.staff.models import EmployeeManage, SubSite
 from app.car.models import EmployeeBonusManage
 from app.staff.filters import EmployeeBonusFilter
-from app.staff.serializer import EmployeeSerializer, EmployeeBonusSerializer
+from app.staff.serializer import EmployeeSerializer, EmployeeBonusSerializer, SubSiteSerializer
 
 
 # '': get_employee
@@ -30,3 +30,12 @@ class EmployeeBonusListView(viewsets.GenericViewSet, mixins.ListModelMixin, mixi
     ordering_fields = ('id',)
     ordering = ('-id',)
     search_fields = ('employee__name',)
+
+
+class SubSiteViewSet(viewsets.ModelViewSet):
+    queryset = SubSite.objects.all()
+    serializer_class = SubSiteSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter)
+    ordering_fields = ('id',)
+    ordering = ('id',)
+    search_fields = ('name',)

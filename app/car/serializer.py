@@ -11,7 +11,7 @@ from rest_framework.validators import UniqueTogetherValidator
 
 from .models import CarInfoManage, CarFixManage, CarFixAccManage, Gurantee
 from app.acc.models import AccManage
-from app.staff.models import EmployeeManage
+from app.staff.models import EmployeeManage, SubSite
 from app.staff.serializer import EmployeeSerializer
 from util import common_util
 
@@ -109,7 +109,16 @@ class CarFixSerializer(common_util.BaseSerializer):
 class GuaranteeSerializer(common_util.BaseSerializer):
     apply_date = serializers.DateTimeField(format="%Y-%m-%d", required=False, read_only=True)
     check_date = serializers.DateTimeField(format="%Y-%m-%d", required=False, read_only=True)
+    sub_name = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Gurantee
         fields = "__all__"
+
+    @staticmethod
+    def get_sub_name(obj):
+        try:
+            return model_to_dict(SubSite.objects.get(id=obj.sub_site.id))['name']
+        except Exception as e:
+            common_util.debug(e)
+            return ""

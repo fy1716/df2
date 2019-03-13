@@ -6,7 +6,7 @@
 __author__ = 'Peter.Fang'
 
 from rest_framework import serializers
-from .models import EmployeeManage
+from .models import EmployeeManage, SubSite
 from app.car.models import EmployeeBonusManage
 
 
@@ -21,4 +21,10 @@ class EmployeeBonusSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmployeeBonusManage
+        fields = "__all__"
+
+
+class SubSiteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubSite
         fields = "__all__"

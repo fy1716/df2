@@ -1,4 +1,4 @@
-root      1490  0.0  6.6 317404 67672 ?        S    Mar10   0:01 uwsgi -x df2_socket.xml
-root      1492  0.0  7.5 330132 76272 ?        S    Mar10   0:03 uwsgi -x df2_socket.xml
-root      1493  0.0  7.7 332600 78880 ?        S    Mar10   0:02 uwsgi -x df2_socket.xml
-root      1494  0.0  6.2 316520 63308 ?        S    Mar10   0:00 uwsgi -x df2_socket.xml
+root      6111  1.9  6.4 315212 65740 ?        S    21:21   0:01 uwsgi -x df2_socket.xml
+root      6113  0.0  5.3 309532 53892 ?        S    21:21   0:00 uwsgi -x df2_socket.xml
+root      6114  0.0  5.3 309532 53892 ?        S    21:21   0:00 uwsgi -x df2_socket.xml
+root      6115  0.0  5.3 309532 53892 ?        S    21:21   0:00 uwsgi -x df2_socket.xml

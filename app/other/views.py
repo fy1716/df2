@@ -1,9 +1,12 @@
 import datetime
 from django.shortcuts import render_to_response
 from django.forms.models import model_to_dict
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 from util import common_util
 from app.car.models import CarFixManage
+from util import platform_util
 
 
 # 从公司平台服务器获取车辆信息
@@ -19,6 +22,13 @@ def get_platform_car_info(request):
         return common_util.json_response(True, data=data, message="更新车辆信息成功")
     else:
         return common_util.json_response(False, message="未获取到车辆底盘号")
+
+
+@csrf_exempt
+def sync_guarantee(request):
+    if request.method == 'POST':
+        platform_util.do_sync_gurantee()
+        return common_util.json_response(True, message="同步成功")
 
 
 def print_report(request):

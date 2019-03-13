@@ -19,7 +19,7 @@ from rest_framework.documentation import include_docs_urls
 from rest_framework.routers import DefaultRouter
 from car.views import CarInfoViewSet, CarFixViewSet, FixAccViewSet, GuaranteeViewSet
 from acc.views import AccListViewSet
-from staff.views import EmployeeViewSet, EmployeeBonusListView
+from staff.views import EmployeeViewSet, EmployeeBonusListView, SubSiteViewSet
 from rest_framework_jwt.views import obtain_jwt_token
 
 router = DefaultRouter()
@@ -30,6 +30,7 @@ router.register(r'fix_acc', FixAccViewSet, base_name='fix_acc')
 router.register(r'guarantee', GuaranteeViewSet, base_name='guarantee')
 router.register(r'employee', EmployeeViewSet)
 router.register(r'employee_bonus', EmployeeBonusListView)
+router.register(r'sub_site', SubSiteViewSet)
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),

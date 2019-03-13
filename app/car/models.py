@@ -98,6 +98,7 @@ class Gurantee(models.Model):
     total_fee = models.FloatField('总金额', default=0)
     is_sync = models.BooleanField('是否同步', default=False)
     is_fake = models.BooleanField('是否真实', default=False)
+    sub_site = models.ForeignKey('staff.SubSite', on_delete=models.CASCADE, related_name="guarantee_acc", null=True)
     remark = models.CharField('备注', max_length=1024, null=True, blank=True, default='')
 
     class Meta:

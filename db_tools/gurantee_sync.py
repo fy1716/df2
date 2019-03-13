@@ -82,6 +82,7 @@ def read_excel():
             # 未审核日期格式处理
             if param_dict['check_date'] == '':
                 param_dict['check_date'] = None
+            param_dict["sub_site_id"] = 3  # 注意 3 代表德丰，新增默认为本站
             gurantee_list.append(Gurantee(**param_dict))
             param_dict = {}
             if i >= limit:
@@ -92,7 +93,8 @@ def read_excel():
             print("新增", gurantee_list)
             Gurantee.objects.bulk_create(gurantee_list)  # 批量存入数据库
         # 更新到对应的车辆
-        subprocess.run(['python', os.path.join(common_util.BASE_DIR, 'db_tools/gurantee2fixacc.py')])
+        subprocess.run(
+            ['/home/fangyu/Venv/df2/bin/python', os.path.join(common_util.BASE_DIR, 'db_tools/gurantee2fixacc.py')])
 
     except Exception as e:
         traceback.print_exc()  # 打印错误信息

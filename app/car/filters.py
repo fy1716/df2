@@ -52,7 +52,7 @@ class GuaranteeFilter(django_filters.rest_framework.FilterSet):
     按申请日期过滤
     """
     day_start = django_filters.DateFilter(field_name="apply_date", lookup_expr="gte")
-    day_end = django_filters.DateFilter(field_name="apply_date", lookup_expr="lte")
+    day_end = django_filters.DateFilter(field_name="apply_date", lookup_expr="lt")
 
     class Meta:
         model = Gurantee

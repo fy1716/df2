@@ -96,7 +96,7 @@ def get_gurantee(day_start, day_end):
         f.write(r.content)
 
     # 导入db
-    subprocess.run(['python', os.path.join(BASE_DIR, 'db_tools/gurantee_sync.py'), day_start, day_end])
+    subprocess.run(['/home/fangyu/Venv/df2/bin/python', os.path.join(BASE_DIR, 'db_tools/gurantee_sync.py'), day_start, day_end])
 
 
 def do_sync_gurantee(day_start=(datetime.date.today() - datetime.timedelta(days=3)).strftime('%Y-%m-%d'),

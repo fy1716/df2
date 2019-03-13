@@ -20,3 +20,14 @@ class EmployeeManage(models.Model):
     def __str__(self):
         return self.name
 
+
+# 二级
+class SubSite(models.Model):
+    name = models.CharField(max_length=24)
+    remark = models.CharField(max_length=48, null=True, blank=True, default='')
+
+    class Meta:
+        db_table = 'sub_site'
+
+    def __str__(self):
+        return self.name
