@@ -11,6 +11,8 @@ import traceback
 import datetime
 import subprocess
 import xlrd
+import xlwt
+from django.forms.models import model_to_dict
 
 pwd = os.path.dirname(os.path.realpath(__file__))
 main_dir = os.path.dirname(pwd)
@@ -22,6 +24,7 @@ import django
 django.setup()
 
 from app.car.models import Gurantee, CarFixAccManage
+from app.staff.models import SubSite
 from util import common_util
 
 limit = 100
@@ -101,6 +104,56 @@ def read_excel():
         print(e)
 
 
+def _guarantee_to_xls():
+    common_util.debug(day_start)
+    common_util.debug(day_end)
+    data = Gurantee.objects.filter(apply_date__range=(day_start, day_end)).order_by('apply_date')
+    if not data:
+        return
+    style_del = xlwt.XFStyle()
+    style_del.alignment.wrap = 1
+
+    header = ['申请日期', '审核状态', 'VIN', '车型', '配件名称', '配件费', '工时费', '总金额', '维修站',
+              '同步', '自增', '备注', '审核日期', '配件代码', '配件数', '工时数', '维修类型', '索赔类型', '活动费',
+              '辅料费', '特殊费']
+    param_list = ["apply_date", "check_state", "car_sn", "car_type",
+                  "acc_name", "acc_fee", "guarantee_time_fee", "total_fee", "sub_site",
+                  "is_sync", "is_fake", "remark", "acc_sn", "acc_count",
+                  "guarantee_time", "repair_type", "gurantee_type", "event_fee", "material_fee", "special_fee",
+                  "total_fee"]
+
+    xls = xlwt.Workbook(style_compression=2)
+    sheet = xls.add_sheet("Sheet1")
+    sheet.col(2).width = (20 * 367)  # 设置表格的宽度
+    sheet.col(4).width = (20 * 367)
+    # sheet.col(9).width = (10 * 367)
+    # sheet.col(10).width = (10 * 367)
+    i = 0
+    row = 1
+    # 写表头
+    for each_header in header:
+        sheet.write(0, i, each_header)
+        i += 1
+    for model in data:
+        i = 0
+        item = model_to_dict(model)
+        item['apply_date'] = item['apply_date'].strftime('%m-%d')
+        item['is_sync'] = "是" if item['is_sync'] else "否"
+        item['is_fake'] = "是" if item['is_fake'] else "否"
+        common_util.debug(item)
+        common_util.debug(item['sub_site'])
+        try:
+            item['sub_site'] = SubSite.objects.get(id=item['sub_site']).name
+        except Exception as e:
+            pass
+        for key in param_list:
+            sheet.write(row, i, item[key])
+            i += 1
+        row += 1
+
+    xls.save(os.path.join(main_dir, 'templates/media/data/三包.xls'))
+
+
 if __name__ == '__main__':
     try:
         _, day_start, day_end = sys.argv
@@ -108,3 +161,7 @@ if __name__ == '__main__':
         day_start = common_util.get_today()
         day_end = common_util.get_today(1)
     read_excel()
+    try:
+        _guarantee_to_xls()
+    except Exception as e:
+        common_util.debug(e)

@@ -102,7 +102,10 @@ angular.module('app.controllers')
             });
         };
         $scope.syncItem = function () {
-            $http.post('/df/v2/platform/sync_guarantee/', {})
+            $http.post('/df/v2/platform/sync_guarantee/', {
+                "day_start": $scope.dayStart,
+                "day_end": $scope.dayEnd,
+            })
                 .success(function (response) {
                     $scope.delMessage = response.message;
                     $scope.tipColor = "#739E73";

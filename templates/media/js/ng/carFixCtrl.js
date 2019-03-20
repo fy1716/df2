@@ -236,6 +236,7 @@ angular.module('app.controllers')
             $scope.carFixID = -1;
             $scope.carFixIDN = "";
             $scope.carFixInfo = {};
+            $scope.carFixInfo.carFixIncome = 0;
             $scope.matchCarInfo();
             $scope.getEmployee();
             $scope.carFixDate.value = new Date().Format("yyyy-MM-dd");
@@ -481,30 +482,12 @@ angular.module('app.controllers')
         //获取更换配件列表
         $scope.getFixAcc = function (flag) {
             if (flag) {
-                var row = 50;
+                var row = 5;
                 $scope.carFixIDN = '';
             } else {
                 var row = $scope.accRows;
             }
             $scope.clearAccSelectedItem();
-            // 获取总价格
-            $http.get('/df/v2/api/fix_acc/', {
-                params: {
-                    "car_fix_id": $scope.carFixIDN || $scope.carFixID,
-                    "page": 1,
-                    "rows": 100,
-                }
-            })
-                .success(function (response) {
-                    var sum = 0;
-                    for (var i = 0; i < response.results.length; i++) {
-                        var item = response.results[i];
-                        if (!item.guarantee) {
-                            sum += item.price * item.usage;
-                        }
-                    }
-                    $scope.sum = sum;
-                });
             $http.get('/df/v2/api/fix_acc/', {
                 params: {
                     "car_fix_id": $scope.carFixIDN || $scope.carFixID,
@@ -513,6 +496,8 @@ angular.module('app.controllers')
                 }
             })
                 .success(function (response) {
+
+                    console.log($scope.raw_employee_list);
                     $scope.fixAccList = $filter('fillArray')(response.results, $scope.accRows);
                     $scope.accTotalItems = response.count;
                     if (response.results.length === 0 && $scope.accPage !== 1) {
@@ -520,11 +505,17 @@ angular.module('app.controllers')
                         $scope.lastPageSub = $scope.accPage;
                         $scope.getFixAcc(false);
                     }
+                    var sum = 0;
+                    for (var i=0;i<response.results.length;i++) {
+                        var item = response.results[i];
+                        if (!item.guarantee) {
+                            sum += item.price * item.usage;
+                        }
+                    }
+                    $scope.sum = sum;
                     if (flag) {
                         $scope.fixAccList = response.results;
-                        $timeout(function () {
-                            $scope.showAccDetail();
-                        }, 200)
+                        $scope.showAccDetail();
                     }
                 });
         };

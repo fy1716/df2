@@ -27,7 +27,11 @@ def get_platform_car_info(request):
 @csrf_exempt
 def sync_guarantee(request):
     if request.method == 'POST':
-        platform_util.do_sync_gurantee()
+        day_start = eval(request.body).get('day_start', None)
+        day_end = eval(request.body).get('day_end', None)
+        common_util.debug(day_start)
+        common_util.debug(day_end)
+        platform_util.do_sync_gurantee(day_start, day_end)
         return common_util.json_response(True, message="同步成功")
 
 
