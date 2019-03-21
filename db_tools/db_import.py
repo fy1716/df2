@@ -11,8 +11,8 @@ import django
 django.setup()
 
 from app.acc.models import AccManage
-from app.car.models import CarInfoManage, CarFixManage, CarFixAccManage
-from app.staff.models import EmployeeBonusManage, EmployeeManage
+from app.car.models import CarInfoManage, CarFixManage, CarFixAccManage, EmployeeBonusManage
+from app.staff.models import EmployeeManage
 
 # 分页获取原始数据
 import MySQLdb

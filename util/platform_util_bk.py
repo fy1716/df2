@@ -6,7 +6,6 @@
 __author__ = 'Peter.Fang'
 
 import os
-import sys
 import requests
 import datetime
 import subprocess
@@ -57,9 +56,6 @@ def login(acc_flag=False):
     if not acc_flag:
         s.post("http://dcms.dfsk.com.cn/DCMS/common/menu/MenuShow/menuDisplay.do?poseId=1100013086",
                data_Location)
-    else:
-        s.post("http://dcms.dfsk.com.cn/DCMS/common/menu/MenuShow/menuDisplay.do?poseId=1100013083",
-               data_Location)
 
 
 def get_info(VIN):
@@ -104,7 +100,7 @@ def get_gurantee(day_start, day_end):
         ['/home/fangyu/Venv/df2/bin/python', os.path.join(BASE_DIR, 'db_tools/gurantee_sync.py'), day_start, day_end])
 
 
-def do_sync_gurantee(day_start=None, day_end=None):
+def do_sync_gurantee(day_start, day_end):
     if not day_start:
         day_start = (datetime.date.today() - datetime.timedelta(days=3)).strftime('%Y-%m-%d')
     if not day_end:
@@ -112,39 +108,29 @@ def do_sync_gurantee(day_start=None, day_end=None):
     get_gurantee(day_start, day_end)
 
 
-def do_sync_acc_record():
-    day_start = (datetime.date.today() - datetime.timedelta(days=3)).strftime('%Y-%m-%d')
-    day_end = (datetime.date.today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d')
-    login(True)
-    s.get(
-        'http://dcms.dfsk.com.cn/DCMS/sysmng/usemng/DcsFuncMapping/pageIntegration.do?funcId=88888888')
-    s.get(
-        'http://idcs.dfsk.com.cn/sysusermng/sysuserinfo/DcsFuncMapping/pageIntegration1.do?funcId=1e4ad363503a24b210130103&password=*********************************&vin=null&inMileage=null&codes=null&codes_type=null&labcodes=null&labcodes_type=null')
-    data_download = [
-        ('RO_STARTDATE', day_start),
-        ('RO_ENDDATE', day_end),
-    ]
-    # 下载excel
-    r = s.post(
-        'http://idcs.dfsk.com.cn/claim/dealerClaimMng/ClaimBillTrack/export.do', data_download)
-    with open(os.path.join(BASE_DIR, 'db_tools/data/test_acc.xls'), 'wb') as f:
-        f.write(r.content)
-
-    # 导入db
-    subprocess.run(
-        ['/home/fangyu/Venv/df2/bin/python', os.path.join(BASE_DIR, 'db_tools/acc_buy_record.py'), day_start, day_end])
-
-
-func_map = {
-    "do_sync_gurantee": do_sync_gurantee,
-    "do_sync_acc_record": do_sync_acc_record,
-}
-
 if __name__ == "__main__":
-    try:
-        _, func_key = sys.argv
-        func_map[func_key]()
-    except ValueError as e:
-        print("no func_key")
-    except KeyError as e:
-        print("func_key is not exist")
+    # 登录
+    # res = s.post("http://dcms.dfsk.com.cn/DCMS/common/login/LoginManager/doLogin.json", data)
+    # c = print(res.text)
+    # 进入职位选择
+    # res = s.get("http://dcms.dfsk.com.cn/DCMS/common/login/LoginManager/login.do?userId=1100013384")
+    # print(res.text)
+    # 选择职位
+    # ret = s.post("http://dcms.dfsk.com.cn/DCMS/common/menu/MenuShow/menuDisplay.do?poseId=1100013086", data_Location)
+    # print(ret.text)
+    # print(s.cookies, ret.cookies)
+
+    # # 获取完整VIN
+    # # res_add = s.get("http://dcms.dfsk.com.cn/DCMS/servicemng/businessreception/CustomerReception/queryCustomerReceptionInit.do?lastLoginUserName=F13-0009_HGH")
+    # # print(res_add.text)
+    # # 获取完整VIN
+    # r = s.post("http://dcms.dfsk.com.cn/DCMS/servicemng/businessreception/CustomerReception/vinSelect.json?&VIN=FC641821&lastLoginUserName=F13-0009_HGH", data_VIN)
+    # # print(r.text)
+    # # 获取完整VIN
+    # r = s.post("http://dcms.dfsk.com.cn/DCMS/servicemng/businessreception/CustomerReception/repairOrderAddInit.do?lastLoginUserName=F13-0009_HGH", data_VIN_DETAIL)
+    # # print(r.text)
+    # print('湘H0FY90' in r.text)
+    # parse_html(r)
+    # print(get_info("JA042894"))
+    do_sync_gurantee()
+    # do_sync_gurantee(day_start="2019-03-01")

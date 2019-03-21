@@ -8,19 +8,26 @@ import os
 import sys
 import xlrd
 
-from util import common_util
-
 pwd = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(pwd + "../")
+main_dir = os.path.dirname(pwd)
+sys.path.append(main_dir)
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "df2.settings")
 
 import django
 
 django.setup()
 
-from app.acc.models import AccBuyRecordManage
+from app.acc.models import AccBuyRecordManage, AccManage
 
 limit = 52
+
+
+def _sync_acc(sn, name, cost):
+    defaults = {
+        "name": name,
+        "cost": cost,
+    }
+    AccManage.objects.update_or_create(sn=sn, defaults=defaults)
 
 
 # 打开文件，读取数据
@@ -30,7 +37,8 @@ def read_excel():
     acc_list = []
     try:
         # 打开excel
-        excel = xlrd.open_workbook('data/acc_record.xls')
+        path = os.path.dirname(__file__)
+        excel = xlrd.open_workbook(os.path.join(path, 'data/acc_record.xls'))
         # 打开表
         table = excel.sheet_by_index(0)
         # 读取每一行
