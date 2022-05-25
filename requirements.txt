@@ -23,7 +23,7 @@ MarkupSafe==1.1.0
 mysqlclient==1.4.2
 odfpy==1.4.0
 openpyxl==2.5.12
-PyJWT==1.7.1
+PyJWT==2.4.0
 pytz==2018.7
 PyYAML==3.13
 requests==2.20.1
